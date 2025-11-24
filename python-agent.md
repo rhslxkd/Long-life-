@@ -50,7 +50,7 @@ http://localhost:8000/chat
    |
    ▼
 Google ADK InMemoryRunner → Gemini 2.5
-
+```
 
 대답은 역순!
 
