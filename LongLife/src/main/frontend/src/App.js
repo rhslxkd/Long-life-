@@ -1,15 +1,14 @@
 import logo from './logo.svg';
 import './App.css';
 import {Route, Routes} from "react-router-dom";
+import AiChatPage from "./pages/AiChatPage";
 
 
 function App() {
   return (
     <div className="App">
       <Routes>
-          <div>
-              홈입니다
-          </div>
+          <Route path="/ai-chat" element={<AiChatPage />} />
       </Routes>
     </div>
   );
