@@ -158,7 +158,6 @@ function Calendar() {
                     })}
                 </div>
 
-                {selectedDate && <p style={{marginTop: "10px"}}>선택된 날짜: {selectedDate.toLocaleDateString()}</p>}
 
                 {/* 팝업 모달 */}
                 {showPopup && (

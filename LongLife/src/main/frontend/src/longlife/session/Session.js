@@ -11,7 +11,8 @@ function Session() {
     const [err, setErr] = useState(null);
 
     const load = async () => {
-        const data = await fetcher(`http://localhost:8080/api/workout/session/${date}`);
+        // const data = await fetcher(`http://localhost:8080/api/workout/session/${date}`);
+        const data = await fetcher(`http://localhost:8080/api/workout/session`);
         setSession(data ?? []); // 데이터 없으면 빈 배열
     }
 
@@ -19,8 +20,9 @@ function Session() {
         setLoading(true);
         (async () => {
             try {
-                console.log(`Loading session for date: ${date}`);
-                const data = await fetcher(`http://localhost:8080/workout/api/session/${date}`);
+                // console.log(`Loading session for date: ${date}`);
+                // const data = await fetcher(`http://localhost:8080/workout/api/session/${date}`);
+                const data = await fetcher(`http://localhost:8080/workout/api/session`);
                 setSession(data ?? []); // 리스트로 세팅
                 await load();
             } catch (e) {
