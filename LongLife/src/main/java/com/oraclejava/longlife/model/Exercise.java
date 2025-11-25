@@ -12,7 +12,7 @@ public class Exercise {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "exercise_id")
-    private int exerciseId;
+    private Long exerciseId;
 
     private String type1;
 

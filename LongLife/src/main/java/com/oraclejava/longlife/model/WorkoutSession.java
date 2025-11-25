@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class WorkoutSession {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private int sessionId;
+    private Long sessionId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "users_id")
