@@ -121,7 +121,7 @@ npm start
 
 기대 출력: 요약 + 표 형식 루틴 + 주의사항 + 스파르타식 성격
 
-## 🙋 기여한 작업 (포트폴리오 핵심)
+## 🙋 작업내용 (포트폴리오 핵심)
 * 영역	상세 내용
 - AI Agent 설계	Gemini 기반 피트니스 코치 튜닝, instruction 설계
 - Backend	Spring ↔ FastAPI ↔ ADK 전체 파이프라인 구현
@@ -130,17 +130,90 @@ npm start
 - 시스템 설계	전체 멀티서비스 아키텍처 직접 설계 및 통합
 - GitHub관리 및 branch전략 수립.
 
-## 📌 성과 및 의미
-- 🧩 실제 작동하는 LLM 기반 피트니스 코치 완성
+## 📅 추후 계획 (기술 중심 고도화 로드맵)
 
-- 💬 단순 텍스트 생성이 아닌 Agent 기반 설계 경험 보유
+본 AI 기능은 현재 단일 Agent 기반 운동 추천과 간단한 대화 기능을 제공하는 MVP 단계이며,  
+향후에는 다음과 같은 기술적 확장을 통해 “전문 Coach AI 플랫폼”으로 발전시킬 계획입니다.
 
-- 🔍 검색 도구 연계 포함한 멀티도구 AI 시스템 실습
+---
 
-- 🌐 AI 기술을 실질적 웹 서비스로 통합한 포트폴리오 구성
+### 1. 전역 UI로 동작하는 AI Floating Widget 구현
+현재는 `/chat` 페이지에서만 AI 챗 UI가 제공되지만,  
+앞으로는 **전 페이지에서 공통으로 떠 있는 Floating AI Widget**을 구현할 예정입니다.  
+React Portal 및 전역 상태 관리(Recoil/Zustand)를 활용해  
+작은 아이콘 클릭 시 언제든지 챗 패널이 열리도록 하여  
+서비스 전체를 관통하는 “상시 접근형 AI 비서 경험”을 제공할 계획입니다.
 
-## 👨‍👩‍👧‍👦 대상 사용자
-"100세 시대, 남녀노소 모두를 위한 AI 건강 파트너"
+---
 
-운동 초보자부터 시니어까지
-모든 연령과 목적에 맞는 맞춤형 피트니스 루틴 제공
+### 2. Session / Memory 기반 “개인 맞춤형 코치 AI” 구축  
+Google ADK의 **Session / Memory API 설계 원칙**을 참고하여  
+사용자의 운동 기록, 빈도, 근력 수준, 신체 부위별 강도, 식습관 등  
+실제 사용자 데이터를 기반으로 **지속적으로 학습하는 개인 챗봇**을 구축할 예정입니다.
+
+- ADK 세션 구조를 이용하여 개별 사용자 상태를 지속적으로 기억  
+- 인증을 위해 AWT 기반 토큰 전략 적용  
+- 장기적 맥락을 유지하여 “보디 프로필 준비 6주 플랜”과 같은  
+  **장기 목표 기반 코칭 모델** 제공
+
+이를 통해 단순 Q&A를 넘어서  
+**“나만의 PT 트레이너” 경험**을 실현하는 것을 목표로 합니다.
+
+---
+
+### 3. VectorDB(Qdrant / MariaDB Vector) 기반 전문 운동지식 구축  
+현재는 google search tool 기반으로 외부 지식을 가져오지만,  
+향후에는 운동 백과/논문/전문 트레이닝 데이터를 정제하여  
+**VectorDB (Qdrant 또는 MariaDB Vector)** 형태로 구축할 계획입니다.
+
+- 운동별 목적(근비대/근지구력), 부위별 위험 요소, 벤치프레스 기전 등  
+  전문적인 운동 지식 임베딩
+- ADK Tool로 Vector Retrieval 시스템 연결
+- LLM이 “검색 기반 답변”이 아니라  
+  **전문 트레이너 수준의 내부 지식 기반 답변**을 생성하도록 업그레이드
+
+이는 Agent Quality 문서에서 강조하는  
+**Retrieval Integration · Trustworthiness 향상** 원칙에 따라  
+AI 응답의 정확도를 현저히 높이는 방향입니다.
+
+---
+
+### 4. 멀티-Agent Orchestration 설계  
+현재는 단일 피트니스 코치 Agent만 존재하지만,  
+추후에는 역할 기반 에이전트를 아래처럼 분리할 예정입니다.
+
+- **부상 예방 Agent** (폼 체크, 스트레칭, 통증 패턴 분석)  
+- **회복 관리 Agent** (수면·영양·회복 루틴)  
+- **운동 처방 Agent** (근비대/감량/분할 루틴 생성)  
+- **멘탈 코치 Agent** (동기부여·습관 형성 플래너)  
+
+그리고 Google ADK의 **Router Agent / Tool Agent 구조**에 따라  
+멀티-Agent 간 조율을 수행하는  
+**Coordinator Agent**를 두어  
+각 요청을 적절한 전문 Agent에게 자동 라우팅할 계획입니다.
+
+이 구조는 Prototype-to-Production 문서에 명시된  
+**Scalable Agent Architecture**에 기반합니다.
+
+---
+
+### 5. AWS 기반 실제 서비스 배포 및 Auto-Scaling  
+AI 서버(FastAPI)와 Spring Gateway를  
+AWS EC2 또는 Lightsail에 배포하여  
+실제 운영 환경에서의 안정성을 확보할 예정입니다.
+
+- FastAPI → Docker 컨테이너화  
+- Spring Boot → AWS 배포 + Nginx Reverse Proxy  
+- React → S3 + CloudFront 정적 배포  
+- 필요 시 GPU 기반 AI 서버로 확장 가능하도록 아키텍처 설계
+
+장기적으로는 GitHub Actions를 이용한 **CI/CD 자동화 파이프라인**을 구성해  
+Agent 업데이트와 벡터 DB 업데이트를 자동화할 계획입니다.
+
+---
+
+### 🎯 최종 목표
+사용자 운동 기록 + VectorDB 지식 + Multi-Agent 코칭 + Session Memory  
+이 네 요소를 결합하여  
+**전문 트레이너 수준의 “라이브 AI 퍼스널 코치” 플랫폼**으로 발전시키는 것입니다.
+
