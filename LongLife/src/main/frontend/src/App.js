@@ -1,18 +1,19 @@
 import logo from './logo.svg';
 import './App.css';
 import {Route, Routes} from "react-router-dom";
+import Calendar from "./longlife/session/Calendar";
+import Session from "./longlife/session/Session";
 
 
 function App() {
-  return (
-    <div className="App">
-      <Routes>
-          <div>
-              홈입니다
-          </div>
-      </Routes>
-    </div>
-  );
+    return (
+        <div>
+            <Routes>
+                <Route path="/calendar" element={<Calendar/>}/>
+                <Route path="/session:date" element={<Session/>}/>
+            </Routes>
+        </div>
+    );
 }
 
 export default App;
