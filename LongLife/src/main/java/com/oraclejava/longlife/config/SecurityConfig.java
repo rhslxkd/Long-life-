@@ -1,5 +1,6 @@
 package com.oraclejava.longlife.config;
 
+import com.oraclejava.longlife.model.Users;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -11,8 +12,25 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
+import java.time.LocalDateTime;
+
 @Configuration
 public class SecurityConfig {
+
+    @Bean
+    public Users adminUser() {
+        Users admin = new Users();
+        admin.setUserId("admin");
+        admin.setEmail("admin@example.com");
+        admin.setName("관리자");
+        admin.setPassword("{noop}1234"); // 인메모리라면 {noop} 가능
+        admin.setAddress("서울시 강남구");
+        admin.setHeight(175);
+        admin.setWeight(70);
+        admin.setRegdate(LocalDateTime.now());
+        return admin;
+    }
+
     @Bean
     public UserDetailsService userDetailsService(PasswordEncoder passwordEncoder) {
         UserDetails admin = User.builder()
