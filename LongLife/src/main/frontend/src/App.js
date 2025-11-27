@@ -1,19 +1,18 @@
 import logo from './logo.svg';
 import './App.css';
 import {Route, Routes} from "react-router-dom";
-import Calendar from "./longlife/session/Calendar";
-import Session from "./longlife/session/Session";
-
+import AdminRouter from "./router/AdminRouter";
+import UserRouter from "./router/UserRouter";
+import PublicRouter from "./router/PublicRouter";
 
 function App() {
-    return (
-        <div>
-            <Routes>
-                <Route path="/calendar" element={<Calendar/>}/>
-                <Route path="/workout/session/:formDate" element={<Session/>}/>
-            </Routes>
-        </div>
-    );
+  return (
+    <Routes>
+        {AdminRouter()}
+        {UserRouter()}
+        {PublicRouter()}
+    </Routes>
+  );
 }
 
 export default App;
