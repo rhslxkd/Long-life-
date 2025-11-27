@@ -10,7 +10,7 @@ function App() {
         <div>
             <Routes>
                 <Route path="/calendar" element={<Calendar/>}/>
-                <Route path="/session:date" element={<Session/>}/>
+                <Route path="/workout/session/:formDate" element={<Session/>}/>
             </Routes>
         </div>
     );

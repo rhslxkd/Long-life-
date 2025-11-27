@@ -15,7 +15,7 @@ public class WorkoutSession {
     private Long sessionId;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "users_id")
+    @JoinColumn(name = "user_id")
     private Users users;
 
     @Column(name = "started_at")

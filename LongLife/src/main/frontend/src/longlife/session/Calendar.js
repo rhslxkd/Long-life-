@@ -139,7 +139,8 @@ function Calendar() {
                             <div
                                 key={idx}
                                 onClick={() => {
-                                    const formDate = date.toISOString().split("T")[0];
+                                    const formDate = date.toLocaleDateString("sv-SE"); // YYYY-MM-DD
+                                    console.log(formDate);
                                     navigate(`/workout/session/${formDate}`);
                                 }}
                                 style={{
