@@ -22,4 +22,5 @@ public class Users {
     private int height;
     private int weight;
     private LocalDateTime regdate;
+    private String role;
 }

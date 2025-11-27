@@ -5,13 +5,14 @@ import Footer from "../../lib/Footer";
 export default function UserLayout() {
 
     const loc = useLocation();
-    // const hideHeader = ['/login', '/forbidden'].includes(loc.pathname); //헤더를 숨길 경로들 includes 메서드로 확인
+    const hideHeader = loc.pathname === '/login' || loc.pathname === '/register' || loc.pathname === '/forbidden';
+    const hideFooter = loc.pathname === '/login' || loc.pathname === '/register' || loc.pathname === '/forbidden';
 
     return (
         <>
-            <Header />
+            {!hideHeader && <Header />}
             <Outlet />
-            <Footer />
+            {!hideFooter && <Footer/>}
         </>
     );
 }
