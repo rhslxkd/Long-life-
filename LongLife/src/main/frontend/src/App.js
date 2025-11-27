@@ -1,17 +1,17 @@
 import logo from './logo.svg';
 import './App.css';
 import {Route, Routes} from "react-router-dom";
-
+import AdminRouter from "./router/AdminRouter";
+import UserRouter from "./router/UserRouter";
+import PublicRouter from "./router/PublicRouter";
 
 function App() {
   return (
-    <div className="App">
-      <Routes>
-          <div>
-              홈입니다
-          </div>
-      </Routes>
-    </div>
+    <Routes>
+        {AdminRouter()}
+        {UserRouter()}
+        {PublicRouter()}
+    </Routes>
   );
 }
 
