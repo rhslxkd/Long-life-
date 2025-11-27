@@ -1,11 +1,10 @@
 import {useState} from "react";
 
-function useMe() { //이게 forigner key역할을 함.
+export default function useMe() {
     const [user, setUser] = useState(() => {
-        const  u = sessionStorage.getItem("user");
-        return u ? JSON.parse(u): null;
+        const uuser = sessionStorage.getItem("user");
+        return uuser ? JSON.parse(uuser) : null;
     });
+
     return user;
 }
-export default useMe;
-export {useMe};
