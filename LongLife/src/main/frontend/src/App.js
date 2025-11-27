@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 import {Route, Routes} from "react-router-dom";
-import AiChatPage from "./pages/AiChatPage";
+import AiChatPage from "./longlife/ai/AiChatPage";
 
 
 function App() {
