@@ -1,0 +1,19 @@
+
+.forbiddenPage .content {
+    background: #2f2f2f;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    flex-direction: column;
+
+}
+
+.forbiddenPage .text-center {
+    text-align: center;
+}
+
+.forbiddenPage .color-white-shadow {
+    color: #fff;
+    text-shadow: 0 -1px #0f0f0f;
+}
