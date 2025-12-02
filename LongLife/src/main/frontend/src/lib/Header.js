@@ -52,6 +52,7 @@ export default function Header() {
                             {user && <span style={{marginLeft: 12}}>안녕하세요, {user.name}({user.userId})님</span>}
                         </div>
                         <div className="text-end">
+                            {user && <button type="button" className="btn btn-outline-light me-2" onClick={() => navigate('/myInfo')}>내정보</button>}
                             <button type="button" className="btn btn-outline-light me-2" onClick={onLogout}>로그아웃
                             </button>
                         </div>
