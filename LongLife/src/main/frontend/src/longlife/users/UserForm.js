@@ -23,6 +23,15 @@ function UserForm({ onSubmit, defaultValues = {}, mode = "register" }) {
                         required: "아이디는 필수 입력입니다.",
                         minLength: { value: 4, message: "아이디는 4자 이상 10자 이하로 입력해주세요." },
                         maxLength: { value: 10, message: "아이디는 4자 이상 10자 이하로 입력해주세요." },
+                        validate: {
+                            checkId: async (value) => {
+                                if (!value) return true;
+                                const r = await fetch(`http://localhost:8080/api/users/duplicate-check?userId=${encodeURIComponent(value)}`);
+                                if (!r.ok) return "중복 확인 실패";
+                                const {available} = await r.json();
+                                return available || '이미 사용중인 아이디입니다.';
+                            }
+                        }
                     })}
                     disabled={mode === "update"} // 수정 모드에서는 아이디 변경 불가
                 />
