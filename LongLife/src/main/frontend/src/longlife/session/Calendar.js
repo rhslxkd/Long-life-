@@ -1,5 +1,6 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useNavigate} from "react-router-dom";
+import {fetcher} from "../../lib/fetcher";
 
 function Calendar() {
     const today = new Date();
@@ -7,6 +8,9 @@ function Calendar() {
     const [currentDate, setCurrentDate] = useState(today);
     const [selectedDate, setSelectedDate] = useState(null);
     const [showPopup, setShowPopup] = useState(false);
+
+    // 운동일지가 있는 날짜들 (백엔드에서 가져옴)
+    const [sessionDates, setSessionDates] = useState([]);
 
     // 팝업에서 임시로 선택한 연/월 상태
     const [tempYear, setTempYear] = useState(today.getFullYear());
@@ -34,6 +38,21 @@ function Calendar() {
         setCurrentDate(new Date(tempYear, tempMonth, 1));
         setShowPopup(false);
     };
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const data = await fetcher(
+                    `http://localhost:8080/api/workout/dates?year=${year}&month=${month+1}`
+                );
+                console.log("응답 데이터:", data);
+                setSessionDates(Array.isArray(data) ? data : []);
+            } catch (e) {
+                console.error("failed", e);
+            }
+        })();
+    }, [year, month]);
+
 
     // 달력 날짜 배열 (앞뒤 달 포함)
     const calendarDays = [];
@@ -134,29 +153,42 @@ function Calendar() {
                         const {date, isCurrentMonth} = dayObj;
                         const isToday = date.toDateString() === today.toDateString();
                         const isSelected = selectedDate && date.toDateString() === selectedDate.toDateString();
+                        const isFuture = date > today;
+
+                        const formDate = date.toLocaleDateString("sv-SE"); // YYYY-MM-DD
+                        const hasSession = Array.isArray(sessionDates) && sessionDates.includes(formDate); // ✅ 운동일지 존재 여부
 
                         return (
                             <div
                                 key={idx}
                                 onClick={() => {
-                                    const formDate = date.toLocaleDateString("sv-SE"); // YYYY-MM-DD
-                                    console.log(formDate);
-                                    navigate(`/workout/session/${formDate}`);
+                                    if (!isFuture) {
+                                        navigate(`/workout/session/${formDate}`);
+                                    }
                                 }}
                                 style={{
                                     border: "1px solid #ccc",
                                     aspectRatio: "1 / 1",
                                     padding: "5px",
                                     textAlign: "left",
-                                    cursor: "pointer",
+                                    cursor: isFuture ? "not-allowed" : "pointer", // 미래 날짜는 클릭 불가 표시
                                     color: isCurrentMonth ? "black" : "gray",
-                                    backgroundColor: isSelected ? "#ffe4b5" : isToday ? "#f0f8ff" : "white",
+                                    backgroundColor: hasSession
+                                        ? "#90ee90" // ✅ 운동일지 있는 날짜는 연두색
+                                        : isSelected
+                                            ? "#ffe4b5"
+                                            : isToday
+                                                ? "#f0f8ff"
+                                                : "white",
+                                    opacity: isFuture ? 0.5 : 1, // 미래 날짜는 흐리게 표시
                                 }}
                             >
                                 {date.getDate()}
                             </div>
                         );
                     })}
+
+
                 </div>
 
 
