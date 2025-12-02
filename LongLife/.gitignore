@@ -42,6 +42,7 @@ __pycache__/
 
 # Virtual environment
 .venv/
+venv/
 
 # Env files
 .env
@@ -49,3 +50,8 @@ __pycache__/
 
 # Editor
 .vscode/
+.idea/
+
+# [핵심] Vector DB 데이터 (용량 큼, 언제든 재생성 가능)
+chroma_db/
+LongLife/python-agent/chroma_db/

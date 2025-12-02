@@ -1,6 +1,7 @@
 import os
+from typing import Dict
 
-from fastapi import FastAPI
+from fastapi import FastAPI, HTTPException
 from pydantic import BaseModel
 
 from google.adk.agents import Agent
@@ -8,85 +9,94 @@ from google.adk.runners import InMemoryRunner
 from google.adk.tools import google_search
 
 # ======================
-# 1. API 키 / 환경 설정
+# 1. 환경 설정
 # ======================
 api_key = os.getenv("GOOGLE_API_KEY")
+# 만약 환경변수 문제라면 여기에 키를 직접 넣어서 테스트해 봐 (테스트 후엔 지워!)
+# api_key = "AIzaSy..." 
+
 if not api_key:
-    raise RuntimeError("환경변수 GOOGLE_API_KEY 가 설정되어 있지 않음")
+    raise RuntimeError("⚠️ API Key가 없습니다. 환경변수를 확인하세요.")
 
 os.environ["GOOGLE_API_KEY"] = api_key
 os.environ["GOOGLE_GENAI_USE_VERTEXAI"] = "FALSE"
 
 # ======================
-# 2. ADK Agent & Runner
+# 2. Agent 정의
 # ======================
 root_agent = Agent(
     name="fitness_coach_agent",
-    model="gemini-2.5-flash-lite",
-    description="Personal fitness coach that designs workout plans and gives exercise advice.",
+    model="gemini-2.5-flash-lite", # 모델명이 정확한지 확인 (gemini-1.5-flash도 시도해봐)
+    description="Personal fitness coach.",
     instruction=(
-        "100세시대를 맞아 남녀노소 오래살거 건강하게 살자라는 모토를 가지고있으세요."
-        "헬스, 체중 감량, 근육 증가, 생활 습관에 대해 구체적으로 조언하세요."
-        "당신은 스파르타코치입니다. 배려와 이해를 하지마세요."
-        "운동에 대해 질문이 나올 시 다음을 따르세요:\n"
-        "1) 한 문장 요약\n"
-        "2) 운동에 대한 설명, 운동 루틴을 운동 이름, 세트 * 횟수(또는 시간)를 표 형식으로 제시\n"
-        "3) 주의사항 2~3개(부상방지, 휴식, 호흡 등)\n\n"
-        "사용자가 건강 상태나 통증을 이야기하면 전문의 진료를 권유해야 합니다.\n"
-        "모르거나 애매한 내용은 아는 척하지 말고, 일반적인 원칙만 설명합니다.\n"
-        "최신 정보나 연구가 필요하면 Google Search 도구를 사용해 검증합니다."
+        "당신은 스파르타 코치입니다. 반말로 강하게 동기부여하세요.\n"
+        "사용자가 이름을 말하면 기억하고 불러주세요."
     ),
-    tools=[google_search],
+    tools=[google_search], 
 )
 
-runner = InMemoryRunner(agent=root_agent)
+# ======================
+# 3. 세션 저장소
+# ======================
+session_store: Dict[str, InMemoryRunner] = {}
+
+def get_or_create_runner(session_id: str) -> InMemoryRunner:
+    if session_id not in session_store:
+        print(f"✨ [New Session] ID: {session_id}")
+        session_store[session_id] = InMemoryRunner(agent=root_agent, app_name="fitness_app")
+    else:
+        print(f"📂 [Loaded] ID: {session_id}")
+    return session_store[session_id]
 
 # ======================
-# 3. FastAPI 서버
+# 4. 서버
 # ======================
 app = FastAPI()
 
-
 class ChatRequest(BaseModel):
     message: str
-
+    session_id: str 
 
 class ChatResponse(BaseModel):
     reply: str
 
-
 def extract_text_from_events(events) -> str:
-    """
-    ADK Event 리스트에서 content.parts[].text만 뽑아서 합쳐주는 함수
-    """
-    texts: list[str] = []
+    texts = []
+    # events가 리스트가 아니면(문자열 에러 등) 그냥 반환
+    if not isinstance(events, list): return str(events)
 
-    # run_debug 결과가 list[Event] 라는 가정
     for ev in events:
         content = getattr(ev, "content", None)
-        if not content:
-            continue
-
+        if not content: continue
         parts = getattr(content, "parts", []) or []
         for part in parts:
             text = getattr(part, "text", None)
             if text:
                 texts.append(text)
-
-    if texts:
-        return "\n\n".join(texts)
-
-    # 혹시라도 아무 텍스트 못 찾으면 디버그용으로 통째로 문자열화
-    return str(events)
-
+    return "\n\n".join(texts) if texts else "(응답 없음)"
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest):
-    # 1) ADK 한 턴 실행 (디버깅용 러너)
-    events = await runner.run_debug(req.message)
+    if not req.session_id:
+        return ChatResponse(reply="오류: 세션 ID 없음")
 
-    # 2) 사람이 읽을 수 있는 텍스트만 추출
+    my_runner = get_or_create_runner(req.session_id)
+    
+    try:
+        # [중요] run_debug에 session_id를 명시적으로 전달해야 격리가 됨
+        # 만약 라이브러리 버전 때문에 session_id 인자가 안 먹히면 빼야 함
+        # 일단 넣어보고 에러 나면 뺄게.
+        events = await my_runner.run_debug(req.message, session_id=req.session_id)
+    except TypeError:
+        print("⚠️ session_id 인자 지원 안 함. 기본 실행.")
+        events = await my_runner.run_debug(req.message)
+    except Exception as e:
+        print(f"🔥 API Error: {e}")
+        return ChatResponse(reply="AI 서버 오류가 발생했습니다. 잠시 후 다시 시도해주세요.")
+
     reply_text = extract_text_from_events(events)
-
-    # 3) 깔끔한 JSON으로 반환
     return ChatResponse(reply=reply_text)
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=8000)

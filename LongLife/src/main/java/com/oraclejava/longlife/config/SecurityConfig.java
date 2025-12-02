@@ -30,7 +30,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/register",
                                 "/api/users/login",
                                 "/api/users/logout",
-                                "/api/users/duplicate-check").permitAll()
+                                "/api/users/duplicate-check",
+                                "/api/ai/**").permitAll()
                         .anyRequest().authenticated())
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
