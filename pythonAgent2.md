@@ -34,7 +34,7 @@ sequenceDiagram
     P->>P: [Context Injection] "비만 상태 확인. 스파르타 모드 발동."
     P-->>S: "회원님은 비만입니다. 당장 유산소 시작하세요!"
     S-->>U: 응답 전달
-    ```
+```
 ---
 
 ## 🚀 Key Implementations
@@ -148,6 +148,7 @@ def get_my_health_info(user_id: str) -> str:
 
 ## 🔮 Next Steps
 * Phase 3: 현재 google_search tool과 get_my_health_info tool을 같이 쥐면 Agent가 충돌이 남.. 각자 하나씩 분리해서 MultiAgent로 해결할 예정
+* 
 [Root Agent (팀장)]
 
        |
