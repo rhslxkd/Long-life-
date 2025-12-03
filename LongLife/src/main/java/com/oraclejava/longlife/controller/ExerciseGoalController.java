@@ -1,7 +1,7 @@
 package com.oraclejava.longlife.controller;
 
 import com.oraclejava.longlife.dto.ExerciseGoalDto;
-import com.oraclejava.longlife.service.GoalService;
+import com.oraclejava.longlife.service.ExerciseGoalService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -12,20 +12,16 @@ import java.util.List;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/api/goal")
-public class GoalController {
-    public final GoalService goalService;
+@RequestMapping("/api/exercise")
+public class ExerciseGoalController {
+    public final ExerciseGoalService goalService;
 
-    @GetMapping("/exercise")
+    @GetMapping("/goal")
     public List<ExerciseGoalDto> findExerciseGoal(Authentication authentication) {
         String userId = authentication.getName();
         return goalService.findExerciseGoalByUserId(userId);
     }
 
-//    @GetMapping("/kg")
-//    public List<KgGoalDto> findKgGoalByUserId(Authentication authentication) {
-//        String userId = authentication.getName();
-//        return goalService.findKgGoalByUserId(userId);
-//    }
+
 
 }

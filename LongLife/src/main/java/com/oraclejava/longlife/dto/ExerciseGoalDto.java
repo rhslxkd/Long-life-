@@ -2,17 +2,15 @@ package com.oraclejava.longlife.dto;
 
 import com.oraclejava.longlife.model.Status;
 
-import java.time.Duration;
 import java.time.LocalDate;
 
-public record GoalDto(
+public record ExerciseGoalDto(
         String userId,
         String name,
-        int weightGoal,
-        int kgGoal,
-        int countGoal,
-        int distanceGoal,
-        int timeGoal,
+        Integer weightGoal,
+        Integer countGoal,
+        Integer distanceGoal,
+        Integer timeGoal,
         LocalDate startingDate,
         LocalDate completeDate,
         Status status

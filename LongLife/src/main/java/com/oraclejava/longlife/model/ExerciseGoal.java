@@ -4,16 +4,17 @@ import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.time.Duration;
 import java.time.LocalDate;
 
 @Entity
 @Getter
 @Setter
-public class Goal {
+@Table(name = "exercise_goal")
+public class ExerciseGoal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    @Column(name = "exerciseGoal_id")
+    private Long exerciseGoalId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "exercise_id")
@@ -25,9 +26,6 @@ public class Goal {
 
     @Column(name = "weight_goal")
     private int weightGoal;
-
-    @Column(name = "kg_goal")
-    private int kgGoal;
 
     @Column(name = "count_goal")
     private int countGoal;

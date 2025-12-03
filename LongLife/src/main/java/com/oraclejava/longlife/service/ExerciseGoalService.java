@@ -11,7 +11,7 @@ import java.util.List;
 @Transactional
 @Service
 @RequiredArgsConstructor
-public class GoalService {
+public class ExerciseGoalService {
     private final ExerciseGoalRepository goalRepo;
 
     // 운동목표 조회
@@ -19,10 +19,7 @@ public class GoalService {
         return goalRepo.findExerciseGoalByUserId(userId);
     }
 
-//    // 체중목표 조회
-//    public List<KgGoalDto> findKgGoalByUserId(String userId){
-//        return goalRepo.findKgGoalByUserId(userId);
-//    }
+
 
     // 운동목표 추가
 

@@ -26,7 +26,9 @@ public interface WorkoutSessionRepository extends JpaRepository<WorkoutSession, 
 
     @Query("""
             select ws from WorkoutSession ws
-            where YEAR(ws.startedAt) = :year and MONTH(ws.startedAt) = :month
+            where YEAR(ws.startedAt) = :year and MONTH(ws.startedAt) = :month and ws.users.userId = :userId
             """)
-    List<WorkoutSession> findMonthSession(@Param("year") int year, @Param("month") int month);
+    List<WorkoutSession> findMonthSession(@Param("year") int year,
+                                          @Param("month") int month,
+                                          @Param("userId") String userId);
 }

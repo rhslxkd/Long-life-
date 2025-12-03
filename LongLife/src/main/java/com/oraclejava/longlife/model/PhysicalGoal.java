@@ -11,17 +11,17 @@ import java.time.LocalDate;
 @Setter
 
 @Table(name = "physical_goal")
-public class KgGoal {
+public class PhysicalGoal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "kgGoal_id")
-    private int kgGoalId;
+    @Column(name = "physicalGoal_id")
+    private Long physicalGoalId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id")
     private Users users;
 
-    @Column(name = "kg")
+    @Column(name = "kg_goal")
     private int kgGoal;
 
     @Column(name = "starting_date")

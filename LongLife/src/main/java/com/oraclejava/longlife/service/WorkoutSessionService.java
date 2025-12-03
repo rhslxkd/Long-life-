@@ -49,8 +49,8 @@ public class WorkoutSessionService {
     }
 
     // 운동일지가 존재하는 월
-    public List<String> findMonthSession(int year, int month) {
-        List<WorkoutSession> session = workoutSessionRepo.findMonthSession(year, month);
+    public List<String> findMonthSession(int year, int month, String userId) {
+        List<WorkoutSession> session = workoutSessionRepo.findMonthSession(year, month, userId);
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
 
         return session.stream()

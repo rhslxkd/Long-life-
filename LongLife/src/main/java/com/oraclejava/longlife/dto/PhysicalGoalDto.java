@@ -4,7 +4,7 @@ import com.oraclejava.longlife.model.Status;
 
 import java.time.LocalDate;
 
-public record KgGoalDto(
+public record PhysicalGoalDto(
         String userId,
         Integer weight,
         Integer height,
