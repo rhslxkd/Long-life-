@@ -30,8 +30,13 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/register",
                                 "/api/users/login",
                                 "/api/users/logout",
+<<<<<<< HEAD
                                 "/api/users/duplicate-check",
                                 "/api/ai/**").permitAll()
+=======
+                                "/api/users/duplicate-check").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
+>>>>>>> origin/dev
                         .anyRequest().authenticated())
                 .formLogin(form -> form.disable())
                 .httpBasic(basic -> basic.disable())
