@@ -5,7 +5,7 @@ import com.oraclejava.longlife.dto.WorkoutSessionRequest;
 import com.oraclejava.longlife.model.Exercise;
 import com.oraclejava.longlife.model.Users;
 import com.oraclejava.longlife.model.WorkoutSession;
-import com.oraclejava.longlife.repo.ExerciseRepo;
+import com.oraclejava.longlife.repo.ExerciseRepository;
 import com.oraclejava.longlife.repo.UsersRepository;
 import com.oraclejava.longlife.repo.WorkoutSessionRepository;
 import lombok.RequiredArgsConstructor;
@@ -24,7 +24,7 @@ import java.util.stream.Collectors;
 @Service
 public class WorkoutSessionService {
     private final WorkoutSessionRepository workoutSessionRepo;
-    private final ExerciseRepo exerciseRepo;
+    private final ExerciseRepository exerciseRepo;
     private final UsersRepository usersRepository;
 
     // 해당 날짜의 운동일지

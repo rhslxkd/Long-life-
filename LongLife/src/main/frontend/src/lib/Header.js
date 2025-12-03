@@ -47,11 +47,19 @@ export default function Header() {
                                 <a className="nav-link disabled" href="#" tabIndex="-1"
                                    aria-disabled="true">Disabled</a>
                             </li>
+                            {user?.role === "ROLE_ADMIN" && (
+                                <>
+                                    <li className="nav-item">
+                                        <a className="nav-link" href="/admin">관리자페이지</a>
+                                    </li>
+                                </>
+                            )}
                         </ul>
                         <div className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
                             {user && <span style={{marginLeft: 12}}>안녕하세요, {user.name}({user.userId})님</span>}
                         </div>
                         <div className="text-end">
+                            {user && <button type="button" className="btn btn-outline-light me-2" onClick={() => navigate('/myInfo')}>내정보</button>}
                             <button type="button" className="btn btn-outline-light me-2" onClick={onLogout}>로그아웃
                             </button>
                         </div>

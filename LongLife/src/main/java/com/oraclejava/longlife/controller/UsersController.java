@@ -3,6 +3,7 @@ package com.oraclejava.longlife.controller;
 import com.oraclejava.longlife.dto.LoginRequest;
 import com.oraclejava.longlife.dto.MeResponse;
 import com.oraclejava.longlife.dto.RegisterRequest;
+import com.oraclejava.longlife.dto.UserUpdateDto;
 import com.oraclejava.longlife.model.Users;
 import com.oraclejava.longlife.repo.UsersRepository;
 import com.oraclejava.longlife.service.UsersService;
@@ -50,11 +51,31 @@ public class UsersController {
         return ResponseEntity.ok().body(meResponse);
     }
 
+    // 로그아웃
     @PostMapping("/logout")
     public ResponseEntity<?> logout(HttpServletRequest request,
                                     HttpServletResponse response) {
         usersService.logout(request, response);
 
+        return ResponseEntity.ok().build();
+    }
+    
+    // 유저 정보
+    @GetMapping("/{userId}")
+    public ResponseEntity<?> getUser(@PathVariable String userId) {
+        return ResponseEntity.ok().body(usersService.getUser(userId));
+    }
+    
+    // 회원 수정
+    @PutMapping("/{userId}")
+    public ResponseEntity<?> updateUser(@PathVariable String userId, @RequestBody UserUpdateDto userUpdateDto) {
+        return ResponseEntity.ok().body(usersService.updateUser(userId, userUpdateDto));
+    }
+    
+    // 회원 탈퇴
+    @DeleteMapping("/{userId}")
+    public ResponseEntity<?> deleteUser(@PathVariable String userId, HttpServletRequest request, HttpServletResponse response) {
+        usersService.userDelete(userId, request, response);
         return ResponseEntity.ok().build();
     }
 }
