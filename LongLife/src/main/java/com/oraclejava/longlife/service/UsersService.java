@@ -108,7 +108,8 @@ public class UsersService {
 
     // 회원 수정
     public UserResponseDto updateUser(String userId, UserUpdateDto updateDto) {
-        Users user = usersRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자 정보를 찾을 수 없습니다."));
+        Users user = usersRepository.findById(userId)
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자 정보를 찾을 수 없습니다."));
 
         user.setName(updateDto.name());
         user.setEmail(updateDto.email());

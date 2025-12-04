@@ -38,10 +38,21 @@ export default function Header() {
                                 <a className="nav-link" href="/workout/calendar">운동일지</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">목표</a>
+                                <a className="nav-link" href="/physical/goal">목표</a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" href="#">스토리</a>
+                            </li>
+                            <li className="nav-item dropdown">
+                                <a className="nav-link dropdown-toggle" href="/friends" id="navbarDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    친구
+                                </a>
+                                <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
+                                    <li><a className="dropdown-item" href="/friends">친구목록</a></li>
+                                    <li><a className="dropdown-item" href="/friendSearch">친구찾기</a></li>
+                                    <li><a className="dropdown-item" href="/requests">받은요청</a></li>
+                                </ul>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" href="/chat">chatbot</a>
@@ -62,7 +73,8 @@ export default function Header() {
                             {user && <span style={{marginLeft: 12}}>안녕하세요, {user.name}({user.userId})님</span>}
                         </div>
                         <div className="text-end">
-                            {user && <button type="button" className="btn btn-outline-light me-2" onClick={() => navigate('/myInfo')}>내정보</button>}
+                            {user && <button type="button" className="btn btn-outline-light me-2"
+                                             onClick={() => navigate('/myInfo')}>내정보</button>}
                             <button type="button" className="btn btn-outline-light me-2" onClick={onLogout}>로그아웃
                             </button>
                         </div>

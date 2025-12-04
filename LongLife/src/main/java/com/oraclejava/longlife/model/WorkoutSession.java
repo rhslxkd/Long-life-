@@ -32,7 +32,8 @@ public class WorkoutSession {
 
     private String note;
 
-    public void update(LocalDateTime startedAt, LocalDateTime endedAt, String location, String note, Exercise exercise) {
+    public void update(LocalDateTime startedAt, LocalDateTime endedAt,
+                       String location, String note, Exercise exercise) {
         this.startedAt = startedAt;
         this.endedAt = endedAt;
         this.location = location;
