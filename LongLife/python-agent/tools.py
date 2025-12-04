@@ -100,43 +100,89 @@ def get_my_goal(user_id: str) -> str:
         conn = get_db_connection()
         with conn.cursor() as cursor:
             sql = """
-                SELECT weight_goal, kg_goal, count_goal, distance_goal, time_goal, starting_date, complete_date, status, ai_recommendation
-                FROM goals
-                WHERE user_id = %s
+                (SELECT 
+                    'exercise' AS goal_type,
+                    weight_goal, NULL AS kg_goal, count_goal, distance_goal, time_goal, 
+                    starting_date, complete_date, status, ai_recommendation
+                FROM exercise_goal
+                WHERE user_id = %s)
+                
+                UNION ALL
+                
+                (SELECT 
+                    'physical' AS goal_type,
+                    NULL AS weight_goal, kg_goal, NULL AS count_goal, NULL AS distance_goal, NULL AS time_goal,
+                    starting_date, complete_date, status, NULL AS ai_recommendation
+                FROM physical_goal
+                WHERE user_id = %s)
+                
                 ORDER BY starting_date DESC
             """
-            cursor.execute(sql, (user_id,))
+            cursor.execute(sql, (user_id,user_id))
             rows = cursor.fetchall()
             
             if not rows:
                 return "설정된 목표가 없다."
             
-            result_list = []
+            result_text = "[나의 통합 목표 리스트]\n"
+            
             for i, r in enumerate(rows, 1):
-                details = []
-                if r['weight_goal']: details.append(f"목표 체중: {r['weight_goal']}kg")
-                if r['kg_goal']: details.append(f"감량 목표: {r['kg_goal']}kg")
-                if r['count_goal']: details.append(f"목표 횟수: {r['count_goal']}회")
-                if r['distance_goal']: details.append(f"목표 거리: {r['distance_goal']}km")
-                if r['time_goal']: details.append(f"목표 시간: {r['time_goal']}")
-                
-                goal_str = ", ".join(details) if details else "구체적 숫자 없음"
-                
-                # 날짜 포맷팅 (YYYY-MM-DD)
-                start = r['starting_date'].strftime('%Y-%m-%d') if r['starting_date'] else "시작일 미정"
-                end = r['complete_date'].strftime('%Y-%m-%d') if r['complete_date'] else "기한 없음"
-                
-                # AI 추천 내용이 있으면 같이 보여줌
-                ai_rec = f"\n  └ AI 조언: {r['ai_recommendation']}" if r['ai_recommendation'] else ""
+                # 날짜 포맷팅
+                start = r['starting_date'].strftime('%Y-%m-%d') if r['starting_date'] else "-"
+                end = r['complete_date'].strftime('%Y-%m-%d') if r['complete_date'] else "-"
+                status_str = f"[{r['status']}] ({start} ~ {end})"
 
-                result_list.append(
-                    f"{i}. 상태: {r['status']} ({start} ~ {end})\n"
-                    f"   내용: {goal_str}{ai_rec}"
-                )
-            return "[나의 운동 목표]\n" + "\n\n".join(result_list)
+                # goal_type에 따라 다르게 포맷팅
+                if r['goal_type'] == 'exercise':
+                    details = []
+                    if r['weight_goal']: details.append(f"중량: {r['weight_goal']}kg")
+                    if r['kg_goal']: details.append(f"감량/증량: {r['kg_goal']}kg")
+                    if r['count_goal']: details.append(f"횟수: {r['count_goal']}회")
+                    if r['distance_goal']: details.append(f"거리: {r['distance_goal']}km")
+                    if r['time_goal']: details.append(f"시간: {r['time_goal']}")
+                    
+                    content = ", ".join(details) if details else "세부 내용 없음"
+                    ai_rec = f"\n   └ AI 코멘트: {r['ai_recommendation']}" if r['ai_recommendation'] else ""
+                    
+                    result_text += f"{i}. [운동] {status_str}\n   내용: {content}{ai_rec}\n"
+
+                elif r['goal_type'] == 'physical':
+                    target = f"{r['kg_goal']}kg" if r['kg_goal'] else "미설정"
+                    result_text += f"{i}. [신체] {status_str}\n   목표 체중: {target}\n"
+
+                return result_text
         
     except Exception as e:
         return f"목표 조회 실패: {e}"
     finally:
         if 'conn' in locals():
             conn.close()
+            
+# ==========================================
+# 4. Search Agent용 도구 (웹 검색)
+# ==========================================
+def search_web(query: str) -> str:
+    """
+    웹 검색 엔진을 사용하여 최신 운동 정보나 지식을 검색합니다.
+    Args:
+        query (str): 검색할 키워드
+    """
+    print(f"🔍 [Tool] 웹 검색 수행: {query}")
+    
+    try:
+        # DuckDuckGo로 검색 (상위 3개 결과)
+        results = DDGS().text(query, max_results=3)
+        
+        if not results:
+            return "검색 결과가 없습니다."
+        
+        # AI가 읽기 좋게 요약
+        summary = ""
+        for i, r in enumerate(results, 1):
+            summary += f"{i}. {r['title']}\n   내용: {r['body']}\n   링크: {r['href']}\n\n"
+            
+        return f"[검색 결과]\n{summary}"
+
+    except Exception as e:
+        print(f"🔥 검색 에러: {e}")
+        return f"검색 중 오류가 발생했습니다: {e}"
