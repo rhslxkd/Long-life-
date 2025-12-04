@@ -145,7 +145,7 @@ export default function Session() {
             <button onClick={() => navigate(`/workout/createSession/${date}`)}>
                 운동일지 추가하기
             </button>
-            <button onClick={() => navigate(`/workout/calendar`)}>
+            <button onClick={() => navigate(`/workout/calendar?date=${date}`)}>
                 캘린더로 돌아가기
             </button>
         </div>

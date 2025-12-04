@@ -2,23 +2,19 @@ import { useForm } from "react-hook-form";
 import { fetcher } from "../../lib/fetcher";
 import useMe from "../../hooks/useMe";
 import {useNavigate, useParams} from "react-router-dom";
+import {useEffect, useState} from "react";
 
 export default function CreateSession() {
     const { formDate: date } = useParams();
-    const exerciseList = [
-        "풀업",
-        "랫풀다운",
-        "스쿼트",
-        "런지",
-        "싯업",
-        "플랭크",
-        "밀리터리프레스",
-        "사이드레터럴레이즈",
-        "푸쉬업",
-        "딥스",
-        "마라톤",
-        "조깅"
-    ];
+    const users = useMe();
+    const [exercises, setExercises] = useState([]);
+    const [exerciseList, setExerciseList] = useState([]);
+    const [cat1, setCat1] = useState([]);
+    const [cat2, setCat2] = useState([]);
+    const [type1, setType1] = useState("");
+    const [type2, setType2] = useState("");
+    const [err, setErr] = useState(null);
+    const navigate = useNavigate();
 
     const {
         register,
@@ -26,8 +22,40 @@ export default function CreateSession() {
         formState: { errors }
     } = useForm();
 
-    const users = useMe();
-    const navigate = useNavigate();
+    useEffect(() => {
+        (async () => {
+            try {
+                const data = await fetcher('http://localhost:8080/api/exercise');
+                setExercises(data);
+                // 카테고리1 고정을 위해 처음에 랜더링 시 한번만
+                setCat1([...new Set(data.map((e) => e.type1))]);
+            } catch (e) {
+                setErr(e.message);
+            }
+        })();
+    }, []);
+
+
+    // type1 선택 시 → cat2 세팅
+    useEffect(() => {
+        if (type1) {
+            setCat2([...new Set(exercises.filter(e => e.type1 === type1).map(e => e.type2))]);
+        } else {
+            setCat2([]);
+        }
+        setType2(""); // 초기화
+        setExerciseList([]); // 초기화
+    }, [type1, exercises]);
+
+    // type2 선택 시 → 운동 목록 세팅
+    useEffect(() => {
+        if (type2) {
+            setExerciseList(exercises.filter(e => e.type1 === type1 && e.type2 === type2));
+        } else {
+            setExerciseList([]);
+        }
+    }, [type2, type1, exercises]);
+
 
     const createSession = async (data) => {
         const { exerciseName, note, location, startedAt, endedAt } = data;
@@ -69,12 +97,34 @@ export default function CreateSession() {
             <h1>운동일지 추가하기</h1>
             <form onSubmit={handleSubmit(createSession)}>
                 <div>
+                    <label>운동 유형</label>
+                    <select value={type1} onChange={(e) => setType1(e.target.value)}>
+                        <option value="">운동 유형 선택</option>
+                        {cat1.map((c, index) => (
+                            <option key={index} value={c}>
+                                {c}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <label>운동 분류</label>
+                    <select value={type2} onChange={(e) => setType2(e.target.value)}>
+                        <option value="">운동 분류 선택</option>
+                        {cat2.map((c, index) => (
+                            <option key={index} value={c}>
+                                {c}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
                     <label>운동</label>
                     <select {...register("exerciseName", { required: true })}>
                         <option value="">운동 선택</option>
                         {exerciseList.map((exercise, index) => (
-                            <option key={index} value={exercise}>
-                                {exercise}
+                            <option key={index} value={exercise.name}>
+                                {exercise.name}
                             </option>
                         ))}
                     </select>

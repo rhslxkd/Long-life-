@@ -34,8 +34,9 @@ public class WorkoutSessionController {
 
     // 운동일지가 존재하는 월
     @GetMapping("/dates")
-    public List<String> findMonthSession(@RequestParam int year, @RequestParam int month) {
-        return workoutSessionService.findMonthSession(year, month);
+    public List<String> findMonthSession(@RequestParam int year, @RequestParam int month, Authentication authentication) {
+        String userId = authentication.getName();
+        return workoutSessionService.findMonthSession(year, month, userId);
     }
 
 

@@ -11,21 +11,14 @@ export default function UpdateSession() {
     const navigate = useNavigate();
     const sessionId = params?.sessionId;
     const [session, setSession] = useState(null);
+    const [exercises, setExercises] = useState([]);
+    const [exerciseList, setExerciseList] = useState([]);
+    const [cat1, setCat1] = useState([]);
+    const [cat2, setCat2] = useState([]);
+    const [type1, setType1] = useState("");
+    const [type2, setType2] = useState("");
 
-    const exerciseList = [
-        "풀업",
-        "랫풀다운",
-        "스쿼트",
-        "런지",
-        "싯업",
-        "플랭크",
-        "밀리터리프레스",
-        "사이드레터럴레이즈",
-        "푸쉬업",
-        "딥스",
-        "마라톤",
-        "조깅"
-    ];
+    const [err, setErr] = useState(null);
 
     const {
         register,
@@ -38,27 +31,75 @@ export default function UpdateSession() {
         (async () => {
             const data = await fetcher(`http://localhost:8080/api/workout/updateSession/${sessionId}`)
             console.log(data)
-            console.log(date)
             setSession(data)
         })();
     }, []);
 
     useEffect(() => {
-        if (session != null) {
+        if (session && exercises.length > 0) {
+            // exerciseName으로 해당 운동 찾기
+            const matched = exercises.find(e => e.name === session.exerciseName);
+
+            if (matched) {
+                setType1(matched.type1);
+                setType2(matched.type2);
+            }
+
+            // 기존 값 세팅
+            setValue("exerciseName", session.exerciseName);
             setValue("startedAt", session.startedAt?.slice(0, 16));
             setValue("endedAt", session.endedAt?.slice(0, 16));
             setValue("location", session.location);
             setValue("note", session.note);
-            setValue("exerciseName", session.exerciseName);
         }
-    }, [session])
+    }, [session, exercises, setValue]);
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const data = await fetcher('http://localhost:8080/api/exercise');
+                setExercises(data);
+                // 카테고리1 고정을 위해 처음에 랜더링 시 한번만
+                setCat1([...new Set(data.map((e) => e.type1))]);
+            } catch (e) {
+                setErr(e.message);
+            }
+        })();
+    }, [session]);
+
+    // type1 선택 시 → cat2 세팅
+    useEffect(() => {
+        if (type1) {
+            setCat2([...new Set(exercises.filter(e => e.type1 === type1).map(e => e.type2))]);
+            // 세션에서 이미 type2를 세팅한 경우에는 초기화하지 않음
+            if (!session) {
+                setType2("");
+                setExerciseList([]);
+            }
+        } else {
+            setCat2([]);
+            setType2("");
+            setExerciseList([]);
+        }
+    }, [type1, exercises, session]);
+
+
+    // type2 선택 시 → 운동 목록 세팅
+    useEffect(() => {
+        if (type2) {
+            setExerciseList(exercises.filter(e => e.type1 === type1 && e.type2 === type2));
+        } else {
+            setExerciseList([]);
+        }
+    }, [type2, type1, exercises]);
+
 
     const updateSession = async (data) => {
         try {
             await fetcher(`http://localhost:8080/api/workout/updateSession/${sessionId}`, {
                 method: "PUT",
-                headers: { "Content-Type": "application/json" },
-                body: JSON.stringify(data),
+                headers: {"Content-Type": "application/json"},
+                body: JSON.stringify(data)
             });
             alert("운동일지가 수정되었습니다.");
             navigate(`/workout/session/${date}`);
@@ -74,12 +115,36 @@ export default function UpdateSession() {
             <form onSubmit={handleSubmit(updateSession)}>
                 <h1>{date} 운동일지 수정하기</h1>
                 <div>
-                    <label>운동: </label>
-                    <select {...register("exerciseName", {required: true})}>
+                    <label>운동 유형</label>
+                    <select value={type1} onChange={(e) => setType1(e.target.value)}>
+                        <option value="">운동 유형 선택</option>
+                        {cat1.map((c, index) => (
+                            <option key={index} value={c}>
+                                {c}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <label>운동 분류</label>
+                    <select value={type2} onChange={(e) => setType2(e.target.value)}>
+                        <option value="">운동 분류 선택</option>
+                        {cat2.map((c, index) => (
+                            <option key={index} value={c}>
+                                {c}
+                            </option>
+                        ))}
+                    </select>
+                </div>
+                <div>
+                    <label>운동</label>
+                    <select {...register("exerciseName", {required: true})}
+                            value={session?.exerciseName || ""}
+                            onChange={(e) => setValue("exerciseName", e.target.value)}>
                         <option value="">운동 선택</option>
                         {exerciseList.map((exercise, index) => (
-                            <option key={index} value={exercise}>
-                                {exercise}
+                            <option key={index} value={exercise.name}>
+                                {exercise.name}
                             </option>
                         ))}
                     </select>
@@ -114,7 +179,7 @@ export default function UpdateSession() {
                 <div>
                     <input type="submit" value="일지 수정"/>
                     <input type="button" value="목록"
-                    onClick={() => navigate(`/workout/session/${date}`)}/>
+                           onClick={() => navigate(`/workout/session/${date}`)}/>
                 </div>
             </form>
         </div>

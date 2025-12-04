@@ -1,12 +1,21 @@
 import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {fetcher} from "../../lib/fetcher";
 
 function Calendar() {
     const today = new Date();
     const navigate = useNavigate();
-    const [currentDate, setCurrentDate] = useState(today);
-    const [selectedDate, setSelectedDate] = useState(null);
+    const location = useLocation();
+
+    // URL에서 date 파라미터 읽기
+    const params = new URLSearchParams(location.search);
+    const targetDate = params.get("date"); // YYYY-MM-DD 형식
+
+    // 초기 currentDate를 targetDate 기준으로 설정
+    const initialDate = targetDate ? new Date(targetDate) : today;
+
+    const [currentDate, setCurrentDate] = useState(initialDate);
+    const [selectedDate, setSelectedDate] = useState(targetDate ? new Date(targetDate) : null);
     const [showPopup, setShowPopup] = useState(false);
 
     // 운동일지가 있는 날짜들 (백엔드에서 가져옴)
