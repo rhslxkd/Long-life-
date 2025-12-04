@@ -16,7 +16,7 @@ public class PhysicalGoalService {
     private final PhysicalGoalRepository physicalGoalRepository;
 
     // 체중목표 조회
-    public List<PhysicalGoalDto> findPhysicalGoalByUserId(String userId){
+    public PhysicalGoalDto findPhysicalGoalByUserId(String userId){
         return physicalGoalRepository.findPhysicalGoalByUserId(userId);
     }
 
@@ -26,5 +26,17 @@ public class PhysicalGoalService {
     }
 
     // 체중목표 수정
+    public PhysicalGoal updatePhysicalGoal(Long id, PhysicalGoal physicalGoal){
+        PhysicalGoal uPhysicalGoal = physicalGoalRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("not found"));
+
+        uPhysicalGoal.update(physicalGoal.getKgGoal(), physicalGoal.getStartingDate(),physicalGoal.getCompleteDate(),physicalGoal.getStatus());
+        return physicalGoalRepository.save(uPhysicalGoal);
+    }
+
+    // 체중목표 삭제
+    public void deletePhysicalGoal(Long id){
+        physicalGoalRepository.deleteById(id);
+    }
 
 }

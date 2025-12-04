@@ -12,7 +12,7 @@ public interface ExerciseGoalRepository extends JpaRepository<ExerciseGoal, Long
 
     @Query("""
             select new com.oraclejava.longlife.dto.ExerciseGoalDto(
-                        u.userId, e.name, g.weightGoal, g.countGoal, g.distanceGoal, g.timeGoal, g.startingDate, g.completeDate, g.status)
+                        u.userId, e.name, g.exerciseGoalId, g.weightGoal, g.countGoal, g.distanceGoal, g.timeGoal, g.startingDate, g.completeDate, g.status)
             from ExerciseGoal g join g.exercise e
                         join g.users u
             where u.userId = :userId

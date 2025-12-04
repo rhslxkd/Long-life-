@@ -6,6 +6,7 @@ import com.oraclejava.longlife.model.Users;
 import com.oraclejava.longlife.repo.UsersRepository;
 import com.oraclejava.longlife.service.PhysicalGoalService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.web.bind.annotation.*;
 
@@ -19,7 +20,7 @@ public class PhysicalGoalController {
     private final UsersRepository usersRepository;
 
     @GetMapping("/goal")
-    public List<PhysicalGoalDto> findKgGoalByUserId(Authentication authentication) {
+    public PhysicalGoalDto findKgGoalByUserId(Authentication authentication) {
         String userId = authentication.getName();
         return physicalGoalService.findPhysicalGoalByUserId(userId);
     }
@@ -32,5 +33,17 @@ public class PhysicalGoalController {
                 .orElseThrow(() -> new RuntimeException("user not found"));
         physicalGoal.setUsers(user);
         return physicalGoalService.savePhysicalGoal(physicalGoal);
+    }
+
+    @PutMapping("/{id}")
+    public PhysicalGoal updatePhysicalGoal(@PathVariable Long id, @RequestBody PhysicalGoal physicalGoal) {
+        PhysicalGoal updatePhysicalGoal = physicalGoalService.updatePhysicalGoal(id, physicalGoal);
+        return updatePhysicalGoal;
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deletePhysicalGoal(@PathVariable Long id) {
+        physicalGoalService.deletePhysicalGoal(id);
+        return ResponseEntity.ok().build();
     }
 }

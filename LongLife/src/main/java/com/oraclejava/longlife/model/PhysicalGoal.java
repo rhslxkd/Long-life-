@@ -32,4 +32,12 @@ public class PhysicalGoal {
 
     @Enumerated(EnumType.STRING)
     private Status status;
+
+    public void update(int kgGoal, LocalDate startingDate, LocalDate completeDate, Status status) {
+        this.kgGoal = kgGoal;
+        this.startingDate = startingDate;
+        this.completeDate = completeDate;
+        this.status = status;
+    }
+
 }

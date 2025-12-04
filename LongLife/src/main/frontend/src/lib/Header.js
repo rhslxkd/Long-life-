@@ -38,7 +38,7 @@ export default function Header() {
                                 <a className="nav-link" href="/workout/calendar">운동일지</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">목표</a>
+                                <a className="nav-link" href="/physical/goal">목표</a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link" href="#">스토리</a>

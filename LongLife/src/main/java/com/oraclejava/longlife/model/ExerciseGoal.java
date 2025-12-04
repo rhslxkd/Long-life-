@@ -13,7 +13,7 @@ import java.time.LocalDate;
 public class ExerciseGoal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "exerciseGoal_id")
+    @Column(name = "exercise_goal_id")
     private Long exerciseGoalId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -25,16 +25,16 @@ public class ExerciseGoal {
     private Users users;
 
     @Column(name = "weight_goal")
-    private int weightGoal;
+    private Integer weightGoal;
 
     @Column(name = "count_goal")
-    private int countGoal;
+    private Integer countGoal;
 
     @Column(name = "distance_goal")
-    private int distanceGoal;
+    private Integer distanceGoal;
 
     @Column(name = "time_goal")
-    private int timeGoal;
+    private Integer timeGoal;
 
     @Column(name = "starting_date")
     private LocalDate startingDate;
@@ -45,6 +45,16 @@ public class ExerciseGoal {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-
+    public void update(Exercise exercise, Integer weightGoal, Integer countGoal, Integer distanceGoal, Integer timeGoal,
+                       LocalDate startingDate, LocalDate completeDate, Status status){
+        this.exercise = exercise;
+        this.weightGoal = weightGoal;
+        this.countGoal = countGoal;
+        this.distanceGoal = distanceGoal;
+        this.timeGoal = timeGoal;
+        this.startingDate = startingDate;
+        this.completeDate = completeDate;
+        this.status = status;
+    }
 
 }

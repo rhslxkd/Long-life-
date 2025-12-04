@@ -21,4 +21,6 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
     List<Exercise> search(@Param("type1") String type1,
                           @Param("type2") String type2,
                           @Param("name") String name);
+
+
 }
