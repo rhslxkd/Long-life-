@@ -1,4 +1,11 @@
 package com.oraclejava.longlife.dto;
 
-public class ForAdminUserDto {
+import java.time.LocalDateTime;
+
+public record ForAdminUserDto(
+        String userId,
+        String email,
+        String name,
+        LocalDateTime regdate
+) {
 }
