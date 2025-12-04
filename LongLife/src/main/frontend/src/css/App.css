@@ -148,3 +148,9 @@ h1 {
     color: #777;
     fontSize: 11px;
 }
+
+.post-upload {
+    display: flex;
+    align-items: center;
+    gap: 20px; /* 간격 조절 */
+}

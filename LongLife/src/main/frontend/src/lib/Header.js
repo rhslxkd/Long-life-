@@ -41,7 +41,7 @@ export default function Header() {
                                 <a className="nav-link" href="#">목표</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">스토리</a>
+                                <a className="nav-link" href="/storyList">스토리</a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link disabled" href="#" tabIndex="-1"
