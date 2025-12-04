@@ -8,22 +8,31 @@ import UpdateSession from "../longlife/session/UpdateSession";
 import Calendar from "../longlife/session/Calendar";
 import Session from "../longlife/session/Session";
 import CreateSession from "../longlife/session/CreateSession";
+import Friends from "../longlife/friends/Friends";
+import FriendSearch from "../longlife/friends/FriendSearch";
+import Requests from "../longlife/friends/Requests";
 
 export default function UserRouter() {
     return (
-        <Route element={<RequiredAuth />}>
-            <Route element={<UserLayout />}>
+        <Route element={<RequiredAuth/>}>
+            <Route element={<UserLayout/>}>
                 {/*홈*/}
-                <Route path="/" element={<Home />} />
+                <Route path="/" element={<Home/>}/>
                 {/* 회원 상세 */}
-                <Route path="/myInfo" element={<MyInfo />} />
+                <Route path="/myInfo" element={<MyInfo/>}/>
                 {/* 회원 수정 */}
-                <Route path="/userEdit" element={<UserEdit />} />
+                <Route path="/userEdit" element={<UserEdit/>}/>
+                {/* 친구 목록 */}
+                <Route path="/friends" element={<Friends/>}/>
+                {/* 친구 찾기 및 요청*/}
+                <Route path="/friendSearch" element={<FriendSearch/>}/>
+                {/* 친구 요청 받은 목록 */}
+                <Route path="/requests" element={<Requests/>}/>
 
-                <Route path="/workout/calendar" element={<Calendar />} />
-                <Route path="/workout/session/:formDate" element={<Session />} />
-                <Route path="/workout/createSession/:formDate" element={<CreateSession />} />
-                <Route path="/workout/updateSession/:formDate/:sessionId" element={<UpdateSession />} />
+                <Route path="/workout/calendar" element={<Calendar/>}/>
+                <Route path="/workout/session/:formDate" element={<Session/>}/>
+                <Route path="/workout/createSession/:formDate" element={<CreateSession/>}/>
+                <Route path="/workout/updateSession/:formDate/:sessionId" element={<UpdateSession/>}/>
             </Route>
         </Route>
     );
