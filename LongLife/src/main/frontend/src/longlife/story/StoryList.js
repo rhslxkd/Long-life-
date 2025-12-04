@@ -153,7 +153,7 @@ export default function StoryList(){
     useEffect(() => {
         const loadExercise = async () => {
             try {
-                const data = await fetcher("http://localhost:8080/api/post/exercise");
+                const data = await fetcher("http://localhost:8080/api/post/exerciseId");
                 setExerciseList(data);
             } catch (e) {
                 console.error("운동 목록 불러오기 오류:", e);
