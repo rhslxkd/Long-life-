@@ -33,7 +33,7 @@ def get_my_health_info(user_id: str) -> str: #user_id: str은 이 함수를 호�
             if h and w: # 키랑 몸무게 다 있으면 실행하겠다.
                 bmi = w / ((h / 100) ** 2)
                 status = "비만" if bmi >= 25 else "정상" if bmi >= 18.5 else "저체중"
-                return f"[신체정보] 이름: {name}, 키: {h}cm, 몸무게: {w}Kg, BMI: {bmi: 1f} ({status})"
+                return f"[신체정보] 이름: {name}, 키: {h}cm, 몸무게: {w}Kg, BMI: {bmi:.1f} ({status})"
             
             return f"[신체 정보] 이름: {name}, (키/몸무게 없음)" # else같이 위의 키와 모무게 없으면 실행 안되고 딱 떨어져서 이걸 실행
         
@@ -47,11 +47,11 @@ def get_my_health_info(user_id: str) -> str: #user_id: str은 이 함수를 호�
 # ======================================
 # 2. WorkoutSession Agent용 도구(트레이너)
 # ======================================
-def get_my_workout_session(user_id: str) -> str: # 이 함수는 String인 user_id가 필요하며 이 함수 실행이 끝나면 다시 string으로 반환
+
+def get_my_workout_session(user_id: str) -> str:
     """
     MariaDB에서 사용자의 운동 기록을 조회. (운동종목, 수행 날짜, 수행 횟수 등)
     """
-    
     print(f"[tool] 운동 기록 조회: {user_id}")
     
     try:
@@ -71,20 +71,26 @@ def get_my_workout_session(user_id: str) -> str: # 이 함수는 String인 user_
             
             result = "[최근 운동기록]\n"
             for r in rows:
-                #DB에서 가져온 날짜/시간 객체를 문자열로 변환
-                start = r['started_at']
-                end = r['ended_at']
-                loc = r['location'] if r['location'] else "장소 미상"
-                note = r['note'] if r['note'] else "메모 없음"
+                start = r["started_at"]
+                end = r["ended_at"]
+                loc = r["location"] if r["location"] else "장소 미상"
+                note = r["note"] if r["note"] else "메모 없음"
                 
-                #AI가 이해하기 쉽게 문장 형태로 구성
-                result += f"- 시간: {start}~{end}\n 장소: {loc}\n 메모: {note}\n"
+                result += (
+                    f"- 시간: {start} ~ {end}\n"
+                    f"  장소: {loc}\n"
+                    f"  메모: {note}\n"
+                )
+            
             return result
+    
     except Exception as e:
         return f"운동기록 조회 실패: {e}"
+    
     finally:
-        if 'conn' in locals():
+        if "conn" in locals():
             conn.close()
+
 
 # ==================================================
 # 3. goal Agent용 도구(메니저)
@@ -92,7 +98,7 @@ def get_my_workout_session(user_id: str) -> str: # 이 함수는 String인 user_
 
 def get_my_goal(user_id: str) -> str:
     """
-    MariaDB에서 goal table data를 조회함.
+    MariaDB에서 exercise_goal + physical_goal 통합 목표 데이터를 조회한다.
     """
     print(f"[tool] 목표 조회: {user_id}")
     
@@ -118,7 +124,7 @@ def get_my_goal(user_id: str) -> str:
                 
                 ORDER BY starting_date DESC
             """
-            cursor.execute(sql, (user_id,user_id))
+            cursor.execute(sql, (user_id, user_id))
             rows = cursor.fetchall()
             
             if not rows:
@@ -128,61 +134,56 @@ def get_my_goal(user_id: str) -> str:
             
             for i, r in enumerate(rows, 1):
                 # 날짜 포맷팅
-                start = r['starting_date'].strftime('%Y-%m-%d') if r['starting_date'] else "-"
-                end = r['complete_date'].strftime('%Y-%m-%d') if r['complete_date'] else "-"
+                start = (
+                    r["starting_date"].strftime("%Y-%m-%d")
+                    if r["starting_date"]
+                    else "-"
+                )
+                end = (
+                    r["complete_date"].strftime("%Y-%m-%d")
+                    if r["complete_date"]
+                    else "-"
+                )
                 status_str = f"[{r['status']}] ({start} ~ {end})"
-
-                # goal_type에 따라 다르게 포맷팅
-                if r['goal_type'] == 'exercise':
+                
+                if r["goal_type"] == "exercise":
                     details = []
-                    if r['weight_goal']: details.append(f"중량: {r['weight_goal']}kg")
-                    if r['kg_goal']: details.append(f"감량/증량: {r['kg_goal']}kg")
-                    if r['count_goal']: details.append(f"횟수: {r['count_goal']}회")
-                    if r['distance_goal']: details.append(f"거리: {r['distance_goal']}km")
-                    if r['time_goal']: details.append(f"시간: {r['time_goal']}")
+                    if r["weight_goal"]:
+                        details.append(f"중량: {r['weight_goal']}kg")
+                    if r["kg_goal"]:
+                        details.append(f"감량/증량: {r['kg_goal']}kg")
+                    if r["count_goal"]:
+                        details.append(f"횟수: {r['count_goal']}회")
+                    if r["distance_goal"]:
+                        details.append(f"거리: {r['distance_goal']}km")
+                    if r["time_goal"]:
+                        details.append(f"시간: {r['time_goal']}")
                     
                     content = ", ".join(details) if details else "세부 내용 없음"
-                    ai_rec = f"\n   └ AI 코멘트: {r['ai_recommendation']}" if r['ai_recommendation'] else ""
+                    ai_rec = (
+                        f"\n   └ AI 코멘트: {r['ai_recommendation']}"
+                        if r["ai_recommendation"]
+                        else ""
+                    )
                     
-                    result_text += f"{i}. [운동] {status_str}\n   내용: {content}{ai_rec}\n"
-
-                elif r['goal_type'] == 'physical':
-                    target = f"{r['kg_goal']}kg" if r['kg_goal'] else "미설정"
-                    result_text += f"{i}. [신체] {status_str}\n   목표 체중: {target}\n"
-
-                return result_text
-        
+                    result_text += (
+                        f"{i}. [운동] {status_str}\n"
+                        f"   내용: {content}{ai_rec}\n"
+                    )
+                
+                elif r["goal_type"] == "physical":
+                    target = f"{r['kg_goal']}kg" if r["kg_goal"] else "미설정"
+                    result_text += (
+                        f"{i}. [신체] {status_str}\n"
+                        f"   목표 체중: {target}\n"
+                    )
+            
+            # 중요: for문 바깥에서 최종 문자열 반환
+            return result_text
+    
     except Exception as e:
         return f"목표 조회 실패: {e}"
-    finally:
-        if 'conn' in locals():
-            conn.close()
-            
-# ==========================================
-# 4. Search Agent용 도구 (웹 검색)
-# ==========================================
-def search_web(query: str) -> str:
-    """
-    웹 검색 엔진을 사용하여 최신 운동 정보나 지식을 검색합니다.
-    Args:
-        query (str): 검색할 키워드
-    """
-    print(f"🔍 [Tool] 웹 검색 수행: {query}")
     
-    try:
-        # DuckDuckGo로 검색 (상위 3개 결과)
-        results = DDGS().text(query, max_results=3)
-        
-        if not results:
-            return "검색 결과가 없습니다."
-        
-        # AI가 읽기 좋게 요약
-        summary = ""
-        for i, r in enumerate(results, 1):
-            summary += f"{i}. {r['title']}\n   내용: {r['body']}\n   링크: {r['href']}\n\n"
-            
-        return f"[검색 결과]\n{summary}"
-
-    except Exception as e:
-        print(f"🔥 검색 에러: {e}")
-        return f"검색 중 오류가 발생했습니다: {e}"
+    finally:
+        if "conn" in locals():
+            conn.close()

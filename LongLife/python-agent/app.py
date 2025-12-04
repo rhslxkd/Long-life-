@@ -4,10 +4,16 @@ from fastapi import FastAPI
 from pydantic import BaseModel
 
 from google.adk.agents import Agent
+from google.adk.tools.agent_tool import AgentTool
 from google.adk.runners import InMemoryRunner
 
 #우리의 팀장들
-from agents import user_agent, workout_agent, goal_agent, search_agent
+from agents import user_agent, workout_agent, goal_agent
+
+user_info_tool = AgentTool(agent=user_agent)
+goal_tool = AgentTool(agent=goal_agent)
+workout_tool = AgentTool(agent=workout_agent)
+
 
 # =================================
 # 1. 환경설정
@@ -15,12 +21,12 @@ from agents import user_agent, workout_agent, goal_agent, search_agent
 
 api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key:
-    pass
-if not api_key:
-    print("경고: GOOGLE_API_KEY환경변수가 설정되지 않았습니다.")
+    print("경고: GOOGLE_API_KEY 환경변수가 설정되지 않았습니다.")
+else:
+    os.environ["GOOGLE_API_KEY"] = api_key
 
-os.environ["GOOGLE_API_KEY"] = api_key if api_key else ""
 os.environ["GOOGLE_GENAI_USE_VERTEXTAI"] = "FALSE"
+
 
 # ================================
 # 2. Root Agent(팀장들을거느리는 부장)
@@ -28,27 +34,57 @@ os.environ["GOOGLE_GENAI_USE_VERTEXTAI"] = "FALSE"
 
 root_agent = Agent(
     name="sparta_head_coach",
+    # [팁] 팀장은 종합적인 판단을 해야 하니까 2.0보다는 1.5 Pro나 Latest가 나을 수 있음 (일단 유지)
     model="gemini-2.0-flash",
-    description="스파르타 헬스장의 헤드 코치이자전체 팀 관리자",
+    description="스파르타 헬스장의 헤드 코치.",
     instruction=(
-        "당신은 '스파르타 헬스장'의 전설적인 헤드 코치입니다. 사용자는 당신만 볼 수 있습니다.\n"
-        "하위 전문가(@user..., @workout...)들은 당신의 비서일 뿐입니다. 그들의 보고를 받고 당신이 최종 결정을 내리세요.\n\n"
-        
-        "**[생각의 흐름 (이 내용은 입 밖으로 내지 마세요)]**\n"
-        "1. 사용자의 질문을 분석한다.\n"
-        "2. 필요한 정보가 무엇인지 파악하고, 담당 전문가를 **조용히** 호출한다.\n"
-        "   - (예: 운동 추천 요청 -> @user_info, @workout_history, @workout_knowledge 순차 호출)\n"
-        "3. 전문가들의 보고 내용을 종합한다.\n"
-        "   - (예: 쟤는 저체중이고, 턱걸이 기록이 저조하군. 등 운동 루틴이 필요하겠어.)\n\n"
+    "You are the Sparta Head Coach, the ONLY agent who talks directly to the user.\n"
+    "Sub-agents are internal analysts that give you data reports. The user must never see them.\n\n"
 
-        "**[최종 답변 가이드]**\n"
-        "1. **모든 정보를 종합해서 딱 한 번만 말하세요.**\n"
-        "2. '제가 전문가에게 물어보겠습니다' 같은 과정 설명은 하지 마세요. 바로 결론부터 말하세요.\n"
-        "3. **[스파르타 페르소나]** 반말, 강한 어조, 팩트 폭격.\n"
-        "   - 나쁜 예: '전문가에게 물어보니 턱걸이를 10개 하셨네요. 루틴을 드릴게요.'\n"
-        "   - 좋은 예: '야! 키는 멀대같이 큰데 턱걸이 10개가 뭐냐? 멸치 탈출하고 싶으면 당장 이 루틴대로 실시해!'"
-    ),
-    sub_agents=[user_agent, workout_agent, goal_agent, search_agent]
+    "==============================\n"
+    "ROLE & TONE\n"
+    "==============================\n"
+    "- Speak in casual, confident Korean 반말.\n"
+    "- You are the one and only 코치. 다른 에이전트들은 너한테만 보고한다.\n\n"
+
+    "==============================\n"
+    "CORE RULES\n"
+    "==============================\n"
+    "1. 절대 사용자에게 sub-agent나 tool 이름을 언급하지 마라.\n"
+    "2. 어떤 전문가를 쓸지, 언제 호출할지는 네가 스스로 결정한다.\n"
+    "3. sub-agent의 보고 내용을 그대로 복사하지 말고, 항상 네 말투로 재구성해라.\n"
+    "4. '회원님의 BMI는 ~입니다', '회원님의 목표는 ~입니다' 같은 문장은\n"
+    "   sub-agent가 말할 수 있지만, 최종 답변에서는 네 스타일로 바꿔라.\n"
+    "5. 도구/에이전트들이 생성한 텍스트는 내부 참고용일 뿐, 그대로 내보내지 않는다.\n\n"
+
+    "==============================\n"
+    "WHEN TO USE WHICH EXPERT\n"
+    "==============================\n"
+    "- 몸 상태 / 키 / 몸무게 / BMI → user_info_specialist\n"
+    "- 운동 기록 / 최근 세션 → workout_history_manager\n"
+    "- 운동/체중 목표 → goal_manager\n"
+    "(도구를 호출할 때는 항상 프롬프트에 포함된 현재 사용자 ID를 그대로 전달한다.)\n\n"
+
+    "==============================\n"
+    "WORKOUT ANSWER FORMAT\n"
+    "==============================\n"
+    "운동 관련 질문에 답할 때는 항상 이 포맷을 지켜라:\n"
+    "1) 한 문장 요약\n"
+    "2) 설명 + 운동 루틴을 표 형식으로 정리:\n"
+    "       운동 | 세트 | 횟수/시간\n"
+    "       -------------------------\n"
+    "       푸시업 | 3세트 | 12회\n"
+    "3) 주의사항 2~3개 (호흡, 자세, 휴식, 부상 방지 등)\n\n"
+
+    "==============================\n"
+    "STRICT BEHAVIOR\n"
+    "==============================\n"
+    "- 사용자가 어떤 질문을 해도, 최종적으로 말하는 건 항상 너 하나다.\n"
+    "- 서브 에이전트 보고서에 등장하는 '회원님', '~입니다' 같은 표현은\n"
+    "  최종 답변에서 네 반말 톤으로 바꾼다.\n"
+    "- 내부 구조나 도구 이름, sub-agent 이름은 절대 설명하지 않는다.\n"
+),
+    tools=[user_info_tool, workout_tool, goal_tool],
 )
 
 # =================================
@@ -61,7 +97,7 @@ def get_or_create_runner(session_id: str) -> InMemoryRunner:
     if session_id not in session_store:
         print(f"[New Session] ID: {session_id}")
         # rootAgent를 대리로 새운 runner 생성
-        session_store[session_id] = InMemoryRunner(agent=root_agent, app_name="fitness_app")
+        session_store[session_id] = InMemoryRunner(agent=root_agent, app_name="sparta_gym")
     return session_store[session_id]
 
 # ======================
@@ -77,20 +113,36 @@ class ChatResponse(BaseModel):
     reply: str
 
 def extract_text_from_events(events) -> str:
-    """ADK 이벤트 로그에서 최종 답변만 추출"""
-    texts = []
-    if not isinstance(events, list): return str(events)
-    
-    for ev in events:
+    """ADK 이벤트 로그에서 '최종 답변'만 추출한다.
+
+    - 여러 에이전트/툴이 섞여 있어도,
+      리스트의 '마지막 쪽'에 있는 텍스트 이벤트만 사용한다.
+    - 중간의 sub-agent/툴 출력은 무시한다.
+    """
+    # events가 리스트가 아니면 그냥 문자열로 캐스팅
+    if not isinstance(events, list):
+        return str(events)
+
+    # 뒤에서부터 거꾸로 돌면서,
+    # 처음으로 '텍스트가 있는 이벤트'를 찾으면 그거 하나만 반환
+    for ev in reversed(events):
         content = getattr(ev, "content", None)
-        if not content: continue
+        if not content:
+            continue
+
         parts = getattr(content, "parts", []) or []
+        texts = []
         for part in parts:
             text = getattr(part, "text", None)
             if text:
                 texts.append(text)
-    
-    return "\n\n".join(texts) if texts else "(응답 없음)"
+
+        if texts:
+            # 마지막 에이전트의 발화만 반환
+            return "\n\n".join(texts)
+
+    # 혹시 몰라서: 아무 텍스트도 못 찾으면 기본값
+    return "(응답 없음)"
 
 @app.post("/chat", response_model=ChatResponse)
 async def chat(req: ChatRequest):
