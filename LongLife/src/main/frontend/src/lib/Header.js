@@ -38,7 +38,7 @@ export default function Header() {
                                 <a className="nav-link" href="/physical/goal">목표</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">스토리</a>
+                                <a className="nav-link" href="/storyList">스토리</a>
                             </li>
                             <li className="nav-item dropdown">
                                 <a className="nav-link dropdown-toggle" href="/friends" id="navbarDropdown" role="button"
