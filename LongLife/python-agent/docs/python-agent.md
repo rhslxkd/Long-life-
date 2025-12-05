@@ -207,7 +207,7 @@ AWS EC2 또는 Lightsail에 배포하여
 - React → S3 + CloudFront 정적 배포  
 - 필요 시 GPU 기반 AI 서버로 확장 가능하도록 아키텍처 설계
 
-장기적으로는 GitHub Actions를 이용한 **CI/CD 자동화 파이프라인**을 구성해  
+장기적으로는 GitHub Actions를 이용한 **CI/CD 자동화 파이프라인**을 구성해
 Agent 업데이트와 벡터 DB 업데이트를 자동화할 계획입니다.
 
 ---
