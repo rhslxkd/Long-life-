@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module version="4">
-<<<<<<< HEAD
+
   <component name="FacetManager">
     <facet type="jpa" name="JPA">
       <configuration>
@@ -9,11 +9,11 @@
         <naming-strategy-map />
       </configuration>
     </facet>
-=======
+
   <component name="AdditionalModuleElements">
     <content url="file://$MODULE_DIR$/../../LongLife/build/generated/sources/annotationProcessor/java/main">
       <sourceFolder url="file://$MODULE_DIR$/../../LongLife/build/generated/sources/annotationProcessor/java/main" isTestSource="false" generated="true" />
     </content>
->>>>>>> origin/dev
+
   </component>
 </module>
