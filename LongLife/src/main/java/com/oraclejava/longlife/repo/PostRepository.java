@@ -18,7 +18,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
 
        @Query("""
-              SELECT p FROM Post p 
+              SELECT p FROM Post p
               WHERE (:searchData IS NULL OR p.title LIKE %:searchData%)
               OR (:searchData IS NULL OR p.content LIKE %:searchData%)
              """)
