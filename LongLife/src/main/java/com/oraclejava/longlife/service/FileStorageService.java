@@ -15,7 +15,7 @@ import java.util.UUID;
 public class FileStorageService {
     private final Path root;
     public FileStorageService(
-            @Value("d:/story_uploads") String uploadDir
+            @Value("${file.upload-dir}") String uploadDir
     ) throws IOException {
         this.root = Paths.get(uploadDir).toAbsolutePath().normalize();
         Files.createDirectories(root);
