@@ -30,6 +30,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/users/register",
                                 "/api/users/login",
                                 "/api/users/logout",
+                                "/api/ai/**",
                                 "/api/users/duplicate-check").permitAll()
                         .requestMatchers("/api/admin/**").hasRole("ADMIN")
                         .anyRequest().authenticated())

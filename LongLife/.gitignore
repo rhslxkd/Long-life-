@@ -36,3 +36,21 @@ out/
 ### VS Code ###
 .vscode/
 
+# Python cache
+__pycache__/
+*.pyc
+
+# Virtual environment
+.venv/
+venv/
+
+# Env files
+.env
+.env.*
+
+# Editor
+.idea/
+
+# [핵심] Vector DB 데이터 (용량 큼, 언제든 재생성 가능)
+chroma_db/
+LongLife/python-agent/chroma_db/
