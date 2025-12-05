@@ -3,6 +3,7 @@ import UserLayout from "../components/layout/UserLayout";
 import Register from "../longlife/users/Register";
 import Login from "../longlife/users/Login";
 import ForbiddenPage from "../longlife/ForbiddenPage";
+import AiChatPage from "../longlife/ai/AiChatPage";
 
 export default function PublicRouter() {
     return (
@@ -16,6 +17,9 @@ export default function PublicRouter() {
 
             {/* 403 Forbidden */}
             <Route path={"/forbidden"} element={<ForbiddenPage/>} />
+
+            {/*ai*/}
+            <Route path={"/chat"} element={<AiChatPage/>} />
         </Route>
     );
 }
