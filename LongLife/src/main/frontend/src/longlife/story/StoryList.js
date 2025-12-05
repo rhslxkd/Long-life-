@@ -218,39 +218,47 @@ export default function StoryList(){
     };
 
     return (
-        <div>
-            <div className="container">
-                <h1>운동 스토리 게시판</h1>
-                <p style={{fontSize: '12px', display: 'flex', gap: '30px', alignItems: 'center'}}>
-                    <input
-                        type="text"
-                        placeholder="제목 입력..."
-                        value={title}
-                        name="title"
-                        onChange={(e) => setTitle(e.target.value)}/>
+        <div
+            style={{
+                width: "100%",           // 화면 전체
+                display: "flex",
+                justifyContent: "center", // 수평 중앙 정렬
+            }}
+        >
 
-                    <select
-                        id="fruit-select"
-                        value={exerciseId}
-                        onChange={handleChange}
-                       >
-                        <option value="">-Exercise종목-</option>
-                        {exerciseList.map((ex) => (
-                            <option key={ex.exerciseId} value={ex.exerciseId}>
-                                {ex.name}
-                            </option>
-                        ))}
-                    </select>
+            <div style={{width: '800px', alignItems: 'center'}}>
+                <div className="container">
+                    <h1>운동 스토리 게시판</h1>
+                    <p style={{fontSize: '12px', display: 'flex', gap: '30px', alignItems: 'center'}}>
+                        <input
+                            type="text"
+                            placeholder="제목 입력..."
+                            value={title}
+                            name="title"
+                            onChange={(e) => setTitle(e.target.value)}/>
 
-                    {exerciseId && (
-                        <p style={{ marginTop: "20px" }}>
-                            선택한 Exercise 종목: <strong>{exerciseId}</strong>
-                        </p>
-                    )}
+                        <select
+                            id="fruit-select"
+                            value={exerciseId}
+                            onChange={handleChange}
+                        >
+                            <option value="">-Exercise종목-</option>
+                            {exerciseList.map((ex) => (
+                                <option key={ex.exerciseId} value={ex.exerciseId}>
+                                    {ex.name}
+                                </option>
+                            ))}
+                        </select>
+
+                        {exerciseId && (
+                            <p style={{marginTop: "20px"}}>
+                                선택한 Exercise 종목: <strong>{exerciseId}</strong>
+                            </p>
+                        )}
 
 
-                </p>
-                <div className="new-story">
+                    </p>
+                    <div className="new-story">
                 <textarea
                     placeholder="운동스토리내용 작성..."
                     name="content"
@@ -275,63 +283,64 @@ export default function StoryList(){
                             onChange={(e) => setSearchTerm(e.target.value)}
                         />
                     </div>
-            </div>
-            {post.map(p => (
-                <div className="story" key={p.postId}>
-                    <p style={{fontSize: '12px'}}><h5>{p.userId}</h5></p>
-                    <div style={{display: 'flex'}}>
-                        <div style={{flex: 1, border: '0px solid #ccc', padding: '10px'}}>
-                            {p.imgUrl &&
-                                <>
-                                    <img src={`http://localhost:8080/uploads/${p.imgUrl}`}
-                                         alt="poster"
-                                         style={{
-                                             width: "100%",         // 부모 영역 가득
-                                             height: "200px",       // 고정된 높이 → 모든 이미지 동일 높이
-                                             objectFit: "contain",  // 이미지 비율 유지 + 잘리지 않음
-                                             backgroundColor: "#f0f0f0", // 빈 여백 색(선택 사항)
-                                             borderRadius: "8px",
-                                         }}
-                                    />
-                                    <br/>
-                                </>
-                            }
-                        </div>
-                        <div style={{
-                            whiteSpace: "pre-line",   // ← 줄바꿈(\n) 반영 핵심!
-                            border: "0px solid gray",
-                            padding: "10px",
-                            width: "300px",
-                            marginTop: "10px",
-                            minHeight: "100px"
-                        }}>
-                            <p><h5>#{p.title}</h5></p>
-                            {p.content}
-                        </div>
-                    </div>
-                    <p style={{fontSize: '12px', display: 'flex', gap: '2px', alignItems: 'center'}}>
-                        <span>작성일: {p.createdAt}</span>
-                        <span>조회수: 12</span>
-                        <span>작성자: {p.userId}</span>
-                        <button>수정</button>
-                        <button onClick={() => handleDeleteClick(p)}>삭제</button>
-                    </p>
-                    <div className="actions">
-                    <button>좋아요(12)</button>
-                    </div>
-                    <div className="comments">
-                        <div className="add-comment">
-                            <input
-                                type="text"
-                                placeholder="댓글 작성..."
-                                value=""
-                            />
-                            <buttons>등록</buttons>
-                        </div>
-                    </div>
                 </div>
-            ))}
+                {post.map(p => (
+                    <div className="story" key={p.postId}>
+                        <p style={{fontSize: '12px'}}><h5>{p.userId}</h5></p>
+                        <div style={{display: 'flex'}}>
+                            <div style={{flex: 1, border: '0px solid #ccc', padding: '10px'}}>
+                                {p.imgUrl &&
+                                    <>
+                                        <img src={`http://localhost:8080/uploads/${p.imgUrl}`}
+                                             alt="poster"
+                                             style={{
+                                                 width: "100%",         // 부모 영역 가득
+                                                 height: "200px",       // 고정된 높이 → 모든 이미지 동일 높이
+                                                 objectFit: "contain",  // 이미지 비율 유지 + 잘리지 않음
+                                                 backgroundColor: "#f0f0f0", // 빈 여백 색(선택 사항)
+                                                 borderRadius: "8px",
+                                             }}
+                                        />
+                                        <br/>
+                                    </>
+                                }
+                            </div>
+                            <div style={{
+                                whiteSpace: "pre-line",   // ← 줄바꿈(\n) 반영 핵심!
+                                border: "0px solid gray",
+                                padding: "10px",
+                                width: "300px",
+                                marginTop: "10px",
+                                minHeight: "100px"
+                            }}>
+                                <p><h5>#{p.title}</h5></p>
+                                {p.content}
+                            </div>
+                        </div>
+                        <p style={{fontSize: '12px', display: 'flex', gap: '2px', alignItems: 'center'}}>
+                            <span>작성일: {p.createdAt}</span>
+                            <span>조회수: 12</span>
+                            <span>작성자: {p.userId}</span>
+                            <button>수정</button>
+                            <button onClick={() => handleDeleteClick(p)}>삭제</button>
+                        </p>
+                        <div className="actions">
+                            <button>좋아요(12)</button>
+                        </div>
+                        <div className="comments">
+                            <div className="add-comment">
+                                <input
+                                    type="text"
+                                    placeholder="댓글 작성..."
+                                    value=""
+                                />
+                                <buttons>등록</buttons>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
         </div>
-    );
-}
+            );
+            }
 
