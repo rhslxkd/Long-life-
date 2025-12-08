@@ -1,5 +1,5 @@
 import RequiredAuth from "../components/RequiredAuth";
-import {Route, Routes} from "react-router-dom";
+import {Route} from "react-router-dom";
 import UserLayout from "../components/layout/UserLayout";
 import Home from "../longlife/home/Home";
 import ExerciseStoryList from "../longlife/story/ExerciseStoryList";
