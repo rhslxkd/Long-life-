@@ -35,7 +35,7 @@ os.environ["GOOGLE_GENAI_USE_VERTEXTAI"] = "FALSE"
 root_agent = Agent(
     name="sparta_head_coach",
     # [팁] 팀장은 종합적인 판단을 해야 하니까 2.0보다는 1.5 Pro나 Latest가 나을 수 있음 (일단 유지)
-    model="gemini-2.0-flash",
+    model="gemini-flash-lite-latest",
     description="스파르타 헬스장의 헤드 코치.",
     instruction=(
     "You are the Sparta Head Coach, the ONLY agent who talks directly to the user.\n"

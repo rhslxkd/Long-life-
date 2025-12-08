@@ -9,7 +9,7 @@ export default function CreateExerciseGoal() {
         register,
         handleSubmit,
         setValue,
-        formState: { errors },
+        formState: {errors},
     } = useForm();
 
     const [exercise, setExercise] = useState([]);
@@ -79,112 +79,257 @@ export default function CreateExerciseGoal() {
             console.log(payload);
             await fetcher(`http://localhost:8080/api/exercise/createGoal`, {
                 method: "POST",
-                headers: { "Content-Type": "application/json" },
+                headers: {"Content-Type": "application/json"},
                 body: JSON.stringify(payload),
             });
             alert("생성 완료");
-            navigate("/exercise/goal");
+            navigate("/workout/exercise/goal");
         } catch (error) {
             console.error(error);
             alert("생성 실패");
         }
     };
 
-    return(
-        <div>
-            <h1>운동일지 추가하기</h1>
-            <form onSubmit={handleSubmit(createExercise)}>
-                <div>
-                    <label>운동 유형</label>
-                    <select value={type1} onChange={(e) => setType1(e.target.value)}>
-                        <option value="">운동 유형 선택</option>
-                        {cat1.map((c, index) => (
-                            <option key={index} value={c}>
-                                {c}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div>
-                    <label>운동 분류</label>
-                    <select value={type2} onChange={(e) => setType2(e.target.value)}>
-                        <option value="">운동 분류 선택</option>
-                        {cat2.map((c, index) => (
-                            <option key={index} value={c}>
-                                {c}
-                            </option>
-                        ))}
-                    </select>
-                </div>
-                <div>
-                    <label>운동</label>
-                    <select {...register("name", { required: true })}>
-                        <option value="">운동 선택</option>
-                        {exerciseList.map((exercise, index) => (
-                            <option key={index} value={exercise.name}>
-                                {exercise.name}
-                            </option>
-                        ))}
-                    </select>
-                    {errors.exerciseName && <p>운동을 선택해주세요.</p>}
-                </div>
-                <div>
-                    <label>무게 목표</label>
-                    <input type="number"
-                           {... register("weightGoal", {required:"목표 무게를 입력하세요."})}/>
-                    {errors.weightGoal && <small>{errors.weightGoal.message}</small>}
-                </div>
-                <div>
-                    <label>개수 목표</label>
-                    <input
-                        type="number"
-                        {...register("countGoal", { required: "목표 개수를 입력하세요." })}
-                    />
-                    {errors.countGoal && <small>{errors.countGoal.message}</small>}
-                </div>
-                <div>
-                    <label>거리 목표</label>
-                    <input
-                        type="number"
-                        {...register("distanceGoal", { required: "목표 거리를 입력하세요." })}
-                    />
-                    {errors.distanceGoal && <small>{errors.distanceGoal.message}</small>}
-                </div>
-                <div>
-                    <label>시간 목표</label>
-                    <input
-                        type="number"
-                        {...register("timeGoal", { required: "목표 시간을 입력하세요." })}
-                    />
-                    {errors.timeGoal && <small>{errors.timeGoal.message}</small>}
-                </div>
-                <div>
-                    <label>시작일</label>
-                    <input
-                        type="date"
-                        {...register("startingDate", { required: "시작일을 입력하세요." })}
-                    />
-                    {errors.startingDate && <small>{errors.startingDate.message}</small>}
+    return (
+        <div
+            style={{
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                padding: "40px 20px",
+                maxWidth: "700px",
+                margin: "0 auto",
+                marginTop: "30px",
+                backgroundColor: "#ffffff",
+                border: "1px solid #e0e0e0",
+                borderRadius: "12px",
+                boxShadow: "0 4px 12px rgba(0,0,0,0.08)"
+            }}
+        >
+            <form
+                onSubmit={handleSubmit((data) => {
+                    if (type1 === "무산소") {
+                        data.distanceGoal = null;
+                        data.timeGoal = null;
+                    }
+                    if (type1 === "유산소") {
+                        data.weightGoal = null;
+                        data.countGoal = null;
+                    }
+
+                    const today = new Date();
+                    const start = new Date(data.startingDate);
+                    const end = new Date(data.completeDate);
+
+                    let status = "SCHEDULED";
+                    if (today < start) status = "SCHEDULED";
+                    else if (today >= start && today <= end) status = "ONGOING";
+                    else if (today > end) status = "SUCCESS";
+
+                    const payload = {...data, status};
+                    createExercise(payload);
+                })}
+                style={{
+                    width: "100%",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "20px"
+                }}
+            >
+                <h1
+                    style={{
+                        marginBottom: "10px",
+                        fontSize: "2rem",
+                        fontWeight: "bold",
+                        textAlign: "center"
+                    }}
+                >
+                    운동목표 추가하기
+                </h1>
+
+                {/* 운동 선택 박스 3개 가로 배치 */}
+                <div style={{display: "flex", gap: "15px"}}>
+                    <div style={{flex: 1, display: "flex", flexDirection: "column", gap: "6px"}}>
+                        <label style={{fontWeight: "600", color: "#333"}}>운동 유형</label>
+                        <select
+                            value={type1}
+                            onChange={(e) => setType1(e.target.value)}
+                            style={{padding: "10px", borderRadius: "6px", border: "1px solid #007bff"}}
+                        >
+                            <option value="">운동 유형 선택</option>
+                            {cat1.map((c, i) => (
+                                <option key={i} value={c}>{c}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div style={{flex: 1, display: "flex", flexDirection: "column", gap: "6px"}}>
+                        <label style={{fontWeight: "600", color: "#333"}}>운동 분류</label>
+                        <select
+                            value={type2}
+                            onChange={(e) => setType2(e.target.value)}
+                            style={{padding: "10px", borderRadius: "6px", border: "1px solid #007bff"}}
+                        >
+                            <option value="">운동 분류 선택</option>
+                            {cat2.map((c, i) => (
+                                <option key={i} value={c}>{c}</option>
+                            ))}
+                        </select>
+                    </div>
+
+                    <div style={{flex: 1, display: "flex", flexDirection: "column", gap: "6px"}}>
+                        <label style={{fontWeight: "600", color: "#333"}}>운동</label>
+                        <select
+                            {...register("name", {required: true})}
+                            style={{padding: "10px", borderRadius: "6px", border: "1px solid #007bff"}}
+                        >
+                            <option value="">운동 선택</option>
+                            {exerciseList.map((ex, i) => (
+                                <option key={i} value={ex.name}>{ex.name}</option>
+                            ))}
+                        </select>
+                        {errors.exerciseName && (
+                            <p style={{color: "red", fontSize: "12px"}}>운동을 선택해주세요.</p>
+                        )}
+                    </div>
                 </div>
 
-                <div>
-                    <label>완료 예정일</label>
-                    <input
-                        type="date"
-                        {...register("completeDate", { required: "완료일을 입력하세요." })}
-                    />
-                    {errors.completeDate && <small>{errors.completeDate.message}</small>}
+                {/* 무게/개수 목표 2개 가로 배치 */}
+                <div style={{display: "flex", gap: "15px"}}>
+                    <div style={{flex: 1, display: "flex", flexDirection: "column", gap: "6px"}}>
+                        <label style={{fontWeight: "600", color: "#333"}}>무게 목표</label>
+                        <input
+                            type="number"
+                            disabled={type1 === "유산소"}
+                            {...register("weightGoal", {
+                                required: type1 === "무산소" ? "무게 목표를 입력하세요." : false
+                            })}
+                            style={{
+                                padding: "10px",
+                                borderRadius: "6px",
+                                border: "1px solid #007bff",
+                                backgroundColor: type1 === "유산소" ? "#e0e0e0" : "#fff"
+                            }}
+                        />
+                        {errors.weightGoal && <small style={{color:"red"}}>{errors.weightGoal.message}</small>}
+                    </div>
+
+                    <div style={{flex: 1, display: "flex", flexDirection: "column", gap: "6px"}}>
+                        <label style={{fontWeight: "600", color: "#333"}}>개수 목표</label>
+                        <input
+                            type="number"
+                            disabled={type1 === "유산소"}
+                            {...register("countGoal", {
+                                required: type1 === "무산소" ? "개수 목표를 입력하세요." : false
+                            })}
+                            style={{
+                                padding: "10px",
+                                borderRadius: "6px",
+                                border: "1px solid #007bff",
+                                backgroundColor: type1 === "유산소" ? "#e0e0e0" : "#fff"
+                            }}
+                        />
+                        {errors.countGoal && <small style={{color:"red"}}>{errors.countGoal.message}</small>}
+                    </div>
                 </div>
 
-                <div>
-                    <input type="submit" value="추가하기" />
-                    <input
+                {/* 거리/시간 목표 2개 가로 배치 */}
+                <div style={{display: "flex", gap: "15px"}}>
+                    <div style={{flex: 1, display: "flex", flexDirection: "column", gap: "6px"}}>
+                        <label style={{fontWeight: "600", color: "#333"}}>거리 목표</label>
+                        <input
+                            type="text"
+                            disabled={type1 === "무산소"}
+                            {...register("distanceGoal")}
+                            style={{
+                                padding: "10px",
+                                borderRadius: "6px",
+                                border: "1px solid #007bff",
+                                backgroundColor: type1 === "무산소" ? "#e0e0e0" : "#fff"
+                            }}
+                        />
+                    </div>
+
+                    <div style={{flex: 1, display: "flex", flexDirection: "column", gap: "6px"}}>
+                        <label style={{fontWeight: "600", color: "#333"}}>시간 목표</label>
+                        <input
+                            type="text"
+                            disabled={type1 === "무산소"}
+                            {...register("timeGoal", {
+                                required: type1 === "유산소" ? "시간 목표를 입력하세요." : false
+                            })}
+                            style={{
+                                padding: "10px",
+                                borderRadius: "6px",
+                                border: "1px solid #007bff",
+                                backgroundColor: type1 === "무산소" ? "#e0e0e0" : "#fff"
+                            }}
+                        />
+                        {errors.timeGoal && <small style={{color:"red"}}>{errors.timeGoal.message}</small>}
+                    </div>
+                </div>
+
+
+                {/* 시작일/완료 예정일 2개 가로 배치 */}
+                <div style={{display: "flex", gap: "15px"}}>
+                    <div style={{flex: 1, display: "flex", flexDirection: "column", gap: "6px"}}>
+                        <label style={{fontWeight: "600", color: "#333"}}>시작일</label>
+                        <input
+                            type="date"
+                            {...register("startingDate", {required: "시작일을 입력하세요."})}
+                            style={{padding: "10px", borderRadius: "6px", border: "1px solid #007bff"}}
+                        />
+                        {errors.startingDate && <small style={{color: "red"}}>{errors.startingDate.message}</small>}
+                    </div>
+
+                    <div style={{flex: 1, display: "flex", flexDirection: "column", gap: "6px"}}>
+                        <label style={{fontWeight: "600", color: "#333"}}>완료 예정일</label>
+                        <input
+                            type="date"
+                            {...register("completeDate", {required: "완료일을 입력하세요."})}
+                            style={{padding: "10px", borderRadius: "6px", border: "1px solid #007bff"}}
+                        />
+                        {errors.completeDate && <small style={{color: "red"}}>{errors.completeDate.message}</small>}
+                    </div>
+                </div>
+
+                {/* 버튼 영역 */}
+                <div style={{display: "flex", justifyContent: "center", gap: "15px", marginTop: "20px"}}>
+                    <button
+                        type="submit"
+                        style={{
+                            padding: "12px 24px",
+                            fontSize: "16px",
+                            cursor: "pointer",
+                            backgroundColor: "#007bff",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "6px",
+                            fontWeight: "bold"
+                        }}
+                    >
+                        추가하기
+                    </button>
+                    <button
                         type="button"
-                        value="목록"
-                        onClick={() => navigate("/exercise/goal")}
-                    />
+                        onClick={() => navigate("/workout/exercise/goal")}
+                        style={{
+                            padding: "12px 24px",
+                            fontSize: "16px",
+                            cursor: "pointer",
+                            backgroundColor: "#6c757d",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "6px",
+                            fontWeight: "bold"
+                        }}
+                    >
+                        목록
+                    </button>
                 </div>
             </form>
+
         </div>
-    )
+    );
+
 }
