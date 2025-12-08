@@ -18,10 +18,24 @@ export default function SideBar() {
                             </NavLink>
                         </li>
                         <li className="nav-item">
-                            <NavLink to="/admin/exercise"
+                            <NavLink to="/admin/userList"
                                      className={({isActive}) => "nav-link" + (isActive ? " active" : "")}>
-                                <i className="nav-icon fas fa-film"></i>
+                                <i className="nav-icon fa-solid fa-users"></i>
+                                <p>회원관리</p>
+                            </NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink to="/admin/exerciseList"
+                                     className={({isActive}) => "nav-link" + (isActive ? " active" : "")}>
+                                <i className="nav-icon fa-solid fa-dumbbell"></i>
                                 <p>운종종목관리</p>
+                            </NavLink>
+                        </li>
+                        <li className="nav-item">
+                            <NavLink to="/admin/postList"
+                                     className={({isActive}) => "nav-link" + (isActive ? " active" : "")}>
+                                <i className="nav-icon fa-regular fa-clipboard"></i>
+                                <p>스토리관리</p>
                             </NavLink>
                         </li>
                     </ul>
