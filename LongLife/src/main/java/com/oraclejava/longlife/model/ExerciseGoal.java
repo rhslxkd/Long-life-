@@ -31,10 +31,10 @@ public class ExerciseGoal {
     private Integer countGoal;
 
     @Column(name = "distance_goal")
-    private Integer distanceGoal;
+    private String distanceGoal;
 
     @Column(name = "time_goal")
-    private Integer timeGoal;
+    private String timeGoal;
 
     @Column(name = "starting_date")
     private LocalDate startingDate;
@@ -45,7 +45,7 @@ public class ExerciseGoal {
     @Enumerated(EnumType.STRING)
     private Status status;
 
-    public void update(Exercise exercise, Integer weightGoal, Integer countGoal, Integer distanceGoal, Integer timeGoal,
+    public void update(Exercise exercise, Integer weightGoal, Integer countGoal, String distanceGoal, String timeGoal,
                        LocalDate startingDate, LocalDate completeDate, Status status){
         this.exercise = exercise;
         this.weightGoal = weightGoal;
