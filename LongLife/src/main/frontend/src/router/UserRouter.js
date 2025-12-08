@@ -20,6 +20,7 @@ import UpdatePhysicalGoal from "../longlife/goal/UpdatePhysicalGoal";
 import ExerciseGoal from "../longlife/goal/ExerciseGoal";
 import CreateExerciseGoal from "../longlife/goal/CreateExerciseGoal";
 import UpdateExerciseGoal from "../longlife/goal/UpdateExerciseGoal";
+import Goal from "../longlife/goal/Goal";
 
 export default function UserRouter() {
     return (
@@ -49,13 +50,16 @@ export default function UserRouter() {
                 <Route path="/workout/createSession/:formDate" element={<CreateSession />} />
                 <Route path="/workout/updateSession/:formDate/:sessionId" element={<UpdateSession />} />
 
-                <Route path="/physical/goal" element={<PhysicalGoal />} />
-                <Route path="/physical/createGoal" element={<CreatePhysicalGoal />} />
-                <Route path="/physical/updateGoal/:id" element={<UpdatePhysicalGoal />} />
+                <Route path="/workout/goal" element={<Goal />} />
 
-                <Route path="/exercise/goal" element={<ExerciseGoal />} />
-                <Route path="/exercise/createGoal" element={<CreateExerciseGoal />} />
-                <Route path="/exercise/updateGoal/:id" element={<UpdateExerciseGoal />} />
+
+                <Route path="/workout/physical/goal" element={<PhysicalGoal />} />
+                <Route path="/workout/physical/createGoal" element={<CreatePhysicalGoal />} />
+                <Route path="/workout/physical/updateGoal/:id" element={<UpdatePhysicalGoal />} />
+
+                <Route path="/workout/exercise/goal" element={<ExerciseGoal />} />
+                <Route path="/workout/exercise/createGoal" element={<CreateExerciseGoal />} />
+                <Route path="/workout/exercise/updateGoal/:id" element={<UpdateExerciseGoal />} />
             </Route>
         </Route>
     );

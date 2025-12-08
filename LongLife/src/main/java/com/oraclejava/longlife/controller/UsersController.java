@@ -36,7 +36,7 @@ public class UsersController {
     }
 
     // 아이디 중복체크
-    @GetMapping("duplicate-check")
+    @GetMapping("/duplicate-check")
     public Map<String, Boolean> duplicateCheck(@RequestParam String userId) {
         boolean exists = usersService.duplicateCheck(userId);
         return Map.of("available", !exists);
