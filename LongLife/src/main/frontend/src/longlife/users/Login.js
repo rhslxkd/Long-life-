@@ -9,10 +9,9 @@ function Login() {
     const {
         register,
         handleSubmit,
-        formState: {isSubmitting, isSubmitted, errors}
+        formState: {isSubmitting}
     } = useForm();
     const [err, setErr] = useState("");
-    const[loading, setLoading] = useState(false);
     const navigate = useNavigate();
     const location = useLocation();
 
@@ -21,7 +20,6 @@ function Login() {
 
     const submitForm = async (data) => {
         setErr("");
-        setLoading(true);
 
         try{
             const user = await fetcher('http://localhost:8080/api/users/login' , {
@@ -34,9 +32,7 @@ function Login() {
 
             navigate(from, {replace:true});
         } catch (e) {
-            setErr("네트워크 오류가 발생했습니다.")
-        } finally {
-            setLoading(false);
+            setErr("아이디 또는 비밀번호를 확인하세요.");
         }
     }
 
@@ -56,13 +52,12 @@ function Login() {
                            {...register("password")}/>
                     <label htmlFor="password">비밀번호</label>
                 </div>
-
-                <button className="w-100 btn btn-lg btn-primary mt-3" type="submit">
-                    {loading ? "로그인 중..." : "로그인"}
-                </button>
                 {err && <p style={{color: "crimson", marginTop: 12}}>{err}</p>}
+                <button className="w-100 btn btn-lg btn-primary mt-3" type="submit" disabled={isSubmitting}>
+                    {isSubmitting ? "로그인 중..." : "로그인"}
+                </button>
                 <button className="w-100 btn btn-lg btn-primary mt-1" type="button"
-                        onClick={() => navigate('/register')}>회원가입
+                        onClick={() => navigate('/register')} disabled={isSubmitting}>회원가입
                 </button>
             </form>
         </div>

@@ -22,5 +22,10 @@ public interface ExerciseRepository extends JpaRepository<Exercise, Long> {
                           @Param("type2") String type2,
                           @Param("name") String name);
 
+    @Query("select distinct e.type1 from Exercise e")
+    List<String> findDistinctType1();
+
+    @Query("select distinct e.type2 from Exercise e")
+    List<String> findDistinctType2();
 
 }

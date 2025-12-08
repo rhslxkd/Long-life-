@@ -165,7 +165,7 @@ export default function StoryList(){
     //운동 스토리 등록
     const addPost = () => {
         if (!exerciseId) {
-            alert("Exercise 종목을 선택하세요!");
+            alert("ExerciseList 종목을 선택하세요!");
             return;
         }
         //처리

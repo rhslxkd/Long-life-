@@ -1,12 +1,9 @@
 import useMe from "../hooks/useMe";
-import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {fetcher} from "./fetcher";
 
 export default function Header() {
     const user = useMe();
-
-    const [ loading, setLoading] = useState(!user);
     const navigate = useNavigate();
 
     const onLogout = async () => {
