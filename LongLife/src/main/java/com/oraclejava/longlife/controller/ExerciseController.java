@@ -1,6 +1,7 @@
 package com.oraclejava.longlife.controller;
 
 import com.oraclejava.longlife.dto.ExerciseDto;
+import com.oraclejava.longlife.dto.ExerciseInitResponse;
 import com.oraclejava.longlife.service.ExerciseService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -19,8 +20,15 @@ public class ExerciseController {
     public ResponseEntity<List<ExerciseDto>> getExercises(@RequestParam(required = false) String type1,
                                                           @RequestParam(required = false) String type2,
                                                           @RequestParam(required = false) String name) {
-        System.out.println("type1: "+ type1 + ", type2: " + type2 + ", name: " + name);
         return ResponseEntity.ok(exerciseService.getAll(type1, type2, name));
+    }
+
+    // 초기데이터
+    @GetMapping("/init")
+    public ResponseEntity<?> getInitExercises(@RequestParam(required = false) String type1,
+                                              @RequestParam(required = false) String type2,
+                                              @RequestParam(required = false) String name) {
+        return ResponseEntity.ok(exerciseService.getInitResponse(type1, type2, name));
     }
 
     // 운동 종목 등록

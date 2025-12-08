@@ -2,26 +2,29 @@ import {use, useCallback, useEffect, useState} from "react";
 import {fetcher} from "../../lib/fetcher";
 import ExerciseForm from "./ExerciseForm";
 
-export default function Exercise() {
+export default function ExerciseList() {
     const [exercises, setExercises] = useState([]);
     const [loading, setLoading] = useState(true);
     const [err, setErr] = useState(null);
-    const [type1, setType1] = useState("");
-    const [type2, setType2] = useState("");
-    const [name, setName] = useState("");
     const [cat1, setCat1] = useState([]);
+    const [initCat2, setInitCat2] = useState([]);
     const [cat2, setCat2] = useState([]);
     const [openForm, setOpenForm] = useState(false);
+    const [selectedType1, setSelectedType1] = useState("");
+    const [selectedType2, setSelectedType2] = useState("");
     const [selectedExercise, setSelectedExercise] = useState(null);
 
-    // 처음 한번만 영화/상영관 목록 로딩
+    // 처음 한번만 목록 로딩
     useEffect(() => {
         (async () => {
             try {
-                const data = await fetcher('http://localhost:8080/api/exercise');
-                setExercises(data);
+                const data = await fetcher('http://localhost:8080/api/exercise/init');
+                setExercises(data.exercises);
                 // 카테고리1 고정을 위해 처음에 랜더링 시 한번만
-                setCat1([...new Set(data.map((e) => e.type1))]);
+                // setCat1([...new Set(data.exercises.map((e) => e.type1))]);
+                setCat1(data.type1List);
+                setCat2(data.type2List);
+                setInitCat2(data.type2List);
             } catch (e) {
                 setErr(e.message);
             }
@@ -33,24 +36,25 @@ export default function Exercise() {
         setErr(null);
 
         const params = new URLSearchParams();
-        if (type1) params.append("type1", type1);
-        if (type2) params.append("type2", type2);
+        if (selectedType1) params.append("type1", selectedType1);
+        if (selectedType2) params.append("type2", selectedType2);
 
         try {
-            console.log(`요청 uri => http://localhost:8080/api/exercise?${params}`);
             const data = await fetcher(`http://localhost:8080/api/exercise?${params}`);
             if (!data) return;
             setExercises(data);
             // 카테고리2 변경 및 고정을 위한 조건문
-            if (type2.length === 0) {
+            if (selectedType1) {
                 setCat2([...new Set(data.map((e) => e.type2))]);
+            } else {
+                setCat2(initCat2);
             }
         } catch (e) {
             setErr(e.message);
         } finally {
             setLoading(false);
         }
-    }, [type1, type2, name]);
+    }, [selectedType1, selectedType2]);
 
     useEffect(() => {
         (async () => {
@@ -106,7 +110,15 @@ export default function Exercise() {
             <div className="row mb-3">
                 <div className="col-md-3">
                     <label className="form-label">카테고리1</label>
-                    <select className="form-select" value={type1} onChange={(e) => setType1(e.target.value)}>
+                    <select className="form-select" value={selectedType1}
+                            onChange={(e) => {
+                                const value = e.target.value;
+                                setSelectedType1(value);
+                                if (!value) {
+                                    // type1이 전체로 바뀌면 type2도 초기화
+                                    setSelectedType2("");
+                                }
+                            }}>
                         <option value="">전체</option>
                         {cat1.map(t => (
                             <option key={t} value={t}>{t}</option>
@@ -115,7 +127,7 @@ export default function Exercise() {
                 </div>
                 <div className="col-md-3">
                     <label className="form-label">카테고리2</label>
-                    <select className="form-select" value={type2} onChange={(e) => setType2(e.target.value)}>
+                    <select className="form-select" value={selectedType2} onChange={(e) => setSelectedType2(e.target.value)}>
                         <option value="">전체</option>
                         {cat2.map(t => (
                             <option key={t} value={t}>{t}</option>
