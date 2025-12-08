@@ -1,79 +1,121 @@
 import os
 import glob
-from langchain_community.document_loaders import PyPDFLoader
+import pandas as pd
+from langchain_core.documents import Document
 from langchain_text_splitters import RecursiveCharacterTextSplitter
 from langchain_chroma import Chroma
 from langchain_google_genai import GoogleGenerativeAIEmbeddings
 
-# DB 저장 경로 (프로젝트 폴더 내에 생성됨)
+# ==========================================
+# 1. 설정 (경로 및 모델)
+# ==========================================
 PERSIST_DIR = "./chroma_db"
-DATA_DIR = "./data"
+DATA_ROOT = "./data"
 
-# 1. 임베딩 모델 설정
+# 임베딩 모델
 embeddings = GoogleGenerativeAIEmbeddings(model="models/text-embedding-004")
 
-# 2. Vector DB 초기화 (없으면 생성, 있으면 로드)
-vector_store = None
+# 전역 변수
+fitness_vector_store = None
+diet_vector_store = None
 
-def initialize_rag():
-    global vector_store
-    
-    # 이미 DB가 있으면 로드만 함
-    if os.path.exists(PERSIST_DIR) and os.listdir(PERSIST_DIR):
-        print("📂 기존 Vector DB를 로드합니다...")
-        vector_store = Chroma(persist_directory=PERSIST_DIR, embedding_function=embeddings)
-        return
+# ==========================================
+# 2. 엑셀 로더 (Pandas 기반 커스텀 로더)
+# ==========================================
+def load_excel_as_documents(file_path: str):
+    """
+    엑셀 파일을 읽어서 각 행(Row)을 하나의 문서(Document)로 변환합니다.
+    형식: "컬럼1: 값1, 컬럼2: 값2 ..." 
+    """
+    try:
+        df = pd.read_excel(file_path)
+        # 빈 데이터 제거
+        df = df.dropna(how='all') 
+        
+        docs = []
+        for index, row in df.iterrows():
+            # 각 행의 데이터를 "키: 값" 형태의 문자열로 변환
+            # 예: "운동명: 벤치프레스, 부위: 가슴, 설명: 미는 운동"
+            row_text = ", ".join([f"{col}: {val}" for col, val in row.items() if pd.notna(val)])
+            
+            # 메타데이터에 파일명과 행 번호 저장 (나중에 출처 찾기 좋음)
+            metadata = {"source": os.path.basename(file_path), "row": index}
+            
+            docs.append(Document(page_content=row_text, metadata=metadata))
+            
+        return docs
+    except Exception as e:
+        print(f"   🔥 엑셀 읽기 실패: {file_path} - {e}")
+        return []
 
-    # DB가 없으면 PDF 로딩 시작
-    print("🚀 PDF 데이터를 로딩하고 Vector DB를 구축합니다... (시간이 좀 걸립니다)")
+# ==========================================
+# 3. 핵심 로직: DB 생성/로드
+# ==========================================
+def get_or_create_vectorstore(category: str):
+    target_folder = os.path.join(DATA_ROOT, category)
+    collection_name = f"{category}_collection"
     
-    pdf_files = glob.glob(os.path.join(DATA_DIR, "*.pdf"))
-    if not pdf_files:
-        print("⚠️ 경고: data 폴더에 PDF 파일이 없습니다!")
-        # 빈 DB라도 생성해서 에러 방지
-        vector_store = Chroma(persist_directory=PERSIST_DIR, embedding_function=embeddings)
-        return
+    print(f"🔍 [{category}] 엑셀 데이터 DB 확인 중...")
+
+    vector_store = Chroma(
+        persist_directory=PERSIST_DIR,
+        embedding_function=embeddings,
+        collection_name=collection_name
+    )
+
+    existing_count = len(vector_store.get()['ids'])
+    if existing_count > 0:
+        print(f"  ✅ [{category}] 기존 DB 로드 완료! (데이터 수: {existing_count})")
+        return vector_store
+
+    print(f"  🚀 [{category}] 데이터가 비어있습니다. 엑셀 로딩 시작...")
+    
+    # 엑셀 파일 찾기 (*.xlsx, *.xls)
+    excel_files = glob.glob(os.path.join(target_folder, "*.xlsx")) + glob.glob(os.path.join(target_folder, "*.xls"))
+    
+    if not excel_files:
+        print(f"  ⚠️ 경고: '{target_folder}' 폴더에 엑셀 파일이 없습니다!")
+        return vector_store
 
     documents = []
-    for pdf_file in pdf_files:
-        try:
-            loader = PyPDFLoader(pdf_file)
-            docs = loader.load()
-            documents.extend(docs)
-            print(f"  - 로딩 완료: {pdf_file} ({len(docs)} 페이지)")
-        except Exception as e:
-            print(f"  - 실패: {pdf_file} / 에러: {e}")
+    for file in excel_files:
+        docs = load_excel_as_documents(file)
+        documents.extend(docs)
+        print(f"   - 읽음: {os.path.basename(file)} ({len(docs)}개 행)")
 
-    # 텍스트 쪼개기
-    text_splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=200)
-    splits = text_splitter.split_documents(documents)
-
-    # DB 저장
-    vector_store = Chroma.from_documents(
-        documents=splits,
-        embedding=embeddings,
-        persist_directory=PERSIST_DIR
-    )
-    print(f"✅ Vector DB 구축 완료! (총 {len(splits)}개 청크 저장됨)")
-
-# 3. 검색 도구 함수 (이걸 Agent가 쓸 것임)
-def query_google_whitepapers(query_text: str):
-    """
-    Google의 Gen AI, Agent, MCP, Context Engineering 관련 백서(Whitepaper) 내용을 검색합니다.
-    사용자가 구글의 최신 기술, 에이전트 아키텍처, 프롬프트 엔지니어링 등에 대해 물어볼 때 사용하세요.
+    if documents:
+        # 엑셀은 이미 행 단위로 잘려있어서 chunk_size를 크게 잡거나 split을 안 해도 되지만,
+        # 내용이 엄청 긴 셀이 있을 수 있으니 안전장치로 둠.
+        splitter = RecursiveCharacterTextSplitter(chunk_size=1000, chunk_overlap=100)
+        splits = splitter.split_documents(documents)
+        
+        vector_store.add_documents(splits)
+        print(f"  💾 [{category}] DB 구축 완료! (총 {len(splits)}개 데이터 저장)")
     
-    Args:
-        query_text: 검색할 질문 내용
-    """
-    if vector_store is None:
-        return "죄송합니다. 아직 지식 데이터베이스가 준비되지 않았습니다."
+    return vector_store
 
-    # 유사도 검색 (상위 3개 문서 추출)
-    results = vector_store.similarity_search(query_text, k=3)
-    
-    # 검색된 내용을 하나의 문자열로 합침
-    context = "\n\n".join([doc.page_content for doc in results])
-    return f"[참고 문헌 데이터]\n{context}"
+# ==========================================
+# 4. 초기화 실행
+# ==========================================
+def initialize_rags():
+    global fitness_vector_store, diet_vector_store
+    fitness_vector_store = get_or_create_vectorstore("fitness")
+    diet_vector_store = get_or_create_vectorstore("diet")
 
-# 모듈 로드 시 DB 초기화 실행
-initialize_rag()
+# ==========================================
+# 5. Agent용 검색 도구
+# ==========================================
+def search_fitness_db(query: str) -> str:
+    """[운동/헬스] 질문 시 사용. 엑셀 DB에서 운동법, 자세 등을 검색."""
+    if not fitness_vector_store: return "운동 지식 DB 준비 안됨."
+    results = fitness_vector_store.similarity_search(query, k=3)
+    return "[운동 검색 결과]\n" + "\n".join([f"- {doc.page_content}" for doc in results])
+
+def search_diet_db(query: str) -> str:
+    """[식단/영양] 질문 시 사용. 엑셀 DB에서 칼로리, 식단표 등을 검색."""
+    if not diet_vector_store: return "식단 지식 DB 준비 안됨."
+    results = diet_vector_store.similarity_search(query, k=3)
+    return "[식단 검색 결과]\n" + "\n".join([f"- {doc.page_content}" for doc in results])
+
+# 자동 실행
+initialize_rags()
