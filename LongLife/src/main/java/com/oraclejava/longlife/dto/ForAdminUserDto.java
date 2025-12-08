@@ -6,6 +6,7 @@ public record ForAdminUserDto(
         String userId,
         String email,
         String name,
-        LocalDateTime regdate
+        LocalDateTime regdate,
+        String role
 ) {
 }

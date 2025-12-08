@@ -1,6 +1,7 @@
 package com.oraclejava.longlife.service;
 
 import com.oraclejava.longlife.dto.ExerciseDto;
+import com.oraclejava.longlife.dto.ExerciseInitResponse;
 import com.oraclejava.longlife.model.Exercise;
 import com.oraclejava.longlife.repo.ExerciseRepository;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +17,7 @@ public class ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
 
+    // 운동 종목 목록
     public List<ExerciseDto> getAll(String type1, String type2, String name) {
         List<Exercise> exerciseList = exerciseRepository.search(type1, type2, name);
 
@@ -68,5 +70,24 @@ public class ExerciseService {
     // 운동 종목 삭제
     public void deleteExercise(Long exerciseId) {
         exerciseRepository.deleteById(exerciseId);
+    }
+
+    // type1 목록
+    public List<String> type1List() {
+        return exerciseRepository.findDistinctType1();
+    }
+
+    // type2 목록
+    public List<String> type2List() {
+        return exerciseRepository.findDistinctType2();
+    }
+
+    // 초기 데이터
+    public ExerciseInitResponse getInitResponse(String type1, String type2, String name) {
+        List<ExerciseDto> exerciseList = this.getAll(type1, type2, name);
+        List<String> type1List = exerciseRepository.findDistinctType1();
+        List<String> type2List = exerciseRepository.findDistinctType2();
+
+        return new ExerciseInitResponse(exerciseList, type1List, type2List);
     }
 }
