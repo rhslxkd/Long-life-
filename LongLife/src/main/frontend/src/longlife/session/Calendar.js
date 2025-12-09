@@ -1,12 +1,21 @@
 import React, {useEffect, useState} from "react";
-import {useNavigate} from "react-router-dom";
+import {useLocation, useNavigate} from "react-router-dom";
 import {fetcher} from "../../lib/fetcher";
 
 function Calendar() {
     const today = new Date();
     const navigate = useNavigate();
-    const [currentDate, setCurrentDate] = useState(today);
-    const [selectedDate, setSelectedDate] = useState(null);
+    const location = useLocation();
+
+    // URL에서 date 파라미터 읽기
+    const params = new URLSearchParams(location.search);
+    const targetDate = params.get("date"); // YYYY-MM-DD 형식
+
+    // 초기 currentDate를 targetDate 기준으로 설정
+    const initialDate = targetDate ? new Date(targetDate) : today;
+
+    const [currentDate, setCurrentDate] = useState(initialDate);
+    const [selectedDate, setSelectedDate] = useState(targetDate ? new Date(targetDate) : null);
     const [showPopup, setShowPopup] = useState(false);
 
     // 운동일지가 있는 날짜들 (백엔드에서 가져옴)
@@ -43,7 +52,7 @@ function Calendar() {
         (async () => {
             try {
                 const data = await fetcher(
-                    `http://localhost:8080/api/workout/dates?year=${year}&month=${month+1}`
+                    `http://localhost:8080/api/workout/dates?year=${year}&month=${month + 1}`
                 );
                 console.log("응답 데이터:", data);
                 setSessionDates(Array.isArray(data) ? data : []);
@@ -92,7 +101,7 @@ function Calendar() {
                         position: "absolute",
                         top: "20px",
                         right: "20px",
-                        background: "none",
+                        background: "white",
                         border: "1px solid #ccc",
                         borderRadius: "4px",
                         padding: "5px 10px",
@@ -174,7 +183,7 @@ function Calendar() {
                                     cursor: isFuture ? "not-allowed" : "pointer", // 미래 날짜는 클릭 불가 표시
                                     color: isCurrentMonth ? "black" : "gray",
                                     backgroundColor: hasSession
-                                        ? "#90ee90" // ✅ 운동일지 있는 날짜는 연두색
+                                        ? "#007bff"
                                         : isSelected
                                             ? "#ffe4b5"
                                             : isToday
@@ -194,37 +203,113 @@ function Calendar() {
 
                 {/* 팝업 모달 */}
                 {showPopup && (
-                    <div style={{
-                        position: "fixed",
-                        top: 0,
-                        left: 0,
-                        right: 0,
-                        bottom: 0,
-                        background: "rgba(0,0,0,0.3)",
-                        display: "flex",
-                        alignItems: "center",
-                        justifyContent: "center",
-                        zIndex: 100
-                    }}>
-                        <div style={{
-                            background: "white",
-                            padding: "20px",
-                            borderRadius: "8px",
-                            boxShadow: "0 4px 8px rgba(0,0,0,0.2)",
-                            minWidth: "300px"
-                        }}>
-                            <h3>연·월 선택</h3>
-                            <div style={{display: "flex", gap: "10px", marginBottom: "20px"}}>
-                                <select value={tempYear} onChange={(e) => setTempYear(parseInt(e.target.value))}>
-                                    {years.map((y) => <option key={y} value={y}>{y}년</option>)}
+                    <div
+                        style={{
+                            position: "fixed",
+                            top: 0,
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            background: "rgba(0,0,0,0.4)",   // 조금 더 진한 배경
+                            display: "flex",
+                            alignItems: "center",
+                            justifyContent: "center",
+                            zIndex: 100
+                        }}
+                    >
+                        <div
+                            style={{
+                                background: "white",
+                                padding: "30px",
+                                borderRadius: "12px",
+                                boxShadow: "0 6px 12px rgba(0,0,0,0.2)",
+                                minWidth: "320px",
+                                maxWidth: "400px",
+                                textAlign: "center"
+                            }}
+                        >
+                            <h3 style={{ marginBottom: "20px"}}>연·월 선택</h3>
+
+                            {/* 선택 박스 영역 */}
+                            <div
+                                style={{
+                                    display: "flex",
+                                    gap: "15px",
+                                    marginBottom: "25px",
+                                    justifyContent: "center"
+                                }}
+                            >
+                                <select
+                                    value={tempYear}
+                                    onChange={(e) => setTempYear(parseInt(e.target.value))}
+                                    style={{
+                                        padding: "8px 12px",
+                                        borderRadius: "6px",
+                                        border: "1px solid #007bff",
+                                        outline: "none",
+                                        cursor: "pointer"
+                                    }}
+                                >
+                                    {years.map((y) => (
+                                        <option key={y} value={y}>
+                                            {y}년
+                                        </option>
+                                    ))}
                                 </select>
-                                <select value={tempMonth} onChange={(e) => setTempMonth(parseInt(e.target.value))}>
-                                    {months.map((m) => <option key={m} value={m}>{m + 1}월</option>)}
+
+                                <select
+                                    value={tempMonth}
+                                    onChange={(e) => setTempMonth(parseInt(e.target.value))}
+                                    style={{
+                                        padding: "8px 12px",
+                                        borderRadius: "6px",
+                                        border: "1px solid #007bff",
+                                        outline: "none",
+                                        cursor: "pointer"
+                                    }}
+                                >
+                                    {months.map((m) => (
+                                        <option key={m} value={m}>
+                                            {m + 1}월
+                                        </option>
+                                    ))}
                                 </select>
                             </div>
-                            <div style={{textAlign: "right"}}>
-                                <button onClick={() => setShowPopup(false)} style={{marginRight: "10px"}}>취소</button>
-                                <button onClick={applyYearMonth}>확인</button>
+
+                            {/* 버튼 영역 */}
+                            <div
+                                style={{
+                                    display: "flex",
+                                    justifyContent: "flex-end",
+                                    gap: "10px"
+                                }}
+                            >
+                                <button
+                                    onClick={() => setShowPopup(false)}
+                                    style={{
+                                        padding: "8px 16px",
+                                        cursor: "pointer",
+                                        backgroundColor: "#6c757d",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "6px"
+                                    }}
+                                >
+                                    취소
+                                </button>
+                                <button
+                                    onClick={applyYearMonth}
+                                    style={{
+                                        padding: "8px 16px",
+                                        cursor: "pointer",
+                                        backgroundColor: "#007bff",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "6px"
+                                    }}
+                                >
+                                    확인
+                                </button>
                             </div>
                         </div>
                     </div>

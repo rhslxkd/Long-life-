@@ -1,12 +1,9 @@
 import useMe from "../hooks/useMe";
-import {useState} from "react";
 import {useNavigate} from "react-router-dom";
 import {fetcher} from "./fetcher";
 
 export default function Header() {
     const user = useMe();
-
-    const [ loading, setLoading] = useState(!user);
     const navigate = useNavigate();
 
     const onLogout = async () => {
@@ -38,10 +35,10 @@ export default function Header() {
                                 <a className="nav-link" href="/workout/calendar">운동일지</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">목표</a>
+                                <a className="nav-link" href="/workout/goal">목표</a>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="#">스토리</a>
+                                <a className="nav-link" href="/storyList">스토리</a>
                             </li>
                             <li className="nav-item dropdown">
                                 <a className="nav-link dropdown-toggle" href="/friends" id="navbarDropdown" role="button"
@@ -53,6 +50,9 @@ export default function Header() {
                                     <li><a className="dropdown-item" href="/friendSearch">친구찾기</a></li>
                                     <li><a className="dropdown-item" href="/requests">받은요청</a></li>
                                 </ul>
+                            </li>
+                            <li className="nav-item">
+                                <a className="nav-link" href="/chat">chatbot</a>
                             </li>
                             <li className="nav-item">
                                 <a className="nav-link disabled" href="#" tabIndex="-1"

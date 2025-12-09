@@ -25,7 +25,7 @@ public class FriendService {
 
     // 친구 검색
     public List<SearchUserDto> searchUsers(String value, String excludeUserId) {
-        return usersRepository.searchUsers(value, excludeUserId)
+        return usersRepository.searchUsersForFriend(value, excludeUserId)
                 .stream().map(user -> new SearchUserDto(
                         user.getUserId(),
                         user.getName()

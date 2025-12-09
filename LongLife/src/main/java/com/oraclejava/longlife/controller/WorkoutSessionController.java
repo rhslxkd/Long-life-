@@ -22,7 +22,7 @@ public class WorkoutSessionController {
 
     // 해당 날짜의 운동일지
     @GetMapping("/session/{date}")
-    public List<WorkoutSessionRequest> findDateSession(@PathVariable LocalDate date,
+    public List<WorkoutSessionRequest> findDateSession(@PathVariable("date") LocalDate date,
                                                    Authentication authentication) {
         LocalDate today = LocalDate.now();
         if(date.isAfter(today)) {
@@ -34,8 +34,9 @@ public class WorkoutSessionController {
 
     // 운동일지가 존재하는 월
     @GetMapping("/dates")
-    public List<String> findMonthSession(@RequestParam int year, @RequestParam int month) {
-        return workoutSessionService.findMonthSession(year, month);
+    public List<String> findMonthSession(@RequestParam int year, @RequestParam int month, Authentication authentication) {
+        String userId = authentication.getName();
+        return workoutSessionService.findMonthSession(year, month, userId);
     }
 
 
@@ -48,13 +49,13 @@ public class WorkoutSessionController {
 
     // 단일 운동일지 조회
     @GetMapping("/updateSession/{sessionId}")
-    public WorkoutSessionDto getSession(@PathVariable Long sessionId) {
+    public WorkoutSessionDto getSession(@PathVariable("sessionId") Long sessionId) {
         return workoutSessionService.findById(sessionId);
     }
 
     // 운동일지 수정
     @PutMapping("/updateSession/{sessionId}")
-    public WorkoutSession updateSession(@PathVariable Long sessionId,
+    public WorkoutSession updateSession(@PathVariable("sessionId") Long sessionId,
                                         @RequestBody WorkoutSessionRequest request) {
         WorkoutSession updateSession = workoutSessionService.updateSession(sessionId, request);
         return updateSession;
@@ -62,7 +63,7 @@ public class WorkoutSessionController {
 
     // 운동일지 삭제
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteSession(@PathVariable Long id) {
+    public ResponseEntity<Void> deleteSession(@PathVariable("id") Long id) {
         workoutSessionService.deleteSession(id);
         return ResponseEntity.ok().build();
     }
