@@ -4,6 +4,7 @@ import AdminRouter from "./router/AdminRouter";
 import UserRouter from "./router/UserRouter";
 import PublicRouter from "./router/PublicRouter";
 import {RequestsProvider} from "./longlife/friends/RequestContext";
+import AiChatPage from "./longlife/ai/AiChatPage";
 
 
 function App() {
@@ -15,6 +16,7 @@ function App() {
                 {UserRouter()}
                 {PublicRouter()}
             </Routes>
+            <AiChatPage/>
         </RequestsProvider>
     );
 }

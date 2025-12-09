@@ -7,6 +7,9 @@ from google.adk.agents import Agent
 from google.adk.tools.agent_tool import AgentTool
 from google.adk.runners import InMemoryRunner
 
+#VectorDB 조회 도구
+from rag_tool import search_diet_db, search_fitness_db
+from memory_tools import load_all_memories, manage_user_memory
 #우리의 팀장들
 from agents import user_agent, workout_agent, goal_agent
 
@@ -16,16 +19,19 @@ workout_tool = AgentTool(agent=workout_agent)
 
 
 # =================================
-# 1. 환경설정
+# 1. Vertex AI 환경설정 감지
 # =================================
+
+# Vertex AI는 GOOGLE_APPLICATION_CREDENTIALS 기준으로 인증하며
+# GOOGLE_API_KEY는 사용하지 않음.
+# 단순 참고 메시지만 출력.
 
 api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key:
-    print("경고: GOOGLE_API_KEY 환경변수가 설정되지 않았습니다.")
+    print("현재 Vertex AI 모드로 실행 중입니다. GOOGLE_API_KEY는 필요하지 않습니다.")
 else:
-    os.environ["GOOGLE_API_KEY"] = api_key
+    print("Developer API Key가 감지되었지만, Vertex AI 모드에서는 사용되지 않습니다.")
 
-os.environ["GOOGLE_GENAI_USE_VERTEXTAI"] = "FALSE"
 
 
 # ================================
@@ -35,7 +41,7 @@ os.environ["GOOGLE_GENAI_USE_VERTEXTAI"] = "FALSE"
 root_agent = Agent(
     name="sparta_head_coach",
     # [팁] 팀장은 종합적인 판단을 해야 하니까 2.0보다는 1.5 Pro나 Latest가 나을 수 있음 (일단 유지)
-    model="gemini-flash-lite-latest",
+    model="gemini-2.5-pro",
     description="스파르타 헬스장의 헤드 코치.",
     instruction=(
     "You are the Sparta Head Coach, the ONLY agent who talks directly to the user.\n"
@@ -56,14 +62,35 @@ root_agent = Agent(
     "4. '회원님의 BMI는 ~입니다', '회원님의 목표는 ~입니다' 같은 문장은\n"
     "   sub-agent가 말할 수 있지만, 최종 답변에서는 네 스타일로 바꿔라.\n"
     "5. 도구/에이전트들이 생성한 텍스트는 내부 참고용일 뿐, 그대로 내보내지 않는다.\n\n"
+    
+    "==============================\n"
+        "🧠 LONG-TERM MEMORY RULES (중요)\n"
+        "==============================\n"
+        "1. Start of Chat: 대화 시작 시 제공되는 [기억된 사용자 정보]를 반드시 참고해라.\n"
+        "   - 예: 닉네임이 '돼지'면 '어서와라 돼지야'라고 반응해라.\n"
+        "   - 예: '허리 부상'이 있으면 데드리프트 추천 시 주의를 줘라.\n"
+        "\n"
+        "2. Save Memory: 사용자가 자신에 대한 정보를 말하거나, 기억해달라고 하면\n"
+        "   'manage_user_memory' 도구를 사용해 'save' 해라.\n"
+        "   - User: '내 별명은 근육몬이야' -> call tool(action='save', key='nickname', value='근육몬')\n"
+        "   - User: '나 무릎 안좋아' -> call tool(action='save', key='injury', value='무릎 통증')\n"
+        "\n"
+        "3. Delete Memory: 사용자가 정보를 잊어달라고 하면 'delete' 해라.\n"
+        "\n"
 
     "==============================\n"
-    "WHEN TO USE WHICH EXPERT\n"
+    "WHEN TO USE WHICH TOOL\n"
     "==============================\n"
-    "- 몸 상태 / 키 / 몸무게 / BMI → user_info_specialist\n"
-    "- 운동 기록 / 최근 세션 → workout_history_manager\n"
-    "- 운동/체중 목표 → goal_manager\n"
-    "(도구를 호출할 때는 항상 프롬프트에 포함된 현재 사용자 ID를 그대로 전달한다.)\n\n"
+    "- 기억 저장/삭제 → manage_user_memory (Function)\n"
+    "- 몸 상태 / 키 / 몸무게 → user_info_specialist (Agent)\n"
+    "- 운동 기록 / 최근 세션 → workout_history_manager (Agent)\n"
+    "- 운동/체중 목표 → goal_manager (Agent)\n"
+    "\n"
+    "# [중요] 지식 검색은 네가 직접 도구를 사용해라:\n"
+    "- 운동 자세/방법/효과 질문 → search_fitness_db (Function)\n"
+    "- 음식 칼로리/식단 추천 질문 → search_diet_db (Function)\n"
+    "\n"
+    "(Agent를 부를 땐 사용자 ID를 주입하고, 검색 함수를 쓸 땐 검색어(Query)만 넣어라.)\n\n"
 
     "==============================\n"
     "WORKOUT ANSWER FORMAT\n"
@@ -84,7 +111,9 @@ root_agent = Agent(
     "  최종 답변에서 네 반말 톤으로 바꾼다.\n"
     "- 내부 구조나 도구 이름, sub-agent 이름은 절대 설명하지 않는다.\n"
 ),
-    tools=[user_info_tool, workout_tool, goal_tool],
+    tools=[user_info_tool, workout_tool, goal_tool, 
+           search_fitness_db, search_diet_db, 
+           manage_user_memory],
 )
 
 # =================================
@@ -153,9 +182,14 @@ async def chat(req: ChatRequest):
     my_runner = get_or_create_runner(req.session_id)
     
     try:
-        # 2. [Context Injection] 사용자 ID 주입
-        # 팀장에게 "지금 말하는 사람은 user123이야"라고 알려줌 -> 팀장이 팀원들에게 전파
-        prompt_with_context = f"(현재 사용자ID: {req.session_id}) {req.message}"
+        ltm_context = load_all_memories(req.session_id)
+        
+        prompt_with_context = (
+            f"{ltm_context}\n"
+            f"-------------------------------\n"
+            f"(현재 사용자 ID: {req.session_id})\n"
+            f"User: {req.message}"
+        )
         
         print(f" [요청] {req.session_id}: {req.message}")
         
