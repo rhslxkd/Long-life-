@@ -19,16 +19,19 @@ workout_tool = AgentTool(agent=workout_agent)
 
 
 # =================================
-# 1. 환경설정
+# 1. Vertex AI 환경설정 감지
 # =================================
+
+# Vertex AI는 GOOGLE_APPLICATION_CREDENTIALS 기준으로 인증하며
+# GOOGLE_API_KEY는 사용하지 않음.
+# 단순 참고 메시지만 출력.
 
 api_key = os.getenv("GOOGLE_API_KEY")
 if not api_key:
-    print("경고: GOOGLE_API_KEY 환경변수가 설정되지 않았습니다.")
+    print("현재 Vertex AI 모드로 실행 중입니다. GOOGLE_API_KEY는 필요하지 않습니다.")
 else:
-    os.environ["GOOGLE_API_KEY"] = api_key
+    print("Developer API Key가 감지되었지만, Vertex AI 모드에서는 사용되지 않습니다.")
 
-os.environ["GOOGLE_GENAI_USE_VERTEXTAI"] = "FALSE"
 
 
 # ================================
@@ -38,7 +41,7 @@ os.environ["GOOGLE_GENAI_USE_VERTEXTAI"] = "FALSE"
 root_agent = Agent(
     name="sparta_head_coach",
     # [팁] 팀장은 종합적인 판단을 해야 하니까 2.0보다는 1.5 Pro나 Latest가 나을 수 있음 (일단 유지)
-    model="gemini-flash-latest",
+    model="gemini-2.5-pro",
     description="스파르타 헬스장의 헤드 코치.",
     instruction=(
     "You are the Sparta Head Coach, the ONLY agent who talks directly to the user.\n"

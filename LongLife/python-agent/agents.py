@@ -11,7 +11,7 @@ from rag_tool import search_diet_db, search_fitness_db
 
 user_agent = Agent(
     name="user_info_specialist",
-    model="gemini-flash-latest",
+    model="gemini-2.0-flash",
     description="회원의 신체 정보를 담당하는 전문가.",
     instruction=(
         "너는 '헤드 코치'에게만 회원의 신체 정보를 보고하는 내부 분석가다.\n"
@@ -41,7 +41,7 @@ user_agent = Agent(
 # ==========================================
 workout_agent = Agent(
     name="workout_history_manager",
-    model="gemini-flash-latest",
+    model="gemini-2.0-flash",
     description="회원의 과거 운동 기록을 관리하는 전문가.",
     instruction=(
         "너는 '헤드 코치'에게 회원의 과거 운동 기록을 요약해서 보고하는 내부 분석가다.\n"
@@ -70,7 +70,7 @@ workout_agent = Agent(
 # ==========================================
 goal_agent = Agent(
     name="goal_manager",
-    model="gemini-flash-latest",
+    model="gemini-2.0-flash",
     description="회원의 운동 목표를 관리하는 전문가.",
     instruction=(
         "너는 '헤드 코치'에게 회원의 목표 정보를 보고하는 내부 분석가다.\n"

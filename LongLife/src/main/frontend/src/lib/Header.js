@@ -1,6 +1,6 @@
 import useMe from "../hooks/useMe";
-import {useNavigate} from "react-router-dom";
-import {fetcher} from "./fetcher";
+import { useNavigate } from "react-router-dom";
+import { fetcher } from "./fetcher";
 
 export default function Header() {
     const user = useMe();
@@ -11,7 +11,8 @@ export default function Header() {
             method: 'POST'
         });
         sessionStorage.removeItem("user");
-        navigate("/login", {replace: true});
+        window.dispatchEvent(new Event("auth-change"));
+        navigate("/login", { replace: true });
     }
 
     return (
@@ -22,8 +23,8 @@ export default function Header() {
                         Long life;
                     </a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
@@ -42,7 +43,7 @@ export default function Header() {
                             </li>
                             <li className="nav-item dropdown">
                                 <a className="nav-link dropdown-toggle" href="/friends" id="navbarDropdown" role="button"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     친구
                                 </a>
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -52,11 +53,8 @@ export default function Header() {
                                 </ul>
                             </li>
                             <li className="nav-item">
-                                <a className="nav-link" href="/chat">chatbot</a>
-                            </li>
-                            <li className="nav-item">
                                 <a className="nav-link disabled" href="#" tabIndex="-1"
-                                   aria-disabled="true">Disabled</a>
+                                    aria-disabled="true">Disabled</a>
                             </li>
                             {user?.role === "ROLE_ADMIN" && (
                                 <>
@@ -67,11 +65,11 @@ export default function Header() {
                             )}
                         </ul>
                         <div className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                            {user && <span style={{marginLeft: 12}}>안녕하세요, {user.name}({user.userId})님</span>}
+                            {user && <span style={{ marginLeft: 12 }}>안녕하세요, {user.name}({user.userId})님</span>}
                         </div>
                         <div className="text-end">
                             {user && <button type="button" className="btn btn-outline-light me-2"
-                                             onClick={() => navigate('/myInfo')}>내정보</button>}
+                                onClick={() => navigate('/myInfo')}>내정보</button>}
                             <button type="button" className="btn btn-outline-light me-2" onClick={onLogout}>로그아웃
                             </button>
                         </div>

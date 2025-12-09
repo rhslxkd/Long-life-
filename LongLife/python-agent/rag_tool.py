@@ -65,7 +65,7 @@ def get_or_create_vectorstore(category: str):
 
     existing_count = len(vector_store.get()['ids'])
     if existing_count > 0:
-        print(f"  ✅ [{category}] 기존 DB 로드 완료! (데이터 수: {existing_count})")
+        print(f"[{category}] 기존 DB 로드 완료! (데이터 수: {existing_count})")
         return vector_store
 
     print(f"  🚀 [{category}] 데이터가 비어있습니다. 엑셀 로딩 시작...")
@@ -74,14 +74,14 @@ def get_or_create_vectorstore(category: str):
     excel_files = glob.glob(os.path.join(target_folder, "*.xlsx")) + glob.glob(os.path.join(target_folder, "*.xls"))
     
     if not excel_files:
-        print(f"  ⚠️ 경고: '{target_folder}' 폴더에 엑셀 파일이 없습니다!")
+        print(f"경고: '{target_folder}' 폴더에 엑셀 파일이 없습니다!")
         return vector_store
 
     documents = []
     for file in excel_files:
         docs = load_excel_as_documents(file)
         documents.extend(docs)
-        print(f"   - 읽음: {os.path.basename(file)} ({len(docs)}개 행)")
+        print(f"- 읽음: {os.path.basename(file)} ({len(docs)}개 행)")
 
     if documents:
         # 엑셀은 이미 행 단위로 잘려있어서 chunk_size를 크게 잡거나 split을 안 해도 되지만,
@@ -90,13 +90,13 @@ def get_or_create_vectorstore(category: str):
         splits = splitter.split_documents(documents)
         
         vector_store.add_documents(splits)
-        print(f"  💾 [{category}] DB 구축 완료! (총 {len(splits)}개 데이터 저장)")
+        print(f"[{category}] DB 구축 완료! (총 {len(splits)}개 데이터 저장)")
     
     return vector_store
 
 # ==========================================
 # 4. 초기화 실행
-# ==========================================
+# ==========================================ㄴ
 def initialize_rags():
     global fitness_vector_store, diet_vector_store
     fitness_vector_store = get_or_create_vectorstore("fitness")

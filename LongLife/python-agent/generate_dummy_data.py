@@ -11,7 +11,7 @@ DIET_DIR = "./data/diet"
 os.makedirs(FITNESS_DIR, exist_ok=True)
 os.makedirs(DIET_DIR, exist_ok=True)
 
-print("🚀 데이터 생성 시작! (각 1,000개 항목)")
+print("데이터 생성 시작! (각 1,000개 항목)")
 
 # ==========================================
 # 2. 운동 데이터 생성 로직 (Combinatorics)
@@ -49,7 +49,7 @@ def generate_fitness_data(count=1000):
     df = pd.DataFrame(data)
     save_path = os.path.join(FITNESS_DIR, "dummy_workout_1000.xlsx")
     df.to_excel(save_path, index=False)
-    print(f"  ✅ 운동 데이터 생성 완료: {save_path}")
+    print(f"운동 데이터 생성 완료: {save_path}")
 
 # ==========================================
 # 3. 식단 데이터 생성 로직
@@ -92,7 +92,7 @@ def generate_diet_data(count=1000):
     df = pd.DataFrame(data)
     save_path = os.path.join(DIET_DIR, "dummy_diet_1000.xlsx")
     df.to_excel(save_path, index=False)
-    print(f"  ✅ 식단 데이터 생성 완료: {save_path}")
+    print(f"식단 데이터 생성 완료: {save_path}")
 
 # ==========================================
 # 4. 실행
@@ -100,4 +100,4 @@ def generate_diet_data(count=1000):
 if __name__ == "__main__":
     generate_fitness_data(1000)
     generate_diet_data(1000)
-    print("\n🎉 모든 데이터 준비 끝! 이제 rag_tool.py를 실행해서 DB에 넣으세요.")
+    print("\n모든 데이터 준비 끝! 이제 rag_tool.py를 실행해서 DB에 넣으세요.")
