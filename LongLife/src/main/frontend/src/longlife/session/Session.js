@@ -231,7 +231,7 @@ export default function Session() {
                         padding: "10px 20px",
                         fontSize: "16px",
                         cursor: "pointer",
-                        backgroundColor: loading ? "#ccc" : "#007bff",
+                        backgroundColor: loading ? "#ccc" : "#6c757d",
                         color: "white",
                         border: "none",
                         borderRadius: "4px"

@@ -7,6 +7,11 @@ export default function ExerciseGoal() {
     const [exercise, setExercise] = useState([]);
     const navigate = useNavigate();
 
+    const load = async () => {
+        const data = await fetcher(`http://localhost:8080/api/exercise/goal`);
+        setExercise(data ?? []);
+    };
+
     useEffect(() => {
         (async () => {
             try{
@@ -121,6 +126,7 @@ export default function ExerciseGoal() {
                                                 `http://localhost:8080/api/exercise/deleteGoal/${e.exerciseGoalId}`,
                                                 { method: "DELETE" }
                                             );
+                                            await load();
                                         } catch (err) {
                                             alert("삭제 실패: " + err.message);
                                         }

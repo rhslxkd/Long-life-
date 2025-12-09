@@ -9,6 +9,7 @@ import com.oraclejava.longlife.repo.ExerciseRepository;
 import com.oraclejava.longlife.repo.UsersRepository;
 import com.oraclejava.longlife.repo.WorkoutSessionRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Sort;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -32,6 +33,11 @@ public class WorkoutSessionService {
         LocalDateTime startOfDay = date.atStartOfDay();
         LocalDateTime endOfDay = date.atTime(23, 59, 59);
         return workoutSessionRepo.findDateSession(loginUser, startOfDay, endOfDay);
+    }
+
+    // 전체 운동일지
+    public List<WorkoutSession> findTop5ByOrderByStartedAtDesc(String loginUser) {
+        return workoutSessionRepo.findTop5ByOrderByStartedAtDesc(loginUser);
     }
 
     // 단일 운동일지 조회

@@ -6,6 +6,10 @@ export default function PhysicalGoal() {
     const [physical, setPhysical] = useState(null);
     const navigate = useNavigate();
 
+    const load = async () => {
+        const data = await fetcher("http://localhost:8080/api/physical/goal");
+        setPhysical(data ?? []);
+    };
 
     useEffect(() => {
         (async () => {
@@ -44,7 +48,7 @@ export default function PhysicalGoal() {
             }}
         >
             {/* 현재 상태 */}
-            <div style={{ width: "100%", marginBottom: "30px" }}>
+            <div style={{width: "100%", marginBottom: "30px"}}>
                 <h2
                     style={{
                         marginBottom: "15px",
@@ -61,36 +65,44 @@ export default function PhysicalGoal() {
                         width: "100%",
                         borderCollapse: "collapse",
                         textAlign: "center",
-                        boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                        tableLayout: "fixed"
                     }}
                 >
                     <thead style={{ backgroundColor: "#f8f9fa" }}>
                     <tr>
-                        <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>키</th>
-                        <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>몸무게</th>
-                        <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>BMI지수</th>
+                        <th style={{ width: "33%", padding: "12px", borderBottom: "1px solid #ddd" }}>키</th>
+                        <th style={{ width: "33%", padding: "12px", borderBottom: "1px solid #ddd" }}>몸무게</th>
+                        <th style={{ width: "33%", padding: "12px", borderBottom: "1px solid #ddd" }}>BMI지수</th>
                     </tr>
                     </thead>
                     <tbody>
                     {physical && (
                         <tr>
-                            <td style={{ padding: "10px", borderBottom: "1px solid #eee" }}>
+                            <td style={{ width: "33%", padding: "10px", borderBottom: "1px solid #eee", verticalAlign: "middle" }}>
                                 {physical.height}cm
                             </td>
-                            <td style={{ padding: "10px", borderBottom: "1px solid #eee" }}>
+                            <td style={{ width: "33%", padding: "10px", borderBottom: "1px solid #eee", verticalAlign: "middle" }}>
                                 {physical.weight}kg
                             </td>
-                            <td style={{ padding: "10px", borderBottom: "1px solid #eee" }}>
-                                {calcBMI(physical.height, physical.weight)}
+                            <td style={{ width: "33%", padding: "10px", borderBottom: "1px solid #eee", verticalAlign: "middle" }}>
+                                {calcBMI(physical.height, physical.weight) < 18.5 ?
+                                    <p style={{ margin: 0 }}>{calcBMI(physical.height, physical.weight)} / 저체중</p>
+                                    : calcBMI(physical.height, physical.weight) < 22.9 ?
+                                        <p style={{ margin: 0 }}>{calcBMI(physical.height, physical.weight)} / 정상</p>
+                                        : calcBMI(physical.height, physical.weight) < 24.9 ?
+                                            <p style={{ margin: 0 }}>{calcBMI(physical.height, physical.weight)} / 과체중</p>
+                                            : <p style={{ margin: 0 }}>{calcBMI(physical.height, physical.weight)} / 비만</p>}
                             </td>
                         </tr>
                     )}
                     </tbody>
                 </table>
+
             </div>
 
             {/* 목표 */}
-            <div style={{ width: "100%" }}>
+            <div style={{width: "100%"}}>
                 <h2
                     style={{
                         marginBottom: "15px",
@@ -111,27 +123,27 @@ export default function PhysicalGoal() {
                             boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
                         }}
                     >
-                        <thead style={{ backgroundColor: "#f8f9fa" }}>
+                        <thead style={{backgroundColor: "#f8f9fa"}}>
                         <tr>
-                            <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>목표 몸무게</th>
-                            <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>시작 일자</th>
-                            <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>완료 일자</th>
-                            <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>진행 상태</th>
-                            <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>관리</th>
+                            <th style={{padding: "12px", borderBottom: "1px solid #ddd"}}>목표 몸무게</th>
+                            <th style={{padding: "12px", borderBottom: "1px solid #ddd"}}>시작 일자</th>
+                            <th style={{padding: "12px", borderBottom: "1px solid #ddd"}}>완료 일자</th>
+                            <th style={{padding: "12px", borderBottom: "1px solid #ddd"}}>진행 상태</th>
+                            <th style={{padding: "12px", borderBottom: "1px solid #ddd"}}>관리</th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr>
-                            <td style={{ padding: "10px", borderBottom: "1px solid #eee" }}>
+                            <td style={{padding: "10px", borderBottom: "1px solid #eee"}}>
                                 {physical.kgGoal}kg
                             </td>
-                            <td style={{ padding: "10px", borderBottom: "1px solid #eee" }}>
+                            <td style={{padding: "10px", borderBottom: "1px solid #eee"}}>
                                 {physical.startingDate}
                             </td>
-                            <td style={{ padding: "10px", borderBottom: "1px solid #eee" }}>
+                            <td style={{padding: "10px", borderBottom: "1px solid #eee"}}>
                                 {physical.completeDate}
                             </td>
-                            <td style={{ padding: "10px", borderBottom: "1px solid #eee" }}>
+                            <td style={{padding: "10px", borderBottom: "1px solid #eee"}}>
                                 {physical.status}
                             </td>
                             <td
@@ -165,8 +177,9 @@ export default function PhysicalGoal() {
                                             try {
                                                 await fetcher(
                                                     `http://localhost:8080/api/physical/${physical.physicalGoalId}`,
-                                                    { method: "DELETE" }
+                                                    {method: "DELETE"}
                                                 );
+                                                await load();
                                             } catch (e) {
                                                 alert("삭제 실패: " + e.message);
                                             }
@@ -189,8 +202,8 @@ export default function PhysicalGoal() {
                         </tbody>
                     </table>
                 ) : (
-                    <div style={{ textAlign: "center", marginTop: "20px" }}>
-                        <p style={{ marginBottom: "10px" }}>저장된 목표가 없습니다.</p>
+                    <div style={{textAlign: "center", marginTop: "20px"}}>
+                        <p style={{marginBottom: "10px"}}>저장된 목표가 없습니다.</p>
                         <button
                             onClick={() => navigate("/workout/physical/createGoal")}
                             style={{
@@ -210,7 +223,7 @@ export default function PhysicalGoal() {
             </div>
 
             {/* 돌아가기 버튼 */}
-            <div style={{ marginTop: "30px" }}>
+            <div style={{marginTop: "30px"}}>
                 <button
                     onClick={() => navigate("/workout/goal")}
                     style={{
