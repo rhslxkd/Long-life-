@@ -1,36 +1,15 @@
 import useMe from "../hooks/useMe";
-import {useNavigate} from "react-router-dom";
-import {fetcher} from "./fetcher";
 import {useEffect, useState} from "react";
 import {useRequests} from "../longlife/friends/RequestContext";
+import { useNavigate } from "react-router-dom";
+import { fetcher } from "./fetcher";
 
 export default function Header() {
     const user = useMe();
     const navigate = useNavigate();
     const {requests, refreshRequests} = useRequests();
-    const [loading, setLoading] = useState(true);
-    const [err, setErr] = useState(null);
-
-    // const loadRequests = async () => {
-    //     setLoading(true);
-    //     setErr(null);
-    //
-    //     try {
-    //         const data = await fetcher('http://localhost:8080/api/friends/requests');
-    //         if (!data) return;
-    //         console.log(data);
-    //         setNotifications(data);
-    //     } catch (e) {
-    //         setErr(e.message);
-    //     } finally {
-    //         setLoading(false);
-    //     }
-    // }
 
     useEffect(() => {
-        // (async () => {
-        //     await loadRequests();
-        // })();
         refreshRequests();
     }, []);
 
@@ -50,15 +29,12 @@ export default function Header() {
                         Long life;
                     </a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
-                            data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                            aria-expanded="false" aria-label="Toggle navigation">
+                        data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+                        aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item">
-                                <a className="nav-link active" aria-current="page" href="/">Home</a>
-                            </li>
                             <li className="nav-item">
                                 <a className="nav-link" href="/workout/calendar">운동일지</a>
                             </li>
@@ -70,7 +46,7 @@ export default function Header() {
                             </li>
                             <li className="nav-item dropdown">
                                 <a className="nav-link dropdown-toggle" href="/friends" id="navbarDropdown" role="button"
-                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    data-bs-toggle="dropdown" aria-expanded="false">
                                     친구
                                 </a>
                                 <ul className="dropdown-menu" aria-labelledby="navbarDropdown">
@@ -78,13 +54,6 @@ export default function Header() {
                                     <li><a className="dropdown-item" href="/friendSearch">친구찾기</a></li>
                                     <li><a className="dropdown-item" href="/requests">받은요청</a></li>
                                 </ul>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="/chat">chatbot</a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link disabled" href="#" tabIndex="-1"
-                                   aria-disabled="true">Disabled</a>
                             </li>
                             {user?.role === "ROLE_ADMIN" && (
                                 <>
@@ -95,7 +64,7 @@ export default function Header() {
                             )}
                         </ul>
                         <div className="col-12 col-lg-auto mb-3 mb-lg-0 me-lg-3">
-                            {user && <span style={{marginLeft: 12}}>안녕하세요, {user.name}({user.userId})님</span>}
+                            {user && <span style={{ marginLeft: 12 }}>안녕하세요, {user.name}({user.userId})님</span>}
                         </div>
                         <div className="text-end">
                             <div className="position-relative d-inline-block me-3">
@@ -126,10 +95,9 @@ export default function Header() {
                                 </ul>
                             </div>
                             {user && <button type="button" className="btn btn-outline-light me-2"
-                                             onClick={() => navigate('/myInfo')}>내정보</button>}
+                                onClick={() => navigate('/myInfo')}>내정보</button>}
                             <button type="button" className="btn btn-outline-light me-2" onClick={onLogout}>로그아웃
                             </button>
-
                         </div>
                     </div>
                 </div>
