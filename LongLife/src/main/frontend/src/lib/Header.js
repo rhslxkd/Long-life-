@@ -1,10 +1,38 @@
 import useMe from "../hooks/useMe";
 import {useNavigate} from "react-router-dom";
 import {fetcher} from "./fetcher";
+import {useEffect, useState} from "react";
+import {useRequests} from "../longlife/friends/RequestContext";
 
 export default function Header() {
     const user = useMe();
     const navigate = useNavigate();
+    const {requests, refreshRequests} = useRequests();
+    const [loading, setLoading] = useState(true);
+    const [err, setErr] = useState(null);
+
+    // const loadRequests = async () => {
+    //     setLoading(true);
+    //     setErr(null);
+    //
+    //     try {
+    //         const data = await fetcher('http://localhost:8080/api/friends/requests');
+    //         if (!data) return;
+    //         console.log(data);
+    //         setNotifications(data);
+    //     } catch (e) {
+    //         setErr(e.message);
+    //     } finally {
+    //         setLoading(false);
+    //     }
+    // }
+
+    useEffect(() => {
+        // (async () => {
+        //     await loadRequests();
+        // })();
+        refreshRequests();
+    }, []);
 
     const onLogout = async () => {
         await fetcher('http://localhost:8080/api/users/logout', {
@@ -70,10 +98,38 @@ export default function Header() {
                             {user && <span style={{marginLeft: 12}}>안녕하세요, {user.name}({user.userId})님</span>}
                         </div>
                         <div className="text-end">
+                            <div className="position-relative d-inline-block me-3">
+                                <i className="fa-solid fa-bell fa-lg"
+                                   id="bellDropdown"
+                                   role="button"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false"
+                                   style={{cursor: "pointer"}}></i>
+                                {requests.length !== 0 &&
+                                    <>
+                                        <span
+                                            className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">!</span>
+                                    </>
+                                }
+                                <ul className="dropdown-menu dropdown-menu-end mt-3" aria-labelledby="bellDropdown">
+                                    {requests.length === 0 ? (
+                                        <li><span className="dropdown-item">알림이 없습니다.</span></li>
+                                    ) : (
+                                        requests.map((n) => (
+                                            <li key={n.friendId}>
+                                                <a className="dropdown-item" href="/requests">
+                                                    {n.receiverId}님의 친구 요청이 있습니다.
+                                                </a>
+                                            </li>
+                                        ))
+                                    )}
+                                </ul>
+                            </div>
                             {user && <button type="button" className="btn btn-outline-light me-2"
                                              onClick={() => navigate('/myInfo')}>내정보</button>}
                             <button type="button" className="btn btn-outline-light me-2" onClick={onLogout}>로그아웃
                             </button>
+
                         </div>
                     </div>
                 </div>

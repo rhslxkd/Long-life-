@@ -5,25 +5,16 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="3fc5dd0f-1710-4307-be2c-89ef6bf15e9e" name="변경" comment="">
-      <change afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/assets/images/exerciseGoal.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/assets/images/physicalGoal.jpg" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/Goal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/python-agent/agents.py" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/python-agent/agents.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/python-agent/app.py" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/python-agent/app.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/jarRepositories.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/friends/RequestContext.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/compiler.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/compiler.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/modules/LongLife.main.iml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/modules/LongLife.main.iml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/App.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/App.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/lib/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/lib/Header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/CreateExerciseGoal.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/CreateExerciseGoal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/CreatePhysicalGoal.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/CreatePhysicalGoal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/ExerciseGoal.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/ExerciseGoal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/PhysicalGoal.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/PhysicalGoal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/UpdateExerciseGoal.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/UpdateExerciseGoal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/UpdatePhysicalGoal.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/UpdatePhysicalGoal.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/session/Calendar.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/session/Calendar.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/session/CreateSession.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/session/CreateSession.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/session/Session.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/session/Session.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/session/UpdateSession.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/session/UpdateSession.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/router/UserRouter.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/router/UserRouter.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/dto/ExerciseGoalDto.java" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/dto/ExerciseGoalDto.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/model/ExerciseGoal.java" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/model/ExerciseGoal.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/friends/Requests.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/friends/Requests.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/repo/FriendRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/repo/FriendRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/service/FriendService.java" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/service/FriendService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -98,6 +89,7 @@
   </component>
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
+    "Gradle.Build LongLife.executor": "Run",
     "Gradle.C:/Users/young/IdeaProjects/Long-life-/LongLife/build.gradle.executor": "Run",
     "Gradle.LongLife 빌드.executor": "Run",
     "Gradle.소스 다운로드.executor": "Run",
@@ -109,10 +101,12 @@
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
     "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Spring Boot.LongLifeApplication.executor": "Run",
-    "git-widget-placeholder": "feature-calendarUI",
+    "git-widget-placeholder": "feature-friend",
+    "ignore.virus.scanning.warn.message": "true",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Users/young/IdeaProjects/Long-life-",
+    "last_opened_file_path": "C:/Users/HP/IdeaProjects/Long-life-",
     "node.js.detected.package.eslint": "true",
     "node.js.detected.package.tslint": "true",
     "node.js.selected.package.eslint": "(autodetect)",
@@ -136,11 +130,6 @@
     </key>
   </component>
   <component name="RunManager">
-    <configuration default="true" type="JetRunConfigurationType">
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration default="true" type="KotlinStandaloneScriptRunConfigurationType">
       <option name="filePath" />
       <method v="2" />
@@ -148,10 +137,10 @@
     <configuration name="LongLifeApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="23" />
       <envs>
-        <env name="DB_PASSWORD" value="younghk0527" />
+        <env name="DB_PASSWORD" value="1234" />
         <env name="DB_URL" value="jdbc:mariadb://localhost:3306/longlife" />
         <env name="DB_USERNAME" value="root" />
-        <env name="file.upload-dir" value="C:\Users\young\IdeaProjects\Long-life-\LongLife\src\main\frontend\src\assets\uploadimage" />
+        <env name="file.upload-dir" value="C:\Users\HP\IdeaProjects\Long-life-\LongLife\src\main\frontend\src\assets\uploadimage" />
       </envs>
       <module name="LongLife.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.oraclejava.longlife.LongLifeApplication" />
@@ -163,11 +152,12 @@
   <component name="SharedIndexes">
     <attachedChunks>
       <set>
-        <option value="bundled-jdk-9823dce3aa75-bf35d07a577b-intellij.indexing.shared.core-IU-252.27397.103" />
-        <option value="bundled-js-predefined-d6986cc7102b-3aa1da707db6-JavaScript-IU-252.27397.103" />
+        <option value="bundled-jdk-9823dce3aa75-28b599e66164-intellij.indexing.shared.core-IU-242.26775.15" />
+        <option value="bundled-js-predefined-d6986cc7102b-5c90d61e3bab-JavaScript-IU-242.26775.15" />
       </set>
     </attachedChunks>
   </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
   <component name="TaskManager">
     <task active="true" id="Default" summary="디폴트 작업">
       <changelist id="3fc5dd0f-1710-4307-be2c-89ef6bf15e9e" name="변경" comment="" />
@@ -237,6 +227,8 @@
       <workItem from="1765161006278" duration="206000" />
       <workItem from="1765161232507" duration="8000" />
       <workItem from="1765170525583" duration="13592000" />
+      <workItem from="1765262029498" duration="101000" />
+      <workItem from="1765262172670" duration="5952000" />
     </task>
     <servers />
   </component>
