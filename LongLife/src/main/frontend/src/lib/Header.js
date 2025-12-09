@@ -1,18 +1,24 @@
 import useMe from "../hooks/useMe";
+import {useEffect, useState} from "react";
+import {useRequests} from "../longlife/friends/RequestContext";
 import { useNavigate } from "react-router-dom";
 import { fetcher } from "./fetcher";
 
 export default function Header() {
     const user = useMe();
     const navigate = useNavigate();
+    const {requests, refreshRequests} = useRequests();
+
+    useEffect(() => {
+        refreshRequests();
+    }, []);
 
     const onLogout = async () => {
         await fetcher('http://localhost:8080/api/users/logout', {
             method: 'POST'
         });
         sessionStorage.removeItem("user");
-        window.dispatchEvent(new Event("auth-change"));
-        navigate("/login", { replace: true });
+        navigate("/login", {replace: true});
     }
 
     return (
@@ -53,6 +59,9 @@ export default function Header() {
                                 </ul>
                             </li>
                             <li className="nav-item">
+                                <a className="nav-link" href="/chat">chatbot</a>
+                            </li>
+                            <li className="nav-item">
                                 <a className="nav-link disabled" href="#" tabIndex="-1"
                                     aria-disabled="true">Disabled</a>
                             </li>
@@ -68,6 +77,33 @@ export default function Header() {
                             {user && <span style={{ marginLeft: 12 }}>안녕하세요, {user.name}({user.userId})님</span>}
                         </div>
                         <div className="text-end">
+                            <div className="position-relative d-inline-block me-3">
+                                <i className="fa-solid fa-bell fa-lg"
+                                   id="bellDropdown"
+                                   role="button"
+                                   data-bs-toggle="dropdown"
+                                   aria-expanded="false"
+                                   style={{cursor: "pointer"}}></i>
+                                {requests.length !== 0 &&
+                                    <>
+                                        <span
+                                            className="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger">!</span>
+                                    </>
+                                }
+                                <ul className="dropdown-menu dropdown-menu-end mt-3" aria-labelledby="bellDropdown">
+                                    {requests.length === 0 ? (
+                                        <li><span className="dropdown-item">알림이 없습니다.</span></li>
+                                    ) : (
+                                        requests.map((n) => (
+                                            <li key={n.friendId}>
+                                                <a className="dropdown-item" href="/requests">
+                                                    {n.receiverId}님의 친구 요청이 있습니다.
+                                                </a>
+                                            </li>
+                                        ))
+                                    )}
+                                </ul>
+                            </div>
                             {user && <button type="button" className="btn btn-outline-light me-2"
                                 onClick={() => navigate('/myInfo')}>내정보</button>}
                             <button type="button" className="btn btn-outline-light me-2" onClick={onLogout}>로그아웃

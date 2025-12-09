@@ -112,7 +112,7 @@ public class FriendService {
 
     // 요청 받은 목록
     public List<FriendDto> getRequestFriends(String userId) {
-        List<FriendDto> requests = friendRepository.findByReceiverUserIdAndStatus(userId, FriendStatus.PENDING)
+        List<FriendDto> requests = friendRepository.findByReceiverUserIdAndStatusOrderByCreatedAtDesc(userId, FriendStatus.PENDING)
                 .stream()
                 .map(f -> new FriendDto(
                         f.getFriendId(),

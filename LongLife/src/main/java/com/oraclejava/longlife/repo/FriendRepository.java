@@ -10,5 +10,5 @@ import java.util.List;
 public interface FriendRepository extends JpaRepository<Friend, Long> {
     List<Friend> findByRequesterAndStatus(Users requester, FriendStatus status);
     List<Friend> findByReceiverAndStatus(Users receiver, FriendStatus status);
-    List<Friend> findByReceiverUserIdAndStatus(String receiverUserId, FriendStatus status);
+    List<Friend> findByReceiverUserIdAndStatusOrderByCreatedAtDesc(String receiverUserId, FriendStatus status);
 }
