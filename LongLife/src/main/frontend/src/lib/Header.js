@@ -36,9 +36,6 @@ export default function Header() {
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item">
-                                <a className="nav-link active" aria-current="page" href="/">Home</a>
-                            </li>
-                            <li className="nav-item">
                                 <a className="nav-link" href="/workout/calendar">운동일지</a>
                             </li>
                             <li className="nav-item">
@@ -57,13 +54,6 @@ export default function Header() {
                                     <li><a className="dropdown-item" href="/friendSearch">친구찾기</a></li>
                                     <li><a className="dropdown-item" href="/requests">받은요청</a></li>
                                 </ul>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="/chat">chatbot</a>
-                            </li>
-                            <li className="nav-item">
-                                <a className="nav-link disabled" href="#" tabIndex="-1"
-                                    aria-disabled="true">Disabled</a>
                             </li>
                             {user?.role === "ROLE_ADMIN" && (
                                 <>
