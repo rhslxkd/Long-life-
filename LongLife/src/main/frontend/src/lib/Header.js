@@ -94,9 +94,9 @@ export default function Header() {
                                     )}
                                 </ul>
                             </div>
-                            {user && <button type="button" className="btn btn-outline-light me-2"
+                            {user && <button type="button" className="btn btn-outline-dark me-2"
                                 onClick={() => navigate('/myInfo')}>내정보</button>}
-                            <button type="button" className="btn btn-outline-light me-2" onClick={onLogout}>로그아웃
+                            <button type="button" className="btn btn-outline-dark me-2" onClick={onLogout}>로그아웃
                             </button>
                         </div>
                     </div>

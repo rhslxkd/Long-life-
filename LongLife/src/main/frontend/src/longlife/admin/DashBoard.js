@@ -4,6 +4,7 @@ import {fetcher} from "../../lib/fetcher";
 function DashBoard() {
     const [exerciseCount, setExerciseCount] = useState(0);
     const [userCount, setUserCount] = useState(0);
+    const [postCount, setPostCount] = useState(0);
     const [loading, setLoading] = useState(true);
     const [err, setErr] = useState(null);
 
@@ -12,10 +13,13 @@ function DashBoard() {
             try {
                 const data1 = await fetcher('http://localhost:8080/api/exercise/count');
                 const data2 = await fetcher('http://localhost:8080/api/users/count')
+                const data3 = await fetcher('http://localhost:8080/api/post/count')
                 if (!data1) return
                 if (!data2) return
+                if (!data3) return
                 setExerciseCount(data1);
                 setUserCount(data2);
+                setPostCount(data3);
             } catch (e) {
                 setErr(e.message);
             } finally {
@@ -41,7 +45,7 @@ function DashBoard() {
 
                 <div className="row g-4 mb-5">
                         <div
-                            className="card card-body bg-primary bg-opacity-10 border border-primary border-opacity-25 p-4 h-100">
+                            className="card card-body bg-primary border border-primary border-opacity-25 p-4 h-100">
                             <div className="d-flex justify-content-between align-items-center">
                                 <div>
                                     <h4 className="mb-1">{userCount}</h4>
@@ -53,7 +57,7 @@ function DashBoard() {
                             </div>
                         </div>
                         <div
-                            className="card card-body bg-dark bg-opacity-10 border border-dark border-opacity-25 p-4 h-100">
+                            className="card card-body bg-dark border border-dark border-opacity-25 p-4 h-100">
                             <div className="d-flex justify-content-between align-items-center">
                                 <div>
                                     <h4 className="mb-1">{exerciseCount}</h4>
@@ -64,10 +68,10 @@ function DashBoard() {
                             </div>
                         </div>
                         <div
-                            className="card card-body bg-info bg-opacity-10 border border-info border-opacity-25 p-4 h-100">
+                            className="card card-body bg-info border border-info border-opacity-25 p-4 h-100">
                             <div className="d-flex justify-content-between align-items-center">
                                 <div>
-                                    <h4 className="mb-1">147</h4>
+                                    <h4 className="mb-1">{postCount}</h4>
                                     <span className="h5 fw-light mb-0">총 스토리</span>
                                 </div>
                                 <div className="icon-lg rounded-circle bg-info text-white mb-0">

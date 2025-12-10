@@ -1,6 +1,8 @@
 package com.oraclejava.longlife.repo;
 
 import com.oraclejava.longlife.model.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -26,4 +28,11 @@ public interface PostRepository extends JpaRepository<Post, Long> {
                @Param("searchData") String searchData
        );
 
+       // 관리자용 스토리 검색
+       @Query("""
+            select p from Post p
+            where p.title LIKE %:searchData%
+            or p.userId LIKE %:searchData%
+        """)
+       Page<Post> findByTitleOrUserId(String searchData, Pageable pageable);
 }
