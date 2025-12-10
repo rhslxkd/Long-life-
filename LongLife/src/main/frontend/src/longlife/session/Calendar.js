@@ -92,7 +92,8 @@ function Calendar() {
                 borderRadius: "8px",
                 padding: "20px",
                 boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                position: "relative"
+                position: "relative",
+                background: "white"
             }}>
                 {/* 오른쪽 상단 오늘 버튼 */}
                 <button

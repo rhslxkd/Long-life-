@@ -95,17 +95,19 @@ export default function UpdateExerciseGoal() {
 
     // type1 변경 시 관련 없는 필드 초기화
     useEffect(() => {
-        if (type1 === "무산소") {
-            // 유산소 목표 초기화
+        if (type2 === "구기종목") {
             setValue("distanceGoal", null);
-            setValue("timeGoal", null);
+            if(type1 === "무산소"){
+                setValue("timeGoal", null);
+            }
         }
-        if (type1 === "유산소") {
-            // 무산소 목표 초기화
+        if (type2 === "복근") {
             setValue("weightGoal", null);
-            setValue("countGoal", null);
+            if(type1 === "유산소"){
+                setValue("countGoal", null);
+            }
         }
-    }, [type1, setValue]);
+    }, [type1, type2, setValue]);
 
 
     // ✅ 업데이트 요청
@@ -114,10 +116,16 @@ export default function UpdateExerciseGoal() {
             if (type1 === "무산소") {
                 data.distanceGoal = null;
                 data.timeGoal = null;
+                if (type2 === "복근") {
+                    data.weightGoal = null;
+                }
             }
             if (type1 === "유산소") {
                 data.weightGoal = null;
                 data.countGoal = null;
+                if (type2 === "구기종목") {
+                    data.distanceGoal = null;
+                }
             }
 
             const today = new Date();
@@ -227,10 +235,10 @@ export default function UpdateExerciseGoal() {
                 {/* 무게/개수 목표 2개 가로 배치 */}
                 <div style={{display: "flex", gap: "15px"}}>
                     <div style={{flex: 1, display: "flex", flexDirection: "column", gap: "6px"}}>
-                        <label style={{fontWeight: "600", color: "#333"}}>무게 목표</label>
+                        <label style={{fontWeight: "600", color: "#333"}}>무게 목표(kg)</label>
                         <input
                             type="number"
-                            disabled={type1 === "유산소"}
+                            disabled={type1 === "유산소" || type2 === "복근"}
                             {...register("weightGoal", {
                                 required: type1 === "무산소" ? "무게 목표를 입력하세요." : false
                             })}
@@ -238,14 +246,14 @@ export default function UpdateExerciseGoal() {
                                 padding: "10px",
                                 borderRadius: "6px",
                                 border: "1px solid #007bff",
-                                backgroundColor: type1 === "유산소" ? "#e0e0e0" : "#fff"
+                                backgroundColor: type1 === "유산소" || type2 === "복근" ? "#e0e0e0" : "#fff"
                             }}
                         />
                         {errors.weightGoal && <small style={{color:"red"}}>{errors.weightGoal.message}</small>}
                     </div>
 
                     <div style={{flex: 1, display: "flex", flexDirection: "column", gap: "6px"}}>
-                        <label style={{fontWeight: "600", color: "#333"}}>개수 목표</label>
+                        <label style={{fontWeight: "600", color: "#333"}}>개수 목표(개)</label>
                         <input
                             type="number"
                             disabled={type1 === "유산소"}
@@ -269,13 +277,13 @@ export default function UpdateExerciseGoal() {
                         <label style={{fontWeight: "600", color: "#333"}}>거리 목표</label>
                         <input
                             type="text"
-                            disabled={type1 === "무산소"}
+                            disabled={type1 === "무산소" || type2 === "구기종목"}
                             {...register("distanceGoal")}
                             style={{
                                 padding: "10px",
                                 borderRadius: "6px",
                                 border: "1px solid #007bff",
-                                backgroundColor: type1 === "무산소" ? "#e0e0e0" : "#fff"
+                                backgroundColor: type1 === "무산소" || type2 === "구기종목" ? "#e0e0e0" : "#fff"
                             }}
                         />
                     </div>

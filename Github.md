@@ -168,6 +168,28 @@ ex: git show 217161c:LongLife/python-agent/app.py
 
 ---
 
+## 1️⃣7️⃣ `git tag v1.0-local`
+
+ex: git checkout 자주쓰는 branch로가서 commit다 하고 이걸 실행,
+이 명령어는 현재 커밋(HEAD)에 “v1.0-local”이라는 이름표를 붙이는 것임.
+
+"여기까지의 상태는 특별히 보관한다"
+"나중에 이 시점으로 돌아올 수 있게 북마크 찍어둔다"
+
+에 가깝다.
+
+---
+
+## 1️⃣7️⃣ `git push origin dev --tags`
+
+태그는 로컬에서만 존재한다.
+그래서 GitHub(원격)에 보내려면 push가 필요함.
+
+--tags는 로컬에 있는 모든 태그를 원격으로 업로드하는 명령.
+
+“이 태그들도 GitHub에 저장해둬라”
+---
+
 # 🧩 팀플 필수 루틴 요약 - 위에 설명이랑 비교해보면서 흐름을 한번 이해해보세요!
 
 ## 1. 작업 시작 - 본인작업 브랜치!
@@ -202,6 +224,38 @@ git push (본인 작업중인 branch)
 
 ## 4. PR할 때
 저 부르세요!!
+
+## 5. RollBack Manual
+```
+git checkout dev #자주쓰는 브랜치
+git add .
+git commit -m "chore: snapshot before aws deploy"
+git tag v1.0-local
+git push origin dev --tags
+```
+이렇게 스냅샷을 저장한 후
+```
+git checkout dev
+git reset --hard v1.0-local
+git push origin dev --force
+```
+dev 브랜치가 롤백한 시점으로 돌아감.
+
+* 히스토리는 유지하면서 결과감 되돌리고싶다.
+```
+git checkout dev
+git revert v1.0-local..HEAD
+git commit -m "rollback to v1.0-local via revert"
+git push origin dev
+```
+dev는 계속 최신 상태, 그 안의 변경사항만 되돌린 "되돌리기 커밋"생성 -> 협업자와 충돌 최소화
+
+* 특정 파일만 되돌리고 싶은 경우
+```
+git checkout v1.0-local -- LongLife/python-agent/app.py # app.py만 되돌리고 싶음.
+git commit -m "restore app.py from v1.0-local"
+git push origin dev
+```
 ---
 
 

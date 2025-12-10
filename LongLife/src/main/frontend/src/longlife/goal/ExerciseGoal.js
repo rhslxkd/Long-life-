@@ -7,6 +7,11 @@ export default function ExerciseGoal() {
     const [exercise, setExercise] = useState([]);
     const navigate = useNavigate();
 
+    const load = async () => {
+        const data = await fetcher(`http://localhost:8080/api/exercise/goal`);
+        setExercise(data ?? []);
+    };
+
     useEffect(() => {
         (async () => {
             try{
@@ -48,6 +53,30 @@ export default function ExerciseGoal() {
             >
                 나의 운동 목표
             </h1>
+            <div
+                style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginBottom: "20px"
+                }}
+            >
+                <button
+                    onClick={() => navigate("/workout/exercise/createGoal")}
+                    style={{
+                        padding: "12px 24px",
+                        fontSize: "16px",
+                        cursor: "pointer",
+                        backgroundColor: "#007bff",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "6px",
+                        fontWeight: "bold"
+                    }}
+                >
+                    운동목표 추가하기
+                </button>
+            </div>
 
             <table
                 style={{
@@ -61,8 +90,8 @@ export default function ExerciseGoal() {
                 <thead style={{ backgroundColor: "#f8f9fa" }}>
                 <tr>
                     <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>운동 이름</th>
-                    <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>무게 목표</th>
-                    <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>개수 목표</th>
+                    <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>무게 목표(kg)</th>
+                    <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>개수 목표(개)</th>
                     <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>거리 목표</th>
                     <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>시간 목표</th>
                     <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>시작일</th>
@@ -121,6 +150,7 @@ export default function ExerciseGoal() {
                                                 `http://localhost:8080/api/exercise/deleteGoal/${e.exerciseGoalId}`,
                                                 { method: "DELETE" }
                                             );
+                                            await load();
                                         } catch (err) {
                                             alert("삭제 실패: " + err.message);
                                         }
@@ -154,7 +184,7 @@ export default function ExerciseGoal() {
                 }}
             >
                 <button
-                    onClick={() => navigate("/workout/exercise/createGoal")}
+                    onClick={() => navigate("/")}
                     style={{
                         padding: "12px 24px",
                         fontSize: "16px",
@@ -166,7 +196,7 @@ export default function ExerciseGoal() {
                         fontWeight: "bold"
                     }}
                 >
-                    운동목표 추가하기
+                    홈으로 돌아가기
                 </button>
                 <button
                     onClick={() => navigate("/workout/goal")}
@@ -181,7 +211,7 @@ export default function ExerciseGoal() {
                         fontWeight: "bold"
                     }}
                 >
-                    돌아가기
+                    목표로 돌아가기
                 </button>
             </div>
         </div>
