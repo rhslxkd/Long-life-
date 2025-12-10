@@ -3,6 +3,7 @@ package com.oraclejava.longlife.service;
 import com.oraclejava.longlife.model.Post;
 import com.oraclejava.longlife.repo.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -18,7 +19,7 @@ public class PostService extends BaseTransactioanalService{
 
     //운동스토리 전체조회
     public List<Post> getAllStory(){
-      return postRepository.findAll();
+        return postRepository.findAll();
     }
 
    //스토리저장
@@ -37,8 +38,26 @@ public class PostService extends BaseTransactioanalService{
 
    }
 
-   public void deletePost(Long id){
+   public ResponseEntity<Post> deletePost(Long id){
         postRepository.deleteById(id);
+        return ResponseEntity.ok().build();
    }
+
+    public Post updatePost(Long id, Post post) {
+        Post uPost = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("story not found"));
+        uPost.update(post.getTitle(),post.getContent(),post.getImgUrl());
+        return uPost;
+    }
+
+
+    // 이미지 수정
+    public Post updateImgFile(Long id, MultipartFile ImgFile) throws IOException {
+        Post uPost = postRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("post image not found"));
+        var saved = fileStorageService.storePoster(ImgFile);
+        uPost.setImgUrl(saved.subdir() + "/" + saved.filename());
+        return uPost;
+    }
 
 }

@@ -40,13 +40,31 @@ public class PostRestController {
     @GetMapping("/search")
     public List<Post> searchPost(@RequestParam String searchData){
         return postService.searchData(searchData);
-
     }
 
     //삭제
     @DeleteMapping("/{id}")
-    public void delete(@PathVariable Long id){
-         postService.deletePost(id);
+    public ResponseEntity<Post> delete(@PathVariable Long id){
+        postService.deletePost(id);
+        return ResponseEntity.ok().build();
+    }
+
+    //수정
+    @PutMapping(value = "/{id}",
+            consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity<Post> update(
+            @PathVariable long id,
+            @RequestPart Post post,
+            @RequestPart(required = false) MultipartFile imgfile
+    ) throws IOException {
+
+        Post savedPost = postService.updatePost(id, post);
+        //if(포스터가 있으면) 업로드;
+        if (imgfile != null && !imgfile.isEmpty()) {
+            postService.updateImgFile(id, imgfile);
+        }
+        return ResponseEntity.ok(savedPost);
+
     }
 
 
