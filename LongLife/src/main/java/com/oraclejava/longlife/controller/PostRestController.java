@@ -67,6 +67,9 @@ public class PostRestController {
 
     }
 
-
-
+    // 총 스토리 수
+    @GetMapping("/count")
+    public long getCount() {
+        return postService.PostCount();
+    }
 }

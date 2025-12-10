@@ -34,7 +34,13 @@ public class AdminController {
     // 스토리 목록
     @GetMapping("/postList")
     public ResponseEntity<?> getPosts(@RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "2") int size) {
-        return ResponseEntity.ok(adminService.getAllPosts(page, size));
+                                      @RequestParam(defaultValue = "2") int size,
+                                      @RequestParam(required = false) String searchData) {
+
+        if (searchData != null) {
+            return ResponseEntity.ok(adminService.getSearchPosts(searchData, page, size));
+        } else {
+            return ResponseEntity.ok(adminService.getAllPosts(page, size));
+        }
     }
 }

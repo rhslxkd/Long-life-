@@ -1,4 +1,4 @@
-import {useCallback, useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {fetcher} from "../../lib/fetcher";
 import Pagination from "../../components/pagination";
 
@@ -53,7 +53,6 @@ export default function UserList() {
     }
 
     const handleSearchClick = () => {
-        // alert(`검색클릭, 검색어: ${searchValue}`);
         (async () => {
             await loadUsers();
         })();
@@ -62,7 +61,6 @@ export default function UserList() {
     return (
         <div className="container">
             <h1 className="mt-4 mb-4">사용자 목록</h1>
-            {/* 검색 필터 */}
             <div className="input-group w-25 ms-auto mb-4">
                 <input type="search" className="form-control rounded" placeholder="아이디 검색"
                        aria-label="Search" aria-describedby="search-addon"
