@@ -59,8 +59,14 @@ public class UsersController {
 
         return ResponseEntity.ok().build();
     }
+
+    // 회원 수
+    @GetMapping("/count")
+    public long getUserCount() {
+        return usersService.getUserCount();
+    }
     
-    // 유저 정보
+    // 회원 정보
     @GetMapping("/{userId}")
     public ResponseEntity<?> getUser(@PathVariable String userId) {
         return ResponseEntity.ok().body(usersService.getUser(userId));

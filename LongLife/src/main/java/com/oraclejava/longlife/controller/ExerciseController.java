@@ -15,6 +15,12 @@ import java.util.List;
 public class ExerciseController {
     private final ExerciseService exerciseService;
 
+    // 운동 종목 수
+    @GetMapping("/count")
+    public long getCount() {
+        return exerciseService.exerciseCount();
+    }
+
     // 운동 종목 목록
     @GetMapping
     public ResponseEntity<List<ExerciseDto>> getExercises(@RequestParam(required = false) String type1,
