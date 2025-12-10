@@ -39,4 +39,11 @@ public class Post implements IEntity {
   @Column(name="img_url")
   private String imgUrl;
 
+
+  public void update(String title, String content, String imgUrl) {
+    this.title = title;
+    this.content = content;
+    this.imgUrl = imgUrl;
+  }
+
 }
