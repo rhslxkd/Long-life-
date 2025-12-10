@@ -91,6 +91,11 @@ public class UsersService {
         response.addCookie(cookie);
     }
 
+    // 회원 수
+    public long getUserCount() {
+        return usersRepository.count();
+    }
+
     // 회원 정보
     public UserResponseDto getUser(String userId) {
         Users user = usersRepository.findById(userId).orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "사용자 정보를 찾을 수 없습니다."));

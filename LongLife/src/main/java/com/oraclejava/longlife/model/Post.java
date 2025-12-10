@@ -16,7 +16,7 @@ public class Post implements IEntity {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   @Column(name="post_id")
-  private int postId;
+  private Long postId;
 
   @Column(name="user_id")
   private String userId;

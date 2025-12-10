@@ -4,7 +4,7 @@ export default function SideBar() {
     return (
         <aside className="main-sidebar sidebar-dark-primary elevation-4">
             <a href="/admin" className="brand-link">
-                <span className="brand-text font-weight-light">Movie Admin</span>
+                <span className="brand-text font-weight-light">Longlife; 관리자</span>
             </a>
             <div className="sidebar">
                 <nav className="mt-2">

@@ -36,7 +36,7 @@ export default function NavBar() {
 
                 {/* 홈 링크 */}
                 <li className="nav-item d-none d-sm-inline-block">
-                    <a href="/admin" className="nav-link">홈</a>
+                    <a href="/" className="nav-link">홈</a>
                 </li>
             </ul>
 
