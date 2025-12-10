@@ -1,36 +1,10 @@
-import {useEffect, useState} from "react";
+import {useState} from "react";
 import {fetcher} from "../../lib/fetcher";
 import {useRequests} from "./RequestContext";
 
 export default function Requests() {
     const {requests ,refreshRequests} = useRequests();
-    const [loading, setLoading] = useState(true);
     const [err, setErr] = useState(null);
-
-    /*const loadRequests = async () => {
-        setLoading(true);
-        setErr(null);
-        
-        try {
-            const data = await fetcher('http://localhost:8080/api/friends/requests');
-            if (!data) return;
-            console.log(data);
-            setRequests(data);
-        } catch (e) {
-            setErr(e.message);
-        } finally {
-            setLoading(false);
-        }
-    }*/
-
-    // useEffect(() => {
-    //     (async () => {
-    //         await loadRequests();
-    //     })();
-    // }, []);
-    //
-    // if (err) return <div className="text-danger">{err}</div>
-    // if (!loadRequests) return <div>로딩중...</div>
     
     const handleAcceptClick = (friendId) => {
         (async () => {
@@ -38,7 +12,6 @@ export default function Requests() {
                 await fetcher(`http://localhost:8080/api/friends/${friendId}/accept`, {
                     method: 'POST'
                 });
-                // await loadRequests();
                 await refreshRequests();
             } catch (e) {
                 setErr(e.message);
@@ -65,14 +38,20 @@ export default function Requests() {
             <h1 className="text-center mt-4">받은 요청</h1>
             <div className="mt-4">
                 <ul className="list-group text-center">
-                    {requests.map(friend => (
-                        <li className="list-group-item" key={friend.friendId}>
-                            <i className="fa-solid fa-user-group me-2"></i>
-                            <span className="me-1">{friend.receiverName}</span><span>({friend.receiverId})</span>
-                            <button className="btn btn-success ms-4" onClick={() => handleAcceptClick(friend.friendId)}>수락</button>
-                            <button className="btn btn-danger ms-2" onClick={() => handleRejectClick(friend.friendId)}>거절</button>
+                    {requests.length > 0 ? (
+                        requests.map(friend => (
+                            <li className="list-group-item" key={friend.friendId}>
+                                <i className="fa-solid fa-user-group me-2"></i>
+                                <span className="me-1">{friend.receiverName}</span><span>({friend.receiverId})</span>
+                                <button className="btn btn-success ms-4" onClick={() => handleAcceptClick(friend.friendId)}>수락</button>
+                                <button className="btn btn-danger ms-2" onClick={() => handleRejectClick(friend.friendId)}>거절</button>
+                            </li>
+                        ))
+                    ) : (
+                        <li className="list-group-item text-center text-muted">
+                            요청이 없습니다.
                         </li>
-                    ))}
+                    )}
                 </ul>
             </div>
         </div>

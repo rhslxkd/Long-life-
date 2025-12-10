@@ -3,6 +3,7 @@ import {useEffect, useState} from "react";
 import {useRequests} from "../longlife/friends/RequestContext";
 import { useNavigate } from "react-router-dom";
 import { fetcher } from "./fetcher";
+import longlifeLogo from "../assets/images/longlife_logo_no_bg.png";
 
 export default function Header() {
     const user = useMe();
@@ -23,10 +24,10 @@ export default function Header() {
 
     return (
         <header>
-            <nav className="navbar navbar-expand-lg navbar-light bg-light">
+            <nav className="navbar navbar-expand-lg navbar-light" style={{backgroundColor: '#dee2e6'}}>
                 <div className="container-fluid">
                     <a className="navbar-brand" href="/">
-                        Long life;
+                        <img style={{ maxHeight: "50px" }} src={longlifeLogo} alt="Long life;" />
                     </a>
                     <button className="navbar-toggler" type="button" data-bs-toggle="collapse"
                         data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
@@ -35,17 +36,17 @@ export default function Header() {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
-                            <li className="nav-item">
-                                <a className="nav-link" href="/workout/calendar">운동일지</a>
+                            <li className="nav-item me-4">
+                                <a className="nav-link fs-5 fw-bold" href="/workout/calendar">운동일지</a>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="/workout/goal">목표</a>
+                            <li className="nav-item me-4">
+                                <a className="nav-link fs-5 fw-bold" href="/workout/goal">목표</a>
                             </li>
-                            <li className="nav-item">
-                                <a className="nav-link" href="/storyList">스토리</a>
+                            <li className="nav-item me-4">
+                                <a className="nav-link fs-5 fw-bold" href="/storyList">스토리</a>
                             </li>
-                            <li className="nav-item dropdown">
-                                <a className="nav-link dropdown-toggle" href="/friends" id="navbarDropdown" role="button"
+                            <li className="nav-item me-4 dropdown">
+                                <a className="nav-link fs-5 fw-bold dropdown-toggle" href="/friends" id="navbarDropdown" role="button"
                                     data-bs-toggle="dropdown" aria-expanded="false">
                                     친구
                                 </a>
@@ -53,6 +54,7 @@ export default function Header() {
                                     <li><a className="dropdown-item" href="/friends">친구목록</a></li>
                                     <li><a className="dropdown-item" href="/friendSearch">친구찾기</a></li>
                                     <li><a className="dropdown-item" href="/requests">받은요청</a></li>
+                                    <li><a className="dropdown-item" href="/friendStory">친구 스토리</a></li>
                                 </ul>
                             </li>
                             {user?.role === "ROLE_ADMIN" && (

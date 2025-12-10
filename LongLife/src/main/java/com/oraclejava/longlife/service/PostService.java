@@ -1,8 +1,17 @@
 package com.oraclejava.longlife.service;
 
+import com.oraclejava.longlife.dto.FriendDto;
+import com.oraclejava.longlife.dto.PostResponseDto;
+import com.oraclejava.longlife.model.Exercise;
+import com.oraclejava.longlife.model.Friend;
 import com.oraclejava.longlife.model.Post;
+import com.oraclejava.longlife.repo.ExerciseRepository;
 import com.oraclejava.longlife.repo.PostRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -16,6 +25,8 @@ public class PostService extends BaseTransactioanalService{
 
     private final PostRepository postRepository;
     private final FileStorageService fileStorageService;
+    private final FriendService friendService;
+    private final ExerciseRepository exerciseRepository;
 
     //운동스토리 전체조회
     public List<Post> getAllStory(){
@@ -65,4 +76,21 @@ public class PostService extends BaseTransactioanalService{
         return postRepository.count();
     }
 
+    // 친구 스토리 가져오기
+    public Page<PostResponseDto> getFriendsPosts(String userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("postId").descending());
+        List<String> friendListId = friendService.getFriends(userId).stream().map(FriendDto::receiverId).toList();
+        Page<Post> friendsPosts = postRepository.findByUserIdIn(friendListId, pageable);
+
+        return friendsPosts.map((fp) -> new PostResponseDto(
+                fp.getPostId(),
+                fp.getUserId(),
+                exerciseRepository.findById(fp.getExerciseId()).map(Exercise::getName).orElse(null),
+                fp.getTitle(),
+                fp.getContent(),
+                fp.getCreatedAt(),
+                fp.getViewCount(),
+                fp.getImgUrl()
+        ));
+    }
 }

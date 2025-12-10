@@ -22,7 +22,7 @@ public class Post implements IEntity {
   private String userId;
 
   @Column(name="exercise_id")
-  private int exerciseId;
+  private long exerciseId;
 
   private String title;
   private String content;

@@ -6,6 +6,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -71,5 +73,13 @@ public class PostRestController {
     @GetMapping("/count")
     public long getCount() {
         return postService.PostCount();
+    }
+
+    // 친구 스토리 가져오기
+    @GetMapping("/friendStory")
+    public ResponseEntity<?> friendStory(@AuthenticationPrincipal User user,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "2") int size){
+        return ResponseEntity.ok(postService.getFriendsPosts(user.getUsername(), page, size));
     }
 }

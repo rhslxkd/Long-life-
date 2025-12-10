@@ -50,13 +50,19 @@ export default function Friends() {
             <h1 className="text-center mt-4">친구 목록</h1>
             <div className="mt-4">
                 <ul className="list-group text-center">
-                    {friends.map(friend => (
-                        <li className="list-group-item" key={friend.friendId}>
-                            <i className="fa-solid fa-user-group me-2"></i>
-                            <span className="me-1">{friend.receiverName}</span><span>({friend.receiverId})</span>
-                            <button className="btn btn-danger ms-4" onClick={() => handleDeleteClick(friend)}>삭제</button>
+                    {friends.length > 0 ? (
+                        friends.map(friend => (
+                            <li className="list-group-item" key={friend.friendId}>
+                                <i className="fa-solid fa-user-group me-2"></i>
+                                <span className="me-1">{friend.receiverName}</span><span>({friend.receiverId})</span>
+                                <button className="btn btn-danger ms-4" onClick={() => handleDeleteClick(friend)}>삭제</button>
+                            </li>
+                        ))
+                    ) : (
+                        <li className="list-group-item text-center text-muted">
+                            등록된 친구가 없습니다
                         </li>
-                    ))}
+                    )}
                 </ul>
             </div>
         </div>

@@ -35,4 +35,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
             or p.userId LIKE %:searchData%
         """)
        Page<Post> findByTitleOrUserId(String searchData, Pageable pageable);
+
+       // 친구 스토리 가져오기
+       Page<Post> findByUserIdIn(List<String> userIds, Pageable pageable);
 }
