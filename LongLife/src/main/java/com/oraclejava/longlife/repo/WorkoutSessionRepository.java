@@ -7,6 +7,7 @@ import com.oraclejava.longlife.model.WorkoutSession;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.security.core.parameters.P;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -23,6 +24,13 @@ public interface WorkoutSessionRepository extends JpaRepository<WorkoutSession, 
     List<WorkoutSessionRequest> findDateSession(@Param("user") String userId,
                                                 @Param("startOfDay") LocalDateTime startOfDay,
                                                 @Param("endOfDay") LocalDateTime endOfDay);
+
+    @Query("""
+            select w from WorkoutSession w where w.users.userId=:userId
+                        order by w.startedAt desc limit 5
+            """
+    )
+    List<WorkoutSession> findTop5ByOrderByStartedAtDesc(@Param("userId") String userId);
 
     @Query("""
             select ws from WorkoutSession ws
