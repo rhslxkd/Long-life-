@@ -7,7 +7,8 @@ export default function Home() {
 
     const [homeSession, setHomeSession] = useState([]);
     const [physical, setPhysical] = useState("");
-    const navigate = useNavigate()
+    const navigate = useNavigate();
+    const today = new Date();
 
     // 체중 목표
     useEffect(() => {
@@ -54,16 +55,77 @@ export default function Home() {
                 gap: "10px",
                 height: "100%"
             }}>
-                <div>
-                    <h1>나의 체중 목표</h1>
-                    <table>
-                        <thead>
+                <div
+                    onClick={() => navigate("/workout/physical/goal")}
+                    style={{
+                        padding: "20px",
+                        backgroundColor: "#ffffff",
+                        borderRadius: "12px",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
+                        maxWidth: "700px",
+                        margin: "0 auto",
+                        marginTop: "30px",
+                        cursor: "pointer",
+                        transition: "transform 0.2s ease, box-shadow 0.2s ease"
+                    }}
+                    onMouseEnter={(e) => {
+                        e.currentTarget.style.transform = "scale(1.03)";
+                        e.currentTarget.style.boxShadow = "0 6px 16px rgba(0,0,0,0.15)";
+                    }}
+                    onMouseLeave={(e) => {
+                        e.currentTarget.style.transform = "scale(1)";
+                        e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
+                    }}
+                >
+                    <h2
+                        style={{
+                            marginBottom: "20px",
+                            fontSize: "1.8rem",
+                            fontWeight: "bold",
+                            textAlign: "center",
+                            color: "#333"
+                        }}
+                    >
+                        나의 체중 목표
+                    </h2>
+
+                    <table
+                        style={{
+                            width: "100%",
+                            borderCollapse: "collapse",
+                            textAlign: "center",
+                            fontSize: "15px"
+                        }}
+                    >
+                        <thead style={{backgroundColor: "#f8f9fa"}}>
                         <tr>
-                            <td>목표 체중</td>
-                            <td>현재 체중</td>
-                            <td></td>
+                            <th style={{padding: "12px", borderBottom: "2px solid #ddd", color: "#555"}}>목표 체중</th>
+                            <th style={{padding: "12px", borderBottom: "2px solid #ddd", color: "#555"}}>현재 체중</th>
+                            <th style={{padding: "12px", borderBottom: "2px solid #ddd", color: "#555"}}>체중 변화</th>
                         </tr>
                         </thead>
+                        <tbody>
+                        <tr
+                            style={{
+                                backgroundColor: "#fafafa",
+                                transition: "background-color 0.2s ease"
+                            }}
+                            onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#e9f5ff")}
+                            onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#fafafa")}
+                        >
+                            <td style={{padding: "10px", borderBottom: "1px solid #eee"}}>{physical.kgGoal}kg</td>
+                            <td style={{padding: "10px", borderBottom: "1px solid #eee"}}>{physical.weight}kg</td>
+                            <td style={{
+                                padding: "10px",
+                                borderBottom: "1px solid #eee",
+                                color: "#e74c3c",
+                                fontWeight: "bold"
+                            }}>
+                                {Math.abs(physical.kgGoal - physical.weight)}kg {physical.kgGoal > physical.weight ? "증량" : "감량"}까지{" "}
+                                {Math.ceil((new Date(physical.completeDate) - new Date()) / (1000 * 60 * 60 * 24))}일 남음
+                            </td>
+                        </tr>
+                        </tbody>
                     </table>
                 </div>
                 <div>

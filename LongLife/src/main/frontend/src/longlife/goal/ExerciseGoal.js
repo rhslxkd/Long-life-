@@ -66,8 +66,8 @@ export default function ExerciseGoal() {
                 <thead style={{ backgroundColor: "#f8f9fa" }}>
                 <tr>
                     <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>운동 이름</th>
-                    <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>무게 목표</th>
-                    <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>개수 목표</th>
+                    <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>무게 목표(kg)</th>
+                    <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>개수 목표(개)</th>
                     <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>거리 목표</th>
                     <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>시간 목표</th>
                     <th style={{ padding: "12px", borderBottom: "1px solid #ddd" }}>시작일</th>
