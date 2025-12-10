@@ -1,0 +1,62 @@
+# ===========================
+# OS / 편집기 기본 무시
+# ===========================
+.DS_Store
+Thumbs.db
+
+# ===========================
+# IntelliJ / IDEA
+# ===========================
+.idea/
+*.iml
+
+# ===========================
+# Python (python-agent)
+# ===========================
+python-agent/__pycache__/
+python-agent/.pytest_cache/
+python-agent/venv/
+python-agent/.mypy_cache/
+
+# 서비스 계정 JSON 키 절대 올리면 안 됨
+*.json
+!package.json   # (Node 프론트에서 JSON 허용)
+
+# ===========================
+# Node.js (frontend)
+# ===========================
+LongLife/src/main/frontend/node_modules/
+LongLife/src/main/frontend/dist/
+LongLife/src/main/frontend/.parcel-cache/
+LongLife/src/main/frontend/.next/
+LongLife/src/main/frontend/.nuxt/
+LongLife/src/main/frontend/out/
+
+# ===========================
+# Java / Gradle (backend)
+# ===========================
+LongLife/build/
+LongLife/out/
+
+# Gradle
+.gradle/
+build/
+!.gradle/buildOutputCleanup
+
+# 로그 파일
+*.log
+
+# ===========================
+# 환경변수 파일 (.env)
+# ===========================
+.env
+.env.local
+.env.development
+.env.production
+
+# ===========================
+# 기타 개인 설정 파일
+# ===========================
+*.swp
+*.swo
+*.tmp
