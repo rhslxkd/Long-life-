@@ -25,7 +25,7 @@ public class FriendService {
 
     // 친구 검색
     public List<SearchUserDto> searchUsers(String value, String excludeUserId) {
-        return usersRepository.searchUsers(value, excludeUserId)
+        return usersRepository.searchUsersForFriend(value, excludeUserId)
                 .stream().map(user -> new SearchUserDto(
                         user.getUserId(),
                         user.getName()
@@ -112,7 +112,7 @@ public class FriendService {
 
     // 요청 받은 목록
     public List<FriendDto> getRequestFriends(String userId) {
-        List<FriendDto> requests = friendRepository.findByReceiverUserIdAndStatus(userId, FriendStatus.PENDING)
+        List<FriendDto> requests = friendRepository.findByReceiverUserIdAndStatusOrderByCreatedAtDesc(userId, FriendStatus.PENDING)
                 .stream()
                 .map(f -> new FriendDto(
                         f.getFriendId(),

@@ -1,19 +1,23 @@
-import logo from './logo.svg';
 import './App.css';
 import {Route, Routes} from "react-router-dom";
 import AdminRouter from "./router/AdminRouter";
 import UserRouter from "./router/UserRouter";
 import PublicRouter from "./router/PublicRouter";
+import {RequestsProvider} from "./longlife/friends/RequestContext";
+import AiChatPage from "./longlife/ai/AiChatPage";
 
 
 function App() {
 
     return (
-        <Routes>
-            {AdminRouter()}
-            {UserRouter()}
-            {PublicRouter()}
-        </Routes>
+        <RequestsProvider>
+            <Routes>
+                {AdminRouter()}
+                {UserRouter()}
+                {PublicRouter()}
+            </Routes>
+            <AiChatPage/>
+        </RequestsProvider>
     );
 }
 

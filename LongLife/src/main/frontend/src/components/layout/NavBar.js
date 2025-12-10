@@ -1,11 +1,11 @@
-import {useState} from "react";
-import {useNavigate, useLocation} from "react-router-dom";
+import { useState } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import useMe from "../../hooks/useMe";
 
 export default function NavBar() {
     const user = useMe();
 
-    const [ loading, setLoading] = useState(!user);
+    const [loading, setLoading] = useState(!user);
     const navigate = useNavigate();
 
     const onLogout = async () => {
@@ -14,7 +14,8 @@ export default function NavBar() {
             credentials: "include" // 쿠키나 인증 정보를 함께 보내도록 설정하는 옵션
         });
         sessionStorage.removeItem("user");
-        navigate("/login", {replace: true});
+        window.dispatchEvent(new Event("auth-change"));
+        navigate("/login", { replace: true });
     }
 
     const onToggleSidebar = (e) => {
@@ -43,7 +44,7 @@ export default function NavBar() {
             <ul className="navbar-nav ml-auto">
                 <li className="nav-item dropdown d-flex">
                     <span className="dropdown-item dropdown-header">
-                        {user && <span style={{marginLeft: 12}}>안녕하세요, {user.name}({user.userId})님</span>}
+                        {user && <span style={{ marginLeft: 12 }}>안녕하세요, {user.name}({user.userId})님</span>}
                     </span>
 
                     <button className="text-danger dropdown-item" onClick={onLogout}>

@@ -1,12 +1,13 @@
 import {useEffect, useState} from "react";
 import {fetcher} from "../../lib/fetcher";
+import {useRequests} from "./RequestContext";
 
 export default function Requests() {
-    const [requests ,setRequests] = useState([]);
+    const {requests ,refreshRequests} = useRequests();
     const [loading, setLoading] = useState(true);
     const [err, setErr] = useState(null);
-    
-    const loadRequests = async () => {
+
+    /*const loadRequests = async () => {
         setLoading(true);
         setErr(null);
         
@@ -20,16 +21,16 @@ export default function Requests() {
         } finally {
             setLoading(false);
         }
-    }
+    }*/
 
-    useEffect(() => {
-        (async () => {
-            await loadRequests();
-        })();
-    }, []);
-
-    if (err) return <div className="text-danger">{err}</div>
-    if (!loadRequests) return <div>로딩중...</div>
+    // useEffect(() => {
+    //     (async () => {
+    //         await loadRequests();
+    //     })();
+    // }, []);
+    //
+    // if (err) return <div className="text-danger">{err}</div>
+    // if (!loadRequests) return <div>로딩중...</div>
     
     const handleAcceptClick = (friendId) => {
         (async () => {
@@ -37,7 +38,8 @@ export default function Requests() {
                 await fetcher(`http://localhost:8080/api/friends/${friendId}/accept`, {
                     method: 'POST'
                 });
-                await loadRequests();
+                // await loadRequests();
+                await refreshRequests();
             } catch (e) {
                 setErr(e.message);
             }
@@ -50,7 +52,8 @@ export default function Requests() {
                 await fetcher(`http://localhost:8080/api/friends/${friendId}`, {
                     method: 'DELETE'
                 });
-                await loadRequests();
+                // await loadRequests();
+                await refreshRequests();
             } catch (e) {
                 setErr(e.message);
             }

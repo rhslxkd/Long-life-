@@ -10,8 +10,8 @@ public record ExerciseGoalDto(
         Long exerciseGoalId,
         Integer weightGoal,
         Integer countGoal,
-        Integer distanceGoal,
-        Integer timeGoal,
+        String distanceGoal,
+        String timeGoal,
         LocalDate startingDate,
         LocalDate completeDate,
         Status status

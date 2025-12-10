@@ -118,7 +118,7 @@ export default function StoryList() {
         }
 
         if (!exerciseId) {
-            alert("Exercise 종목을 선택하세요!");
+            alert("ExerciseList 종목을 선택하세요!");
             return;
         }
 

@@ -22,7 +22,7 @@ export default function Session() {
             // 미래 날짜 접근 시 오늘로 리다이렉트
             alert("잘못된 날짜 접근입니다. 오늘로 이동합니다.");
             setDate(todayStr);
-            navigate(`/workout/session/${todayStr}`, { replace: true });
+            navigate(`/workout/session/${todayStr}`, {replace: true});
             window.location.reload();
         } else {
             setDate(formDate);
@@ -64,75 +64,134 @@ export default function Session() {
     if (err) return <div className="content">{err}</div>;
 
     return (
-        <div className="content">
-            <h2>
+        <div className="content"
+             style={{
+                 display: "flex",
+                 flexDirection: "column",
+                 alignItems: "center",
+                 textAlign: "center"
+             }}>
+            <h2
+                style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    marginTop: "30px",
+                    marginBottom: "10px",
+                    fontSize: "2rem",
+                    fontWeight: "bold",
+                    gap: "15px"   // 버튼과 날짜 사이 간격을 동일하게
+                }}
+            >
                 <button
                     onClick={() => changeDate(-1)}
-                    style={{marginRight: "10px"}}
+                    style={{
+                        cursor: "pointer",
+                        background: "none",
+                        border: "none",
+                        fontSize: "25px"
+                    }}
                 >
                     ◀
                 </button>
 
-                {date}
+                <span>{date}</span>
 
                 <button
                     onClick={() => changeDate(1)}
                     disabled={currentStr >= todayStr}
                     style={{
-                        marginLeft: "10px",
-                        opacity: currentStr >= todayStr ? 0.5 : 1,
-                        cursor: currentStr >= todayStr ? "not-allowed" : "pointer"
+                        cursor: currentStr >= todayStr ? "not-allowed" : "pointer",
+                        background: "none",
+                        border: "none",
+                        fontSize: "25px",
+                        opacity: currentStr >= todayStr ? 0.5 : 1
                     }}
                 >
                     ▶
                 </button>
-                <br/>
-                운동일지
             </h2>
+
 
             {!session.length ? (
                 <div>
                     운동일지가 없습니다.
                 </div>
             ) : (
-                <table>
-                    <thead>
+                <table
+                    className="table table-bordered table-hover"
+                    style={{
+                        width: "90%",
+                        margin: "20px auto",
+                        textAlign: "center",
+                        verticalAlign: "middle",
+                        borderRadius: "8px",
+                        overflow: "hidden",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.1)"
+                    }}
+                >
+                    <thead style={{backgroundColor: "#f8f9fa"}}>
                     <tr>
-                        <td>운동</td>
-                        <td>내용</td>
-                        <td>시작 일시</td>
-                        <td>종료 일시</td>
-                        <td>위치</td>
+                        <th>운동</th>
+                        <th>내용</th>
+                        <th>시작 일시</th>
+                        <th>종료 일시</th>
+                        <th>위치</th>
+                        <th>관리</th>
                     </tr>
                     </thead>
                     <tbody>
                     {session.map((s) => (
                         <tr key={s.sessionId}>
-                            <td>{s.exerciseName}</td>
-                            <td>{s.note}</td>
-                            <td>{formatKST(s.startedAt)}</td>
-                            <td>{formatKST(s.endedAt)}</td>
-                            <td>{s.location}</td>
-                            <td>
+                            <td style={{ verticalAlign: "middle" }}>{s.exerciseName}</td>
+                            <td style={{ verticalAlign: "middle" }}>{s.note}</td>
+                            <td style={{ verticalAlign: "middle" }}>{formatKST(s.startedAt)}</td>
+                            <td style={{ verticalAlign: "middle" }}>{formatKST(s.endedAt)}</td>
+                            <td style={{ verticalAlign: "middle" }}>{s.location}</td>
+                            <td style={{display: "flex", justifyContent: "center", gap: "8px"}}>
                                 <button
-                                    onClick={() => navigate(`/workout/updateSession/${date}/${s.sessionId}`)}>
+                                    type="button"
+                                    onClick={() =>
+                                        navigate(`/workout/updateSession/${date}/${s.sessionId}`)
+                                    }
+                                    style={{
+                                        padding: "6px 12px",
+                                        fontSize: "14px",
+                                        cursor: "pointer",
+                                        backgroundColor: "#007bff",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "4px"
+                                    }}
+                                >
                                     수정
                                 </button>
-                            </td>
-                            <td>
+
                                 <button
+                                    type="button"
                                     onClick={async () => {
-                                        if (window.confirm('정말 삭제할까요?')) {
+                                        if (window.confirm("정말 삭제할까요?")) {
                                             try {
-                                                await fetcher(`http://localhost:8080/api/workout/${s.sessionId}`, {
-                                                    method: "DELETE"
-                                                });
-                                                await load(date); // 삭제 후 최신 데이터 다시 불러오기
+                                                await fetcher(
+                                                    `http://localhost:8080/api/workout/${s.sessionId}`,
+                                                    {method: "DELETE"}
+                                                );
+                                                await load(date);
                                             } catch (e) {
                                                 alert("삭제 실패: " + e.message);
                                             }
                                         }
-                                    }}>
+                                    }}
+                                    style={{
+                                        padding: "6px 12px",
+                                        fontSize: "14px",
+                                        cursor: "pointer",
+                                        backgroundColor: "#dc3545",
+                                        color: "white",
+                                        border: "none",
+                                        borderRadius: "4px"
+                                    }}
+                                >
                                     삭제
                                 </button>
                             </td>
@@ -140,16 +199,50 @@ export default function Session() {
                     ))}
                     </tbody>
                 </table>
-            )}
 
-            <button onClick={() => navigate(`/workout/createSession/${date}`)}>
-                운동일지 추가하기
-            </button>
-            <button onClick={() => navigate(`/workout/calendar?date=${date}`)}>
-                캘린더로 돌아가기
-            </button>
+            )}
+            <div style={{
+                marginTop: "20px",
+                display: "flex",
+                justifyContent: "center",
+                gap: "10px"
+            }}>
+                <button
+                    onClick={() => navigate(`/workout/createSession/${date}`)}
+                    style={{
+                        marginTop: "10px",
+                        padding: "10px 20px",
+                        fontSize: "16px",
+                        cursor: "pointer",
+                        backgroundColor: loading ? "#ccc" : "#007bff",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px",
+                        marginRight: "10px"
+                    }}
+                >
+                    운동일지 추가하기
+                </button>
+
+                <button
+                    onClick={() => navigate(`/workout/calendar?date=${date}`)}
+                    style={{
+                        marginTop: "10px",
+                        padding: "10px 20px",
+                        fontSize: "16px",
+                        cursor: "pointer",
+                        backgroundColor: loading ? "#ccc" : "#007bff",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "4px"
+                    }}
+                >
+                    캘린더로 돌아가기
+                </button>
+            </div>
         </div>
     );
+
 }
 
 function formatKST(iso) {

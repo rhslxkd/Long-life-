@@ -3,6 +3,7 @@ from google.adk.agents import Agent
 
 #우리 이뿌니 도구들ㅎㅎ
 from tools import get_my_health_info, get_my_workout_session, get_my_goal
+from rag_tool import search_diet_db, search_fitness_db
 
 # =================================
 # 1. UserInfo Agent
