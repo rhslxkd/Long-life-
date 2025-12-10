@@ -53,6 +53,30 @@ export default function ExerciseGoal() {
             >
                 나의 운동 목표
             </h1>
+            <div
+                style={{
+                    width: "100%",
+                    display: "flex",
+                    justifyContent: "flex-end",
+                    marginBottom: "20px"
+                }}
+            >
+                <button
+                    onClick={() => navigate("/workout/exercise/createGoal")}
+                    style={{
+                        padding: "12px 24px",
+                        fontSize: "16px",
+                        cursor: "pointer",
+                        backgroundColor: "#007bff",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "6px",
+                        fontWeight: "bold"
+                    }}
+                >
+                    운동목표 추가하기
+                </button>
+            </div>
 
             <table
                 style={{
@@ -160,7 +184,7 @@ export default function ExerciseGoal() {
                 }}
             >
                 <button
-                    onClick={() => navigate("/workout/exercise/createGoal")}
+                    onClick={() => navigate("/")}
                     style={{
                         padding: "12px 24px",
                         fontSize: "16px",
@@ -172,7 +196,7 @@ export default function ExerciseGoal() {
                         fontWeight: "bold"
                     }}
                 >
-                    운동목표 추가하기
+                    홈으로 돌아가기
                 </button>
                 <button
                     onClick={() => navigate("/workout/goal")}
@@ -187,7 +211,7 @@ export default function ExerciseGoal() {
                         fontWeight: "bold"
                     }}
                 >
-                    돌아가기
+                    목표로 돌아가기
                 </button>
             </div>
         </div>

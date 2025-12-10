@@ -69,30 +69,46 @@ export default function PhysicalGoal() {
                         tableLayout: "fixed"
                     }}
                 >
-                    <thead style={{ backgroundColor: "#f8f9fa" }}>
+                    <thead style={{backgroundColor: "#f8f9fa"}}>
                     <tr>
-                        <th style={{ width: "33%", padding: "12px", borderBottom: "1px solid #ddd" }}>키</th>
-                        <th style={{ width: "33%", padding: "12px", borderBottom: "1px solid #ddd" }}>몸무게</th>
-                        <th style={{ width: "33%", padding: "12px", borderBottom: "1px solid #ddd" }}>BMI지수</th>
+                        <th style={{width: "33%", padding: "12px", borderBottom: "1px solid #ddd"}}>키</th>
+                        <th style={{width: "33%", padding: "12px", borderBottom: "1px solid #ddd"}}>몸무게</th>
+                        <th style={{width: "33%", padding: "12px", borderBottom: "1px solid #ddd"}}>BMI지수</th>
                     </tr>
                     </thead>
                     <tbody>
                     {physical && (
                         <tr>
-                            <td style={{ width: "33%", padding: "10px", borderBottom: "1px solid #eee", verticalAlign: "middle" }}>
+                            <td style={{
+                                width: "33%",
+                                padding: "10px",
+                                borderBottom: "1px solid #eee",
+                                verticalAlign: "middle"
+                            }}>
                                 {physical.height}cm
                             </td>
-                            <td style={{ width: "33%", padding: "10px", borderBottom: "1px solid #eee", verticalAlign: "middle" }}>
+                            <td style={{
+                                width: "33%",
+                                padding: "10px",
+                                borderBottom: "1px solid #eee",
+                                verticalAlign: "middle"
+                            }}>
                                 {physical.weight}kg
                             </td>
-                            <td style={{ width: "33%", padding: "10px", borderBottom: "1px solid #eee", verticalAlign: "middle" }}>
+                            <td style={{
+                                width: "33%",
+                                padding: "10px",
+                                borderBottom: "1px solid #eee",
+                                verticalAlign: "middle"
+                            }}>
                                 {calcBMI(physical.height, physical.weight) < 18.5 ?
-                                    <p style={{ margin: 0 }}>{calcBMI(physical.height, physical.weight)} / 저체중</p>
+                                    <p style={{margin: 0}}>{calcBMI(physical.height, physical.weight)} / 저체중</p>
                                     : calcBMI(physical.height, physical.weight) < 22.9 ?
-                                        <p style={{ margin: 0 }}>{calcBMI(physical.height, physical.weight)} / 정상</p>
+                                        <p style={{margin: 0}}>{calcBMI(physical.height, physical.weight)} / 정상</p>
                                         : calcBMI(physical.height, physical.weight) < 24.9 ?
-                                            <p style={{ margin: 0 }}>{calcBMI(physical.height, physical.weight)} / 과체중</p>
-                                            : <p style={{ margin: 0 }}>{calcBMI(physical.height, physical.weight)} / 비만</p>}
+                                            <p style={{margin: 0}}>{calcBMI(physical.height, physical.weight)} / 과체중</p>
+                                            :
+                                            <p style={{margin: 0}}>{calcBMI(physical.height, physical.weight)} / 비만</p>}
                             </td>
                         </tr>
                     )}
@@ -223,7 +239,27 @@ export default function PhysicalGoal() {
             </div>
 
             {/* 돌아가기 버튼 */}
-            <div style={{marginTop: "30px"}}>
+            <div style={{
+                display: "flex",
+                justifyContent: "center",
+                gap: "15px",
+                marginTop: "20px"
+            }}>
+                <button
+                    onClick={() => navigate("/")}
+                    style={{
+                        padding: "12px 24px",
+                        fontSize: "16px",
+                        cursor: "pointer",
+                        backgroundColor: "#007bff",
+                        color: "white",
+                        border: "none",
+                        borderRadius: "6px",
+                        fontWeight: "bold"
+                    }}
+                >
+                    홈으로 돌아가기
+                </button>
                 <button
                     onClick={() => navigate("/workout/goal")}
                     style={{
@@ -237,7 +273,7 @@ export default function PhysicalGoal() {
                         fontWeight: "bold"
                     }}
                 >
-                    돌아가기
+                    목표로 돌아가기
                 </button>
             </div>
         </div>

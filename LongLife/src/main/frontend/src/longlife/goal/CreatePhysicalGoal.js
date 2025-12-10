@@ -88,7 +88,7 @@ export default function CreatePhysicalGoal() {
 
                 {/* 목표 몸무게 */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
-                    <label style={{ fontWeight: "600", color: "#333" }}>목표 몸무게</label>
+                    <label style={{ fontWeight: "600", color: "#333" }}>목표 몸무게(kg)</label>
                     <input
                         type="number"
                         {...register("kgGoal", { required: "목표 몸무게를 입력하세요." })}
