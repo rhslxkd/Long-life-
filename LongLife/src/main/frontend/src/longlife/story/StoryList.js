@@ -7,6 +7,7 @@ import useMe from "../../hooks/useMe";
 import noImage from "../../assets/images/noImage.png";
 import StoryEditForm from "./StoryEditForm";
 import Pagination from "../../components/pagination";
+import CommentList from "../../components/comments/CommentList";
 
 export default function StoryList() {
     const user = useMe();
@@ -321,10 +322,7 @@ export default function StoryList() {
                                 <button className="btn btn-outline-primary btn-sm">좋아요(12)</button>
 
                                 {/* 댓글 */}
-                                <div className="input-group mt-3">
-                                    <input type="text" className="form-control" placeholder="댓글 작성..."/>
-                                    <button className="btn btn-outline-primary">등록</button>
-                                </div>
+                                <CommentList postId={p.postId} userId={user.userId} />
 
                             </div>
                         </div>
