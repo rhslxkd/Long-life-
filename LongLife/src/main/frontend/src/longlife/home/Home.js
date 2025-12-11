@@ -3,6 +3,7 @@ import React, {useEffect, useState} from "react";
 import {fetcher} from "../../lib/fetcher";
 import {useNavigate} from "react-router-dom";
 import noImage from "../../assets/images/noImage.png";
+import FormatKST from "../../lib/FormatKST";
 
 export default function Home() {
 
@@ -78,7 +79,7 @@ export default function Home() {
             margin: "3vw",
             gap: "3vw",
             width: "100%",
-            height: "73vh"
+            // height: "73vh"
         }}>
             <div style={{
                 display: "grid",
@@ -478,9 +479,9 @@ export default function Home() {
                     친구 스토리
                 </h2>
                 <div>
-                    {/* 게시글 리스트 */}
+                    {/* 스토리 리스트 */}
                     {posts.map((p) => (
-                        <div className="card mb-4 shadow-sm" key={p.postId}>
+                        <div className="card mb-4 shadow-sm text-start" key={p.postId}>
                             <div className="card-body">
                                 <h6 className="text-secondary small">작성자: {p.writer}</h6>
                                 <div className="row">
@@ -501,7 +502,7 @@ export default function Home() {
                                 </div>
                                 {/* 날짜 */}
                                 <div className="mt-3 text-muted small">
-                                    <span>작성일: {p.createdAt}</span>
+                                    <span>작성일: {FormatKST(p.createdAt).slice(0,-3)}</span>
                                 </div>
                             </div>
                         </div>
@@ -510,6 +511,4 @@ export default function Home() {
             </div>
         </div>
     );
-
-
 }

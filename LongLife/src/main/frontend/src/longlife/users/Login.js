@@ -33,7 +33,12 @@ function Login() {
                 window.dispatchEvent(new Event("auth-change"));
             }
 
-            navigate(from, { replace: true });
+            if (user.role === "ROLE_ADMIN") {
+                navigate("/admin");
+            } else {
+                navigate(from, { replace: true });
+            }
+
         } catch (e) {
             setErr("아이디 또는 비밀번호를 확인하세요.");
         }
