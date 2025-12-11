@@ -74,4 +74,9 @@ public class PostService extends BaseTransactioanalService{
         return uPost;
     }
 
+    // 총 스토리 수
+    public long PostCount() {
+        return postRepository.count();
+    }
+
 }

@@ -32,6 +32,13 @@ public class WorkoutSessionController {
         return workoutSessionService.findDateSession(date, loginUser);
     }
 
+    // 전체 운동일지
+    @GetMapping("/homeSession")
+    public List<WorkoutSession> findHomeSession(Authentication authentication) {
+        String loginUser = authentication.getName();
+        return workoutSessionService.findTop5ByOrderByStartedAtDesc(loginUser);
+    }
+
     // 운동일지가 존재하는 월
     @GetMapping("/dates")
     public List<String> findMonthSession(@RequestParam int year, @RequestParam int month, Authentication authentication) {

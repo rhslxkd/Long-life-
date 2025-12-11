@@ -17,6 +17,10 @@ public class ExerciseService {
 
     private final ExerciseRepository exerciseRepository;
 
+    public long exerciseCount() {
+        return exerciseRepository.count();
+    }
+
     // 운동 종목 목록
     public List<ExerciseDto> getAll(String type1, String type2, String name) {
         List<Exercise> exerciseList = exerciseRepository.search(type1, type2, name);

@@ -76,4 +76,18 @@ public class AdminService {
             )
         );
     }
+
+    // 스토리 검색 목록
+    public Page<ForAdminPostDto> getSearchPosts(String searchData, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("postId").descending());
+        Page<Post> posts = postRepository.findByTitleOrUserId(searchData, pageable);
+
+        return posts.map((p) -> new ForAdminPostDto(
+                p.getPostId(),
+                p.getUserId(),
+                p.getTitle(),
+                p.getCreatedAt(),
+                p.getUpdatedAt()
+        ));
+    }
 }
