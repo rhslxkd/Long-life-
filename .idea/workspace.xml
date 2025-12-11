@@ -6,13 +6,13 @@
   <component name="ChangeListManager">
     <list default="true" id="3fc5dd0f-1710-4307-be2c-89ef6bf15e9e" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/lib/Header.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/lib/Header.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/admin/DashBoard.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/admin/DashBoard.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/friends/FriendStory.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/friends/FriendStory.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/home/Home.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/users/MyInfo.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/users/MyInfo.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/App.css" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/components/layout/UserLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/components/layout/UserLayout.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/lib/Footer.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/lib/Footer.js" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/controller/PostRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/controller/PostRestController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/model/Post.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/repo/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/repo/PostRepository.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/service/AdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/service/AdminService.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/service/PostService.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
@@ -232,7 +232,7 @@
       <workItem from="1765326886383" duration="607000" />
       <workItem from="1765330147222" duration="466000" />
       <workItem from="1765341160133" duration="16976000" />
-      <workItem from="1765413136376" duration="5693000" />
+      <workItem from="1765413136376" duration="8389000" />
     </task>
     <servers />
   </component>

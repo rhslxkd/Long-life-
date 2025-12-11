@@ -9,10 +9,12 @@ export default function UserLayout() {
     const hideFooter = loc.pathname === '/login' || loc.pathname === '/register' || loc.pathname === '/forbidden';
 
     return (
-        <>
+        <div className="layout">
             {!hideHeader && <Header />}
-            <Outlet />
+            <div className="content">
+                <Outlet />
+            </div>
             {!hideFooter && <Footer/>}
-        </>
+        </div>
     );
 }

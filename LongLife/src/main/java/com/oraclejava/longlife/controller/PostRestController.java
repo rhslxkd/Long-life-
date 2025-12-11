@@ -56,7 +56,7 @@ public class PostRestController {
         post.setUser(user);
         post.setTitle(dto.getTitle());
         post.setContent(dto.getContent());
-        post.setExerciseId(exercise);
+        post.setExercise(exercise);
         post.setCreatedAt(dto.getCreatedAt());
         post.setUpdatedAt(dto.getUpdatedAt());
 
@@ -94,7 +94,7 @@ public class PostRestController {
         Post post = new Post();
         post.setTitle(dto.getTitle());
         post.setContent(dto.getContent());
-        post.setExerciseId(exercise);
+        post.setExercise(exercise);
         post.setUpdatedAt(dto.getUpdatedAt());
 
         //if(포스터가 있으면) 업로드;

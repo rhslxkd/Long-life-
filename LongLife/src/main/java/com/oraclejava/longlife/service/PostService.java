@@ -67,7 +67,7 @@ public class PostService extends BaseTransactioanalService{
 
         // uPost.setImgUrl(post.getImgUrl());
 
-        uPost.setExerciseId(post.getExerciseId());
+        uPost.setExercise(post.getExercise());
         uPost.setUpdatedAt(post.getUpdatedAt());
 
 //        uPost.update(post.getTitle(),post.getContent(),post.getImgUrl());
@@ -94,12 +94,12 @@ public class PostService extends BaseTransactioanalService{
     public Page<PostResponseDto> getFriendsPosts(String userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("postId").descending());
         List<String> friendListId = friendService.getFriends(userId).stream().map(FriendDto::receiverId).toList();
-        Page<Post> friendsPosts = postRepository.findByUserIdIn(friendListId, pageable);
+        Page<Post> friendsPosts = postRepository.findByUser_UserIdIn(friendListId, pageable);
 
         return friendsPosts.map((fp) -> new PostResponseDto(
                 fp.getPostId(),
-                fp.getUserId(),
-                exerciseRepository.findById(fp.getExerciseId()).map(Exercise::getName).orElse(null),
+                fp.getUser().getUserId(),
+                exerciseRepository.findById(fp.getExercise().getExerciseId()).map(Exercise::getName).orElse(null),
                 fp.getTitle(),
                 fp.getContent(),
                 fp.getCreatedAt(),
@@ -112,10 +112,10 @@ public class PostService extends BaseTransactioanalService{
     public List<PostResponseDto> getTop3FriendsPosts(String userId) {
         List<String> friendListId = friendService.getFriends(userId).stream().map(FriendDto::receiverId).toList();
 
-        return postRepository.findTop3ByUserIdInOrderByCreatedAtDesc(friendListId).stream().map((fp) -> new PostResponseDto(
+        return postRepository.findTop3ByUser_UserIdInOrderByCreatedAtDesc(friendListId).stream().map((fp) -> new PostResponseDto(
                 fp.getPostId(),
-                fp.getUserId(),
-                exerciseRepository.findById(fp.getExerciseId()).map(Exercise::getName).orElse(null),
+                fp.getUser().getUserId(),
+                exerciseRepository.findById(fp.getExercise().getExerciseId()).map(Exercise::getName).orElse(null),
                 fp.getTitle(),
                 fp.getContent(),
                 fp.getCreatedAt(),
