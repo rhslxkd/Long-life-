@@ -168,7 +168,7 @@ ex: git show 217161c:LongLife/python-agent/app.py
 
 ---
 
-## 1️⃣7️⃣ `git tag v1.0-local`
+## 1️⃣7️⃣-1 `git tag v1.0-local`
 
 ex: git checkout 자주쓰는 branch로가서 commit다 하고 이걸 실행,
 이 명령어는 현재 커밋(HEAD)에 “v1.0-local”이라는 이름표를 붙이는 것임.
@@ -180,7 +180,7 @@ ex: git checkout 자주쓰는 branch로가서 commit다 하고 이걸 실행,
 
 ---
 
-## 1️⃣7️⃣ `git push origin dev --tags`
+## 1️⃣7️⃣-2 `git push origin dev --tags`
 
 태그는 로컬에서만 존재한다.
 그래서 GitHub(원격)에 보내려면 push가 필요함.
@@ -188,6 +188,22 @@ ex: git checkout 자주쓰는 branch로가서 commit다 하고 이걸 실행,
 --tags는 로컬에 있는 모든 태그를 원격으로 업로드하는 명령.
 
 “이 태그들도 GitHub에 저장해둬라”
+---
+
+## 1️⃣8️⃣ `git branch -m new-branch`, `git branch -m old-branch new-branch`
+
+현재 브랜치, 다른 브랜치의 이름을 바꿀 때 쓴느 명령어.
+---
+
+## 1️⃣9️⃣ `git push origin -u new-branch`
+
+새 이름을 원격에 저장(push)
+---
+
+## 2️⃣-0 `git fetch --prune`
+
+로컬에 여전히 브랜치가 남아있음 -> 캐시가 존재 이러한 캐시를 정리할수 있는 명령어.
+
 ---
 
 # 🧩 팀플 필수 루틴 요약 - 위에 설명이랑 비교해보면서 흐름을 한번 이해해보세요!
