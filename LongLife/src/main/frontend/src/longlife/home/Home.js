@@ -74,23 +74,21 @@ export default function Home() {
     return (
         <div style={{
             display: "grid",
-            gridTemplateColumns: "1fr 1fr",
-            marginTop: "2vw",
-            marginBottom: "2vw",
-            marginRight: "2vw",
-            marginLeft:"2vw",
-            gap: "1vw",
-            width: "100%"
+            gridTemplateColumns: "45.5vw 45.5vw",
+            margin: "3vw",
+            gap: "3vw",
+            width: "100%",
+            height: "73vh"
         }}>
             <div style={{
                 display: "grid",
                 gridTemplateRows: "1fr 1fr",
                 height: "100%",
-                gap: "2vw"
+                gap: "3vw"
             }}>
                 <div style={{
                     display: "grid",
-                    gridTemplateColumns: "1fr 1fr",
+                    gridTemplateColumns: "22.25vw 22.25vw",
                     gap: "1vw",
                     width: "100%"
                 }}>
@@ -102,7 +100,6 @@ export default function Home() {
                             backgroundColor: "#ffffff",
                             borderRadius: "12px",
                             boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                            width: "22.5vw",
                             cursor: "pointer",
                             transition: "transform 0.2s ease, box-shadow 0.2s ease",
                             textAlign: "center"
@@ -226,7 +223,6 @@ export default function Home() {
                             backgroundColor: "#ffffff",
                             borderRadius: "12px",
                             boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                            width: "22.5vw",
                             cursor: "pointer",
                             transition: "transform 0.2s ease, box-shadow 0.2s ease",
                             textAlign: "center"
@@ -343,7 +339,6 @@ export default function Home() {
                         backgroundColor: "#ffffff",
                         borderRadius: "12px",
                         boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                        width: "47.5vw",
                         cursor: "pointer",
                         transition: "transform 0.2s ease, box-shadow 0.2s ease",
                         textAlign: "center"
@@ -459,7 +454,6 @@ export default function Home() {
                 backgroundColor: "#ffffff",
                 borderRadius: "12px",
                 boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                width: "92%",
                 cursor: "pointer",
                 transition: "transform 0.2s ease, box-shadow 0.2s ease",
                 textAlign: "center"
@@ -514,7 +508,6 @@ export default function Home() {
                     ))}
                 </div>
             </div>
-
         </div>
     );
 
