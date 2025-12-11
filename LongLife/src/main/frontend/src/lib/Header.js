@@ -34,7 +34,7 @@ export default function Header() {
                         aria-expanded="false" aria-label="Toggle navigation">
                         <span className="navbar-toggler-icon"></span>
                     </button>
-                    <div className="collapse navbar-collapse" id="navbarSupportedContent">
+                    <div className="collapse navbar-collapse ms-2" id="navbarSupportedContent">
                         <ul className="navbar-nav me-auto mb-2 mb-lg-0">
                             <li className="nav-item me-4">
                                 <a className="nav-link fs-5 fw-bold" href="/workout/calendar">운동일지</a>
@@ -59,8 +59,8 @@ export default function Header() {
                             </li>
                             {user?.role === "ROLE_ADMIN" && (
                                 <>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="/admin">관리자페이지</a>
+                                    <li className="nav-item fs-5 fw-bold">
+                                        <a className="nav-link text-dark" href="/admin">관리자페이지</a>
                                     </li>
                                 </>
                             )}

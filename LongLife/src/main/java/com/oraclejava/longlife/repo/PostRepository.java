@@ -38,4 +38,7 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
        // 친구 스토리 가져오기
        Page<Post> findByUserIdIn(List<String> userIds, Pageable pageable);
+
+       // 친구 스토리 최신 3가지 가져오기
+       List<Post> findTop3ByUserIdInOrderByCreatedAtDesc(List<String> userIds);
 }

@@ -93,4 +93,20 @@ public class PostService extends BaseTransactioanalService{
                 fp.getImgUrl()
         ));
     }
+
+    // 친구 스토리 최신 3개 가져오기
+    public List<PostResponseDto> getTop3FriendsPosts(String userId) {
+        List<String> friendListId = friendService.getFriends(userId).stream().map(FriendDto::receiverId).toList();
+
+        return postRepository.findTop3ByUserIdInOrderByCreatedAtDesc(friendListId).stream().map((fp) -> new PostResponseDto(
+                fp.getPostId(),
+                fp.getUserId(),
+                exerciseRepository.findById(fp.getExerciseId()).map(Exercise::getName).orElse(null),
+                fp.getTitle(),
+                fp.getContent(),
+                fp.getCreatedAt(),
+                fp.getViewCount(),
+                fp.getImgUrl()
+        )).toList();
+    }
 }

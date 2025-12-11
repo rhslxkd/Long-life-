@@ -94,11 +94,6 @@ export default function FriendStory() {
                     </div>
                 ))}
             </InfiniteScroll>
-            {/*<Pagination*/}
-            {/*    totalPages={totalPages}*/}
-            {/*    currentPage={currentPage}*/}
-            {/*    paginate={loadPosts}*/}
-            {/*/>*/}
         </div>
     );
 }

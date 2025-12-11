@@ -82,4 +82,10 @@ public class PostRestController {
                                          @RequestParam(defaultValue = "2") int size){
         return ResponseEntity.ok(postService.getFriendsPosts(user.getUsername(), page, size));
     }
+
+    // 친구 스토리 최신 3개 가져오기
+    @GetMapping("/top3FriendStory")
+    public ResponseEntity<?> top3FriendStory(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(postService.getTop3FriendsPosts(user.getUsername()));
+    }
 }

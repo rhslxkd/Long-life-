@@ -28,44 +28,44 @@ function MyInfo() {
     if (loading) return <p>로딩중...</p>;
 
     return (
-        <div className="container" style={{ maxWidth: 480 }}>
-            <h2>회원정보 상세보기</h2>
-            <table className="table table-bordered table-hover">
+        <div className="container my-4" style={{ maxWidth: 480 }}>
+            <h2 className="text-center">회원정보 상세보기</h2>
+            <table className="table table-bordered table-hover mt-4">
                 <tbody>
                 <tr>
-                    <th scope="col" className="w-25">아이디</th>
-                    <td className="form-group w-75">{user.userId}</td>
+                    <th scope="col" className="w-25 py-3">아이디</th>
+                    <td className="form-group w-75 py-3">{user.userId}</td>
                 </tr>
                 <tr>
-                    <th scope="col" className="w-25">이름</th>
-                    <td className="form-group w-75">{user.name}</td>
+                    <th scope="col" className="w-25 py-3">이름</th>
+                    <td className="form-group w-75 py-3">{user.name}</td>
                 </tr>
                 <tr>
-                    <th scope="col" className="w-25">이메일</th>
-                    <td className="form-group w-75">{user.email}</td>
+                    <th scope="col" className="w-25 py-3">이메일</th>
+                    <td className="form-group w-75 py-3">{user.email}</td>
                 </tr>
                 <tr>
-                    <th scope="col" className="w-25">주소</th>
-                    <td className="form-group w-75">{user.address}</td>
+                    <th scope="col" className="w-25 py-3">주소</th>
+                    <td className="form-group w-75 py-3">{user.address}</td>
                 </tr>
                 <tr>
-                    <th scope="col" className="w-25">키</th>
-                    <td className="form-group w-75">{user.height} cm</td>
+                    <th scope="col" className="w-25 py-3">키</th>
+                    <td className="form-group w-75 py-3">{user.height} cm</td>
                 </tr>
                 <tr>
-                    <th scope="col" className="w-25">몸무게</th>
-                    <td className="form-group w-75">{user.weight} kg</td>
+                    <th scope="col" className="w-25 py-3">몸무게</th>
+                    <td className="form-group w-75 py-3">{user.weight} kg</td>
                 </tr>
                 </tbody>
             </table>
-            <div className="text-end">
+            <div className="text-center">
                 <button className="btn btn-primary" type="button" onClick={() => {
                     navigate(`/userEdit`);
                 }}>수정
                 </button>
                 &nbsp;
                 <button className="btn btn-danger" type="button" onClick={() => {
-                    if (window.confirm('정말 삭제할까요?')) {
+                    if (window.confirm('정말 탈퇴할까요?')) {
                         (async () => {
                             await fetcher(`http://localhost:8080/api/users/${uuser.userId}`, {
                                 method: 'DELETE'
@@ -73,7 +73,7 @@ function MyInfo() {
                             navigate('/login');
                         })();
                     }
-                }}>삭제
+                }}>탈퇴
                 </button>
             </div>
         </div>

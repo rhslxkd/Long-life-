@@ -1,13 +1,15 @@
 import Calendar from "../session/Calendar";
-import {useEffect, useState} from "react";
+import React, {useEffect, useState} from "react";
 import {fetcher} from "../../lib/fetcher";
 import {useNavigate} from "react-router-dom";
+import noImage from "../../assets/images/noImage.png";
 
 export default function Home() {
 
     const [homeSession, setHomeSession] = useState([]);
     const [physical, setPhysical] = useState("");
     const [exerciseGoal, setExerciseGoal] = useState([]);
+    const [posts, setPosts] = useState([]);
     const navigate = useNavigate();
     const today = new Date();
 
@@ -55,6 +57,19 @@ export default function Home() {
         })();
     }, []);
     const ongoingGoals = exerciseGoal.filter(e => e.status === "ONGOING");
+
+    useEffect(() => {
+        (async () => {
+            try {
+                const data = await fetcher('http://localhost:8080/api/post/top3FriendStory');
+                if (data) {
+                    setPosts(data);
+                }
+            } catch (e) {
+                console.error("데이터 불러오기 실패:", e)
+            }
+        })();
+    }, []);
 
     return (
         <div style={{
@@ -438,7 +453,9 @@ export default function Home() {
                     }
                 </div>
             </div>
-            <div style={{
+            <div
+                onClick={() => navigate("/friendStory")}
+                style={{
                 padding: "20px",
                 backgroundColor: "#ffffff",
                 borderRadius: "12px",
@@ -459,7 +476,47 @@ export default function Home() {
                      e.currentTarget.style.transform = "scale(1)";
                      e.currentTarget.style.boxShadow = "0 4px 12px rgba(0,0,0,0.1)";
                  }}>
-                스토리
+                <h2
+                    style={{
+                        marginBottom: "20px",
+                        fontSize: "1.8rem",
+                        fontWeight: "bold",
+                        textAlign: "center",
+                        color: "#333"
+                    }}
+                >
+                    친구 스토리
+                </h2>
+                <div>
+                    {/* 게시글 리스트 */}
+                    {posts.map((p) => (
+                        <div className="card mb-4 shadow-sm" key={p.postId}>
+                            <div className="card-body">
+                                <h6 className="text-secondary small">작성자: {p.writer}</h6>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <img src={ p.imgUrl ? `http://localhost:8080/uploads/${p.imgUrl}` : noImage }
+                                             alt={p.title || "no image"}
+                                             style={{
+                                                 maxWidth: "100%",
+                                                 maxHeight: "100%",
+                                                 objectFit: "contain",
+                                             }}
+                                        />
+                                    </div>
+                                    <div className="col-md-6">
+                                        <h5 className="fw-bold mt-2">#{p.title}</h5>
+                                        <p style={{whiteSpace: "pre-line"}}>{p.content}</p>
+                                    </div>
+                                </div>
+                                {/* 날짜 */}
+                                <div className="mt-3 text-muted small">
+                                    <span>작성일: {p.createdAt}</span>
+                                </div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
             </div>
 
         </div>
