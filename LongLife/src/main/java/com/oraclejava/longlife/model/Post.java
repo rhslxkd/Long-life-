@@ -18,11 +18,13 @@ public class Post implements IEntity {
   @Column(name="post_id")
   private Long postId;
 
-  @Column(name="user_id")
-  private String userId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name="user_id")
+  private Users user;
 
-  @Column(name="exercise_id")
-  private int exerciseId;
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name="exercise_id")
+  private Exercise exerciseId;
 
   private String title;
   private String content;
@@ -38,7 +40,6 @@ public class Post implements IEntity {
 
   @Column(name="img_url")
   private String imgUrl;
-
 
   public void update(String title, String content, String imgUrl) {
     this.title = title;
