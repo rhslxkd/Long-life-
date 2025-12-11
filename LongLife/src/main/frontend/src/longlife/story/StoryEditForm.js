@@ -15,11 +15,25 @@ export default function StoryEditForm({ onClose, onSaved, initialData}) {
     const [pId,setPId] = useState(initialData?.postId);
     const [uId,setUid] = useState(initialData?.userId);
 
+
+    const getToday = () => {
+        const now = new Date();
+        const year = now.getFullYear();
+        const month = String(now.getMonth() + 1).padStart(2, "0");
+        const day = String(now.getDate()).padStart(2, "0");
+        const hours = String(now.getHours()).padStart(2, "0");
+        const minutes = String(now.getMinutes()).padStart(2, "0");
+        const seconds = String(now.getSeconds()).padStart(2, "0");
+        return `${year}-${month}-${day}T${hours}:${minutes}:${seconds}`;
+    };
+
+    const [updatedAt] = useState(getToday());
+
     //운동 목록 로딩
     useEffect(() => {
         const loadExercise = async () => {
             try {
-                const data = await fetcher("http://localhost:8080/api/post/exerciseId");
+                const data = await fetcher(`http://localhost:8080/api/exercise`);
                 setExerciseList(data);
             } catch (e) {
                 console.error("운동 목록 오류:", e);
@@ -43,12 +57,12 @@ export default function StoryEditForm({ onClose, onSaved, initialData}) {
     // 수정저장 핸들러2
     const handleEdit = async () => {
         const formData = new FormData();
-
         // 서버가 요구하는 post(JSON 문자열)
         const postObj = {
             title,
             content,
-            exerciseId
+            exerciseId: exerciseId?.exerciseId,
+            updatedAt
         };
 
         formData.append(
@@ -68,6 +82,7 @@ export default function StoryEditForm({ onClose, onSaved, initialData}) {
             });
             onSaved();
         } catch (err) {
+            alert(exerciseId.exerciseId);
             alert("저장 중 오류가 발생했습니다.");
         }
     };
