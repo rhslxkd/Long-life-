@@ -13,11 +13,9 @@ public interface PostRepository extends JpaRepository<Post, Long> {
 
        //운동 스토리 전체
        @Query("""
-          SELECT p FROM Post p WHERE 1=1 order by p.postId desc
+          SELECT p FROM Post p WHERE p.user.userId = :userId order by p.postId desc
           """)
-       List<Post> findAll();
-
-
+       List<Post> findAll(@Param("userId") String userId);
 
        @Query("""
               SELECT p FROM Post p
