@@ -1,6 +1,8 @@
 package com.oraclejava.longlife.service;
 
+import com.oraclejava.longlife.dto.ForAdminPostDto;
 import com.oraclejava.longlife.dto.FriendDto;
+import com.oraclejava.longlife.dto.PostRequestDto;
 import com.oraclejava.longlife.dto.PostResponseDto;
 import com.oraclejava.longlife.model.Exercise;
 import com.oraclejava.longlife.model.Likes;
@@ -33,11 +35,22 @@ public class PostService extends BaseTransactioanalService{
     private final ExerciseRepository exerciseRepository;
     private final LikeRepository likeRepository;
 
-    //운동스토리 전체조회 계정별
-    public List<Post> getAllStory(String userId){
-
-        return postRepository.findAll(userId);
+    //운동스토리 전체조회 계정별  페이징 없이
+    //    public List<Post> getAllStory(String userId){
+    //        return postRepository.findAllByUserId(userId);
+    //    }
+    //운동스토리 전체조회 계정별  페이징 적용
+    public Page<Post> getAllStory(String userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by("postId").descending());
+        return postRepository.findAllByUserId(userId, pageable);
     }
+
+    //검색 페이징 미적용
+    public Page<Post> searchData(String searchData ,String userId, int page, int size){
+        Pageable pageable = PageRequest.of(page, size, Sort.by("postId").descending());
+        return postRepository.findSearchTitleContent(searchData , userId, pageable);
+    }
+
 
    //스토리저장
    public Post savePost(Post post , MultipartFile poster) throws IOException {
@@ -48,13 +61,7 @@ public class PostService extends BaseTransactioanalService{
        }
 
         return postRepository.save(post);
-   }
-
-   //검색
-   public List<Post> searchData(String searchData){
-        return postRepository.findSearchTitleContent(searchData);
-
-   }
+   } 
 
    //삭제
    public ResponseEntity<Post> deletePost(Long id){
@@ -69,14 +76,8 @@ public class PostService extends BaseTransactioanalService{
 
         uPost.setTitle(post.getTitle());
         uPost.setContent(post.getContent());
-
-        // uPost.setImgUrl(post.getImgUrl());
-
         uPost.setExercise(post.getExercise());
         uPost.setUpdatedAt(post.getUpdatedAt());
-
-//        uPost.update(post.getTitle(),post.getContent(),post.getImgUrl());
-
         return uPost;
     }
 
