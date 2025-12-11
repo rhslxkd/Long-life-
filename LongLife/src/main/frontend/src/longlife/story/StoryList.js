@@ -29,6 +29,8 @@ export default function StoryList() {
     //수정 삭제를 위한 상영회차 넘기기 위한 변수
     const [selectedStory, setSelectedStory] = useState(null);
     const [openForm, setOpenForm] = useState(false); //처음에는 일단 비활성화
+    const [isSearching, setIsSearching] = useState(false);
+
 
     const getToday = () => {
         const now = new Date();
@@ -92,10 +94,12 @@ export default function StoryList() {
             const query = searchTerm.trim();
 
             if (query === "") {
-                await loadPost();
+                setIsSearching(false);
+                await loadPost(pageNumber);
                 return;
             }
 
+            setIsSearching(true);
             const url = `http://localhost:8080/api/post/search?searchData=${query}&userId=${userSession}&page=${pageNumber-1}`;
             const data = await fetcher(url);
             setPost(data.content);
@@ -263,6 +267,10 @@ export default function StoryList() {
                 placeholder="검색어 입력..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                style={{
+                    border: "2px solid #4A90E2",   // 테두리 색상
+                    boxShadow: "0 0 8px rgba(74, 144, 226, 0.6)" // 파란색 그림자
+                }}
             />
 
             {loading ? (
@@ -333,7 +341,7 @@ export default function StoryList() {
             <Pagination
                 totalPages={totalPages}
                 currentPage={currentPage}
-                paginate={loadPost}
+                paginate={isSearching ? searchPost : loadPost}
             />
             {openForm && (
                 <StoryEditForm onClose={() => setOpenForm(false)}

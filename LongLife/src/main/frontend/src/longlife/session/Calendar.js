@@ -86,8 +86,8 @@ function Calendar() {
 
         <div>
             <div style={{
-                width: "600px",
-                margin: "40px auto",
+                width: "35vw",
+                margin: "2vw auto",
                 border: "1px solid #ddd",
                 borderRadius: "8px",
                 padding: "20px",
@@ -134,7 +134,11 @@ function Calendar() {
                         setTempYear(year);
                         setTempMonth(month);
                         setShowPopup(true);
-                    }} style={{cursor: "pointer", userSelect: "none"}}>
+                    }} style={{
+                        cursor: "pointer",
+                        userSelect: "none",
+                        fontSize: "3vmin"
+                    }}>
           {year}년 {month + 1}월
         </span>
 
@@ -156,7 +160,9 @@ function Calendar() {
                     gap: "2px"
                 }}>
                     {["일", "월", "화", "수", "목", "금", "토"].map((day) => (
-                        <div key={day} style={{textAlign: "center", fontWeight: "bold", padding: "5px"}}>{day}</div>
+                        <div key={day} style={{
+                            textAlign: "center", fontWeight: "bold", padding: "5px", fontSize: "2vmin"
+                        }}>{day}</div>
                     ))}
 
                     {calendarDays.map((dayObj, idx) => {
@@ -181,6 +187,7 @@ function Calendar() {
                                     aspectRatio: "1 / 1",
                                     padding: "5px",
                                     textAlign: "left",
+                                    fontSize: "2vmin",
                                     cursor: isFuture ? "not-allowed" : "pointer", // 미래 날짜는 클릭 불가 표시
                                     color: isCurrentMonth ? "black" : "gray",
                                     backgroundColor: hasSession
@@ -229,7 +236,7 @@ function Calendar() {
                                 textAlign: "center"
                             }}
                         >
-                            <h3 style={{ marginBottom: "20px"}}>연·월 선택</h3>
+                            <h3 style={{marginBottom: "20px"}}>연·월 선택</h3>
 
                             {/* 선택 박스 영역 */}
                             <div

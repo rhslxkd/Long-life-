@@ -41,7 +41,7 @@ function DashBoard() {
                         </div>
                     </div>
                 </div>
-/                <div className="row g-4 mb-5">
+                <div className="row g-4 mb-5">
                         <div
                             className="card card-body bg-primary border border-primary border-opacity-25 p-4 h-100">
                             <div className="d-flex justify-content-between align-items-center">
