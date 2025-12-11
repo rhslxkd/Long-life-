@@ -1,7 +1,7 @@
 import NavBar from "./NavBar";
 import SideBar from "./SideBar";
 import {Outlet} from "react-router-dom";
-import Footer from "./Footer";
+import Footer from "../../lib/Footer";
 
 export default function AdminLayout () {
     return (

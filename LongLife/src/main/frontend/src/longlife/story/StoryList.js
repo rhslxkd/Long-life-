@@ -1,17 +1,22 @@
-import { useState, useEffect, useCallback } from "react";
-import { useNavigate } from "react-router-dom";
-import { fetcher } from "../../lib/fetcher";
-import { useForm } from "react-hook-form";
+import {useState, useEffect, useCallback} from "react";
+import {useNavigate} from "react-router-dom";
+import {fetcher} from "../../lib/fetcher";
+import {useForm} from "react-hook-form";
 import React from "react";
 import useMe from "../../hooks/useMe";
 import noImage from "../../assets/images/noImage.png";
 import StoryEditForm from "./StoryEditForm";
+import Pagination from "../../components/pagination";
+import CommentList from "../../components/comments/CommentList";
 
 export default function StoryList() {
     const user = useMe();
     const navigate = useNavigate();
-
     const [post, setPost] = useState([]);
+    const [page, setPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [currentPage, setCurrentPage] = useState(1);
+
     const [loading, setLoading] = useState(true);
     const [err, setErr] = useState(null);
     const [searchTerm, setSearchTerm] = useState("");
@@ -21,10 +26,11 @@ export default function StoryList() {
     const [content, setContent] = useState("");
     const [exerciseId, setExerciseId] = useState("");
     const [exerciseList, setExerciseList] = useState([]);
-
     //수정 삭제를 위한 상영회차 넘기기 위한 변수
-    const [selectedStory,setSelectedStory] =useState(null);
-    const [openForm,setOpenForm] = useState(false); //처음에는 일단 비활성화
+    const [selectedStory, setSelectedStory] = useState(null);
+    const [openForm, setOpenForm] = useState(false); //처음에는 일단 비활성화
+    const [isSearching, setIsSearching] = useState(false);
+
 
     const getToday = () => {
         const now = new Date();
@@ -52,15 +58,17 @@ export default function StoryList() {
         setPreview(URL.createObjectURL(file));
     };
 
-    const loadPost = useCallback(async () => {
+    const loadPost = useCallback(async (pageNumber = 1) => {
         try {
 
             //접속한 유저아이디로 전체 리스트 조회
             const userSession = user.userId;
             console.log(userSession);
-            const data = await fetcher(`http://localhost:8080/api/post/story?userId=${userSession}`);
+            const data = await fetcher(`http://localhost:8080/api/post/story?userId=${userSession}&page=${pageNumber-1}`);
             if (!data) return;
-            setPost(data);
+            setPost(data.content);
+            setTotalPages(data.totalPages);
+            setCurrentPage(pageNumber);
         } catch (e) {
             if (e.status === 403) {
                 navigate("/forbidden");
@@ -73,22 +81,30 @@ export default function StoryList() {
     }, [navigate]);
 
     useEffect(() => {
-        (async () => await loadPost())();
+        (
+            async () => await loadPost()
+        )();
     }, [loadPost]);
 
     // 검색
-    const searchPost = useCallback(async () => {
+    const searchPost = useCallback(async (pageNumber = 1) => {
         try {
+
+            const userSession = user.userId;
             const query = searchTerm.trim();
 
             if (query === "") {
-                await loadPost();
+                setIsSearching(false);
+                await loadPost(pageNumber);
                 return;
             }
 
-            const url = `http://localhost:8080/api/post/search?searchData=${query}`;
+            setIsSearching(true);
+            const url = `http://localhost:8080/api/post/search?searchData=${query}&userId=${userSession}&page=${pageNumber-1}`;
             const data = await fetcher(url);
-            setPost(data);
+            setPost(data.content);
+            setTotalPages(data.totalPages);
+            setCurrentPage(pageNumber);
         } catch (e) {
             console.error("검색 오류:", e);
             setErr(e.message);
@@ -115,7 +131,7 @@ export default function StoryList() {
 
     // 스토리 등록
     const addPost = () => {
-        if(!title){
+        if (!title) {
             alert("제목은 반드시 입력하셔야 합니다.");
             return;
         }
@@ -123,23 +139,23 @@ export default function StoryList() {
             alert("ExerciseList 종목을 선택하세요!");
             return;
         }
-        if(!content){
+        if (!content) {
             alert("내용도 반드시 입력하셔야 합니다.");
             return;
         }
 
         const form = new FormData();
-        // const data = { userId, title, content, exerciseId, createdAt, updatedAt };
         const data = {
             userId,
             title,
             content,
-            exerciseId ,
+            exerciseId,
             createdAt,
-            updatedAt };
+            updatedAt
+        };
 
         const json = JSON.stringify(data);
-        const blob = new Blob([json], { type: "application/json" });
+        const blob = new Blob([json], {type: "application/json"});
         form.append("post", blob);
 
         if (poster) form.append("poster", poster);
@@ -176,7 +192,7 @@ export default function StoryList() {
         if (!window.confirm("게시물을 삭제하시겠습니까?")) return;
         try {
             await fetcher(`http://localhost:8080/api/post/${st.postId}`,
-                { method: "DELETE" });
+                {method: "DELETE"});
             await loadPost();
         } catch (e) {
             setErr(e.message);
@@ -232,13 +248,13 @@ export default function StoryList() {
                         placeholder="운동스토리내용 작성..."
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
-                        style={{ height: "100px" }}
+                        style={{height: "100px"}}
                     />
 
                     {/* 파일 + 등록 버튼 */}
                     <div className="d-flex gap-2">
                         <button className="btn btn-success" onClick={addPost}>스토리 등록</button>
-                        <input type="file" className="form-control w-50" onChange={onChangePoster} />
+                        <input type="file" className="form-control w-50" onChange={onChangePoster}/>
                     </div>
 
                 </div>
@@ -251,80 +267,86 @@ export default function StoryList() {
                 placeholder="검색어 입력..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
+                style={{
+                    border: "2px solid #4A90E2",   // 테두리 색상
+                    boxShadow: "0 0 8px rgba(74, 144, 226, 0.6)" // 파란색 그림자
+                }}
             />
 
             {loading ? (
                 <span>로딩중....</span>
             ) : (
-           <div>
-                {/* 게시글 리스트 */}
-            {post.map((p) => (
-                <div className="card mb-4 shadow-sm" key={p.postId}>
-            <div className="card-body">
+                <div>
+                    {/* 게시글 리스트 */}
+                    {post.map((p) => (
+                        <div className="card mb-4 shadow-sm" key={p.postId}>
+                            <div className="card-body">
 
-                <h6 className="text-secondary small">작성자: {p.user.userId}</h6>
+                                <h6 className="text-secondary small">작성자: {p.user.userId}</h6>
 
-                <div className="row">
-                    <div className="col-md-6">
-                        <img
-                            src={
-                                p.imgUrl
-                                    ? `http://localhost:8080/uploads/${p.imgUrl}`
-                                    : noImage
-                            }
-                            alt={p.title || "no image"}
-                            style={{
-                                maxWidth: "100%",
-                                maxHeight: "100%",
-                                objectFit: "contain",
-                            }}
-                        />
-                    </div>
+                                <div className="row">
+                                    <div className="col-md-6">
+                                        <img
+                                            src={
+                                                p.imgUrl
+                                                    ? `http://localhost:8080/uploads/${p.imgUrl}`
+                                                    : noImage
+                                            }
+                                            alt={p.title || "no image"}
+                                            style={{
+                                                maxWidth: "100%",
+                                                maxHeight: "100%",
+                                                objectFit: "contain",
+                                            }}
+                                        />
+                                    </div>
 
-                    <div className="col-md-6">
-                        <h5 className="fw-bold mt-2">#{p.title}</h5>
-                        <p style={{ whiteSpace: "pre-line" }}>{p.content}</p>
-                    </div>
+                                    <div className="col-md-6">
+                                        <h5 className="fw-bold mt-2">#{p.title}</h5>
+                                        <p style={{whiteSpace: "pre-line"}}>{p.content}</p>
+                                    </div>
+                                </div>
+
+                                {/* 날짜 */}
+                                <div className="mt-3 text-muted small">
+                                    <span>작성일: {p.createdAt}</span>
+                                </div>
+
+                                {/* 수정/삭제 버튼 */}
+                                <div className="mt-3 d-flex gap-2">
+                                    <button className="btn btn-primary btn-sm" onClick={() => handleEditClick(p)}>수정
+                                    </button>
+                                    <button
+                                        className="btn btn-danger btn-sm"
+                                        onClick={() => handleDeleteClick(p)}
+                                    >
+                                        삭제
+                                    </button>
+                                </div>
+
+                                <hr/>
+
+                                {/* 좋아요 */}
+                                <button className="btn btn-outline-primary btn-sm">좋아요(12)</button>
+
+                                {/* 댓글 */}
+                                <CommentList postId={p.postId} userId={user.userId} />
+
+                            </div>
+                        </div>
+
+                    ))}
                 </div>
-
-                {/* 날짜 */}
-                <div className="mt-3 text-muted small">
-                    <span>작성일: {p.createdAt}</span>
-                </div>
-
-                {/* 수정/삭제 버튼 */}
-                <div className="mt-3 d-flex gap-2">
-                    <button className="btn btn-primary btn-sm"  onClick={() => handleEditClick(p)}>수정</button>
-                    <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => handleDeleteClick(p)}
-                    >
-                        삭제
-                    </button>
-                </div>
-
-                <hr />
-
-                {/* 좋아요 */}
-                <button className="btn btn-outline-primary btn-sm">좋아요(12)</button>
-
-                {/* 댓글 */}
-                <div className="input-group mt-3">
-                    <input type="text" className="form-control" placeholder="댓글 작성..." />
-                    <button className="btn btn-outline-primary">등록</button>
-                </div>
-
-            </div>
-        </div>
-
-    ))}
-           </div>
-
             )}
+            <Pagination
+                totalPages={totalPages}
+                currentPage={currentPage}
+                paginate={isSearching ? searchPost : loadPost}
+            />
             {openForm && (
                 <StoryEditForm onClose={() => setOpenForm(false)}
-                              onSaved={handleSaved}
-                              initialData={selectedStory}
+                               onSaved={handleSaved}
+                               initialData={selectedStory}
                 />
             )}
 
