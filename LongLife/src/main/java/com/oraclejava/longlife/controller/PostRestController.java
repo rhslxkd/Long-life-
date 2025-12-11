@@ -13,6 +13,8 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,7 +56,7 @@ public class PostRestController {
         post.setUser(user);
         post.setTitle(dto.getTitle());
         post.setContent(dto.getContent());
-        post.setExerciseId(exercise);
+        post.setExercise(exercise);
         post.setCreatedAt(dto.getCreatedAt());
         post.setUpdatedAt(dto.getUpdatedAt());
 
@@ -92,7 +94,7 @@ public class PostRestController {
         Post post = new Post();
         post.setTitle(dto.getTitle());
         post.setContent(dto.getContent());
-        post.setExerciseId(exercise);
+        post.setExercise(exercise);
         post.setUpdatedAt(dto.getUpdatedAt());
 
         //if(포스터가 있으면) 업로드;
@@ -110,5 +112,19 @@ public class PostRestController {
     @GetMapping("/count")
     public long getCount() {
         return postService.PostCount();
+    }
+
+    // 친구 스토리 가져오기
+    @GetMapping("/friendStory")
+    public ResponseEntity<?> friendStory(@AuthenticationPrincipal User user,
+                                         @RequestParam(defaultValue = "0") int page,
+                                         @RequestParam(defaultValue = "2") int size){
+        return ResponseEntity.ok(postService.getFriendsPosts(user.getUsername(), page, size));
+    }
+
+    // 친구 스토리 최신 3개 가져오기
+    @GetMapping("/top3FriendStory")
+    public ResponseEntity<?> top3FriendStory(@AuthenticationPrincipal User user) {
+        return ResponseEntity.ok(postService.getTop3FriendsPosts(user.getUsername()));
     }
 }

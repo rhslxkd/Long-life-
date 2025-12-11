@@ -30,7 +30,13 @@ public interface PostRepository extends JpaRepository<Post, Long> {
        @Query("""
             select p from Post p
             where p.title LIKE %:searchData%
-            or p.userId LIKE %:searchData%
+            or p.user.userId LIKE %:searchData%
         """)
        Page<Post> findByTitleOrUserId(String searchData, Pageable pageable);
+
+       // 친구 스토리 가져오기
+       Page<Post> findByUser_UserIdIn(List<String> userIds, Pageable pageable);
+
+       // 친구 스토리 최신 3가지 가져오기
+       List<Post> findTop3ByUser_UserIdInOrderByCreatedAtDesc(List<String> userIds);
 }

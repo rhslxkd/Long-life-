@@ -34,16 +34,14 @@ function DashBoard() {
     return(
         <div className="container" style={{maxWidth: 500}}>
             <div className="page-content-wrapper p-xxl-4">
-
                 <div className="row">
                     <div className="col-12 mb-4 mb-sm-5">
                         <div className="d-sm-flex justify-content-between align-items-center">
-                            <h1 className="h3 mb-2 mb-sm-0">Dashboard</h1>
+                            <h1 className="h3 mb-2 mb-sm-0">대시보드</h1>
                         </div>
                     </div>
                 </div>
-
-                <div className="row g-4 mb-5">
+/                <div className="row g-4 mb-5">
                         <div
                             className="card card-body bg-primary border border-primary border-opacity-25 p-4 h-100">
                             <div className="d-flex justify-content-between align-items-center">

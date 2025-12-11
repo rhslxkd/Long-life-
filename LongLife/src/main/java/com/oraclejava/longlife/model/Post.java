@@ -24,7 +24,7 @@ public class Post implements IEntity {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name="exercise_id")
-  private Exercise exerciseId;
+  private Exercise exercise;
 
   private String title;
   private String content;

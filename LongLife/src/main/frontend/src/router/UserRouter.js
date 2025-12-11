@@ -20,6 +20,7 @@ import ExerciseGoal from "../longlife/goal/ExerciseGoal";
 import CreateExerciseGoal from "../longlife/goal/CreateExerciseGoal";
 import UpdateExerciseGoal from "../longlife/goal/UpdateExerciseGoal";
 import Goal from "../longlife/goal/Goal";
+import FriendStory from "../longlife/friends/FriendStory";
 
 export default function UserRouter() {
     return (
@@ -40,7 +41,8 @@ export default function UserRouter() {
                 <Route path="/friendSearch" element={<FriendSearch/>}/>
                 {/* 친구 요청 받은 목록 */}
                 <Route path="/requests" element={<Requests/>}/>
-
+                {/* 친구 스토리 */}
+                <Route path="/friendStory" element={<FriendStory/>}/>
 
                 <Route path="/workout/calendar" element={<Calendar/>}/>
 
