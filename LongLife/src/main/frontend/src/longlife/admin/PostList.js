@@ -1,6 +1,7 @@
 import {useEffect, useState} from "react";
 import {fetcher} from "../../lib/fetcher";
 import Pagination from "../../components/pagination";
+import FormatKST from "../../lib/FormatKST";
 
 export default function PostList() {
     const [posts, setPosts] = useState([]);
@@ -87,8 +88,8 @@ export default function PostList() {
                         <td>{post.postId}</td>
                         <td>{post.userId}</td>
                         <td>{post.title}</td>
-                        <td>{post.createdAt}</td>
-                        <td>{post.updatedAt}</td>
+                        <td>{FormatKST(post.createdAt).slice(0,-3)}</td>
+                        <td>{FormatKST(post.updatedAt).slice(0,-3)}</td>
                         <td className="text-center">
                             <button className="btn btn-sm btn-outline-danger"
                                     onClick={() => handleDeleteClick(post)}>삭제

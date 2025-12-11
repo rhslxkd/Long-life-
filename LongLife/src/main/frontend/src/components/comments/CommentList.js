@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import {fetcher} from "../../lib/fetcher";
 import CommentItem from "./CommentItem";
 
-export default function CommentList({ postId, userId }) {
+export default function CommentList({ postId, userId, mode }) {
     const [comments, setComments] = useState([]);
     const [content, setContent] = useState("");
 
@@ -36,19 +36,20 @@ export default function CommentList({ postId, userId }) {
 
     return (
         <div className="mt-3">
-
-            {/* 댓글 입력 */}
-            <div className="input-group mb-3">
-                <input
-                    className="form-control"
-                    placeholder="댓글을 입력하세요..."
-                    value={content}
-                    onChange={(e) => setContent(e.target.value)}
-                />
-                <button className="btn btn-outline-primary" onClick={addComment}>
-                    등록
-                </button>
-            </div>
+            {/* mode === friendStory 일 때만 댓글 입력창 보이기 */}
+            {mode === "friendStory" && (
+                <div className="input-group mb-3">
+                    <input
+                        className="form-control"
+                        placeholder="댓글을 입력하세요..."
+                        value={content}
+                        onChange={(e) => setContent(e.target.value)}
+                    />
+                    <button className="btn btn-outline-primary" onClick={addComment}>
+                        등록
+                    </button>
+                </div>
+            )}
 
             {/* 댓글 목록 */}
             <div>
@@ -62,6 +63,7 @@ export default function CommentList({ postId, userId }) {
                             postId={postId}
                             userId={userId}
                             reload={loadComments}
+                            mode={mode}
                         />
                     ))
                 )}
