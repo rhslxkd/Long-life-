@@ -14,9 +14,8 @@ export default function StoryEditForm({ onClose, onSaved, initialData}) {
     const [uId,setUid] = useState(initialData?.userId);
 
     const [exerciseId, setExerciseId] = useState(
-        initialData?.exerciseId?.exerciseId || initialData?.exerciseId || ""
+        initialData?.exercise?.exerciseId ? Number(initialData.exercise.exerciseId) : 0
     );
-
 
     const getToday = () => {
         const now = new Date();
@@ -59,17 +58,11 @@ export default function StoryEditForm({ onClose, onSaved, initialData}) {
     // 수정저장 핸들러2
     const handleEdit = async () => {
         const formData = new FormData();
-        // 서버가 요구하는 post(JSON 문자열)
-        // const postObj = {
-        //     title,
-        //     content,
-        //     exerciseId: exerciseId?.exerciseId,
-        //     updatedAt
-        // };
+
         const postObj = {
             title,
             content,
-            exerciseId,  // 숫자 그대로
+            exerciseId: Number(exerciseId),  // 무조건 숫자로 보냄
             updatedAt
         };
 
@@ -161,24 +154,12 @@ export default function StoryEditForm({ onClose, onSaved, initialData}) {
 
                         <div className="mb-3">
                             <label><strong>연습종목</strong></label>
-                            {/*<select*/}
-                            {/*    className="form-select"*/}
-                            {/*    value={exerciseId}*/}
-                            {/*    onChange={(e) => setExerciseId(e.target.value)}*/}
-                            {/*>*/}
-                            {/*    <option value="">-Exercise종목-</option>*/}
-                            {/*    {exerciseList.map((ex) => (*/}
-                            {/*        <option key={ex.exerciseId} value={ex.exerciseId}>*/}
-                            {/*            {ex.name}*/}
-                            {/*        </option>*/}
-                            {/*    ))}*/}
-                            {/*</select>*/}
                             <select
                                 className="form-select"
                                 value={exerciseId}
                                 onChange={(e) => setExerciseId(Number(e.target.value))}
                             >
-                                <option value="">-Exercise종목-</option>
+                                <option value={0}>-Exercise종목-</option>
                                 {exerciseList.map((ex) => (
                                     <option key={ex.exerciseId} value={ex.exerciseId}>
                                         {ex.name}
