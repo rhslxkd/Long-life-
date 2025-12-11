@@ -6,14 +6,10 @@
   <component name="ChangeListManager">
     <list default="true" id="3fc5dd0f-1710-4307-be2c-89ef6bf15e9e" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/App.css" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/App.css" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/components/layout/UserLayout.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/components/layout/UserLayout.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/lib/Footer.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/lib/Footer.js" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/controller/PostRestController.java" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/controller/PostRestController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/model/Post.java" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/model/Post.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/repo/PostRepository.java" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/repo/PostRepository.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/service/AdminService.java" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/service/AdminService.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/service/PostService.java" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/java/com/oraclejava/longlife/service/PostService.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/Goal.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/Goal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/home/Home.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/home/Home.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/session/Calendar.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/session/Calendar.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -86,40 +82,40 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;Gradle.Build LongLife.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.C:/Users/young/IdeaProjects/Long-life-/LongLife/build.gradle.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.LongLife 빌드.executor&quot;: &quot;Run&quot;,
-    &quot;Gradle.소스 다운로드.executor&quot;: &quot;Run&quot;,
-    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
-    &quot;RequestMappingsPanelOrder0&quot;: &quot;0&quot;,
-    &quot;RequestMappingsPanelOrder1&quot;: &quot;1&quot;,
-    &quot;RequestMappingsPanelWidth0&quot;: &quot;75&quot;,
-    &quot;RequestMappingsPanelWidth1&quot;: &quot;75&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;Spring Boot.LongLifeApplication.executor&quot;: &quot;Run&quot;,
-    &quot;git-widget-placeholder&quot;: &quot;feature-friend&quot;,
-    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
-    &quot;kotlin-language-version-configured&quot;: &quot;true&quot;,
-    &quot;last_opened_file_path&quot;: &quot;C:/Users/HP/IdeaProjects/Long-life-&quot;,
-    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
-    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
-    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
-    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
-    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;프로젝트&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;,
-    &quot;ts.external.directory.path&quot;: &quot;C:\\스프링부트 단기심화\\ideaIU-2024.2.6.win\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external&quot;,
-    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "Gradle.Build LongLife.executor": "Run",
+    "Gradle.C:/Users/young/IdeaProjects/Long-life-/LongLife/build.gradle.executor": "Run",
+    "Gradle.LongLife 빌드.executor": "Run",
+    "Gradle.소스 다운로드.executor": "Run",
+    "ModuleVcsDetector.initialDetectionPerformed": "true",
+    "RequestMappingsPanelOrder0": "0",
+    "RequestMappingsPanelOrder1": "1",
+    "RequestMappingsPanelWidth0": "75",
+    "RequestMappingsPanelWidth1": "75",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.TerminalTabsStorage.copyFrom.TerminalArrangementManager.252": "true",
+    "RunOnceActivity.git.unshallow": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "Spring Boot.LongLifeApplication.executor": "Run",
+    "git-widget-placeholder": "feature-calendarUI",
+    "ignore.virus.scanning.warn.message": "true",
+    "kotlin-language-version-configured": "true",
+    "last_opened_file_path": "C:/Users/HP/IdeaProjects/Long-life-",
+    "node.js.detected.package.eslint": "true",
+    "node.js.detected.package.tslint": "true",
+    "node.js.selected.package.eslint": "(autodetect)",
+    "node.js.selected.package.tslint": "(autodetect)",
+    "nodejs_package_manager_path": "npm",
+    "project.structure.last.edited": "프로젝트",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "run.code.analysis.last.selected.profile": "pProject Default",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle",
+    "ts.external.directory.path": "C:\\스프링부트 단기심화\\ideaIU-2024.2.6.win\\plugins\\javascript-plugin\\jsLanguageServicesImpl\\external",
+    "vue.rearranger.settings.migration": "true"
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\young\IdeaProjects\Long-life-\LongLife\src\main\frontend\src\assets\images" />
@@ -136,10 +132,10 @@
     <configuration name="LongLifeApplication" type="SpringBootApplicationConfigurationType" factoryName="Spring Boot" nameIsGenerated="true">
       <option name="ALTERNATIVE_JRE_PATH" value="23" />
       <envs>
-        <env name="DB_PASSWORD" value="1234" />
+        <env name="DB_PASSWORD" value="younghk0527" />
         <env name="DB_URL" value="jdbc:mariadb://localhost:3306/longlife" />
         <env name="DB_USERNAME" value="root" />
-        <env name="file.upload-dir" value="C:\Users\HP\IdeaProjects\Long-life-\LongLife\src\main\frontend\src\assets\uploadimage" />
+        <env name="file.upload-dir" value="C:\Users\young\IdeaProjects\Long-life-\LongLife\src\main\frontend\src\assets\uploadimage" />
       </envs>
       <module name="LongLife.main" />
       <option name="SPRING_BOOT_MAIN_CLASS" value="com.oraclejava.longlife.LongLifeApplication" />
