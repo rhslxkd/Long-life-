@@ -6,14 +6,16 @@ export default function StoryEditForm({ onClose, onSaved, initialData}) {
     const [title, setTitle] = useState(initialData?.title || "");
     const [content, setContent] = useState(initialData?.content || "");
     const [imgUrl, setImgUrl] = useState(initialData?.imgUrl || null);
-    const [exerciseId,setExerciseId] = useState(initialData?.exerciseId);
     const [exerciseList, setExerciseList] = useState([]);
     const [preview, setPreview] = useState(
         initialData?.imgUrl ? `http://localhost:8080/uploads/${initialData.imgUrl}` : noImage
     );
-
     const [pId,setPId] = useState(initialData?.postId);
     const [uId,setUid] = useState(initialData?.userId);
+
+    const [exerciseId, setExerciseId] = useState(
+        initialData?.exerciseId?.exerciseId || initialData?.exerciseId || ""
+    );
 
 
     const getToday = () => {
@@ -58,10 +60,16 @@ export default function StoryEditForm({ onClose, onSaved, initialData}) {
     const handleEdit = async () => {
         const formData = new FormData();
         // 서버가 요구하는 post(JSON 문자열)
+        // const postObj = {
+        //     title,
+        //     content,
+        //     exerciseId: exerciseId?.exerciseId,
+        //     updatedAt
+        // };
         const postObj = {
             title,
             content,
-            exerciseId: exerciseId?.exerciseId,
+            exerciseId,  // 숫자 그대로
             updatedAt
         };
 
@@ -153,10 +161,22 @@ export default function StoryEditForm({ onClose, onSaved, initialData}) {
 
                         <div className="mb-3">
                             <label><strong>연습종목</strong></label>
+                            {/*<select*/}
+                            {/*    className="form-select"*/}
+                            {/*    value={exerciseId}*/}
+                            {/*    onChange={(e) => setExerciseId(e.target.value)}*/}
+                            {/*>*/}
+                            {/*    <option value="">-Exercise종목-</option>*/}
+                            {/*    {exerciseList.map((ex) => (*/}
+                            {/*        <option key={ex.exerciseId} value={ex.exerciseId}>*/}
+                            {/*            {ex.name}*/}
+                            {/*        </option>*/}
+                            {/*    ))}*/}
+                            {/*</select>*/}
                             <select
                                 className="form-select"
                                 value={exerciseId}
-                                onChange={(e) => setExerciseId(e.target.value)}
+                                onChange={(e) => setExerciseId(Number(e.target.value))}
                             >
                                 <option value="">-Exercise종목-</option>
                                 {exerciseList.map((ex) => (
@@ -165,9 +185,9 @@ export default function StoryEditForm({ onClose, onSaved, initialData}) {
                                     </option>
                                 ))}
                             </select>
+
+
                         </div>
-
-
                         <div className="mb-3">
                             <label><strong>내용</strong></label>
                             <textarea
