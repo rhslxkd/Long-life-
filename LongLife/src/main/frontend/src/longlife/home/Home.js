@@ -75,19 +75,24 @@ export default function Home() {
         <div style={{
             display: "grid",
             gridTemplateColumns: "1fr 1fr",
-            width: "100%",
-            height: "100vh"
+            marginTop: "2vw",
+            marginBottom: "2vw",
+            marginRight: "2vw",
+            marginLeft:"2vw",
+            gap: "1vw",
+            width: "100%"
         }}>
             <div style={{
                 display: "grid",
                 gridTemplateRows: "1fr 1fr",
-                gap: "30px",
-                height: "100%"
+                height: "100%",
+                gap: "2vw"
             }}>
                 <div style={{
                     display: "grid",
                     gridTemplateColumns: "1fr 1fr",
-                    gap: "50px"
+                    gap: "1vw",
+                    width: "100%"
                 }}>
                     {/* 체중 목표 */}
                     <div
@@ -97,9 +102,7 @@ export default function Home() {
                             backgroundColor: "#ffffff",
                             borderRadius: "12px",
                             boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                            maxWidth: "325px",
-                            marginLeft: "30px",
-                            marginTop: "30px",
+                            width: "22.5vw",
                             cursor: "pointer",
                             transition: "transform 0.2s ease, box-shadow 0.2s ease",
                             textAlign: "center"
@@ -223,9 +226,7 @@ export default function Home() {
                             backgroundColor: "#ffffff",
                             borderRadius: "12px",
                             boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                            maxWidth: "325px",
-                            marginTop: "30px",
-                            marginRight: "30px",
+                            width: "22.5vw",
                             cursor: "pointer",
                             transition: "transform 0.2s ease, box-shadow 0.2s ease",
                             textAlign: "center"
@@ -342,9 +343,7 @@ export default function Home() {
                         backgroundColor: "#ffffff",
                         borderRadius: "12px",
                         boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                        maxWidth: "700px",
-                        marginLeft: "30px",
-                        marginRight: "30px",
+                        width: "47.5vw",
                         cursor: "pointer",
                         transition: "transform 0.2s ease, box-shadow 0.2s ease",
                         textAlign: "center"
@@ -460,10 +459,7 @@ export default function Home() {
                 backgroundColor: "#ffffff",
                 borderRadius: "12px",
                 boxShadow: "0 4px 12px rgba(0,0,0,0.1)",
-                maxWidth: "700px",
-                marginLeft: "30px",
-                marginRight: "30px",
-                marginTop: "30px",
+                width: "92%",
                 cursor: "pointer",
                 transition: "transform 0.2s ease, box-shadow 0.2s ease",
                 textAlign: "center"
