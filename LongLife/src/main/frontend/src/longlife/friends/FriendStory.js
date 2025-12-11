@@ -3,6 +3,7 @@ import {fetcher} from "../../lib/fetcher";
 import InfiniteScroll from "react-infinite-scroll-component";
 import Pagination from "../../components/pagination";
 import noImage from "../../assets/images/noImage.png";
+import {set} from "react-hook-form";
 
 export default function FriendStory() {
     const [posts, setPosts] = useState([]);
@@ -19,10 +20,7 @@ export default function FriendStory() {
 
         try {
             const data = await fetcher(`http://localhost:8080/api/post/friendStory?page=${page - 1}`);
-            // if (!data) return;
-            // setPosts(data.content);
-            // setTotalPages(data.totalPages);
-            // setCurrentPage(pageNumber);
+            console.log(data.content);
 
             if (data.content.length === 0) {
                 setHasMore(false);
@@ -47,6 +45,27 @@ export default function FriendStory() {
 
     if (err) return <div className="text-danger">{err}</div>
 
+    const handleLikeClick = async (postId) => {
+        try {
+            const data = await fetcher(`http://localhost:8080/api/like/${postId}`, {
+                method: 'POST'
+            });
+            setPosts((prevPosts) =>
+                prevPosts.map((post) =>
+                    post.postId === postId
+                        ? {
+                            ...post,
+                            likedByUser: data.isLike, // 서버에서 받은 값으로 갱신
+                            likeCount: post.likeCount + (data.isLike ? 1 : -1) // 낙관적 업데이트
+                        }
+                        : post
+                )
+            );
+        } catch (e) {
+            setErr(e.message);
+        }
+    }
+
     return (
         <div className="container" style={{maxWidth: 800}}>
             <h1 className="mt-4 mb-4">친구 스토리 목록</h1>
@@ -64,13 +83,13 @@ export default function FriendStory() {
                             <h6 className="text-secondary small">작성자: {p.writer}</h6>
                             <div className="row">
                                 <div className="col-md-6">
-                                    <img src={ p.imgUrl ? `http://localhost:8080/uploads/${p.imgUrl}` : noImage }
-                                        alt={p.title || "no image"}
-                                        style={{
-                                            maxWidth: "100%",
-                                            maxHeight: "100%",
-                                            objectFit: "contain",
-                                        }}
+                                    <img src={p.imgUrl ? `http://localhost:8080/uploads/${p.imgUrl}` : noImage}
+                                         alt={p.title || "no image"}
+                                         style={{
+                                             maxWidth: "100%",
+                                             maxHeight: "100%",
+                                             objectFit: "contain",
+                                         }}
                                     />
                                 </div>
                                 <div className="col-md-6">
@@ -84,7 +103,10 @@ export default function FriendStory() {
                             </div>
                             <hr/>
                             {/* 좋아요 */}
-                            <button className="btn btn-outline-primary btn-sm">좋아요(12)</button>
+                            <button className={`btn btn-sm ${p.likedByUser ? 'btn-danger' : 'btn-outline-danger'}`}
+                                    onClick={() => handleLikeClick(p.postId)}>
+                                <i className="fa-regular fa-heart"></i>({p.likeCount})
+                            </button>
                             {/* 댓글 */}
                             <div className="input-group mt-3">
                                 <input type="text" className="form-control" placeholder="댓글 작성..."/>

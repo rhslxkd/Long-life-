@@ -9,6 +9,7 @@ Thumbs.db
 # ===========================
 .idea/
 *.iml
+.idea/workspace.xml
 
 # ===========================
 # Python (python-agent)

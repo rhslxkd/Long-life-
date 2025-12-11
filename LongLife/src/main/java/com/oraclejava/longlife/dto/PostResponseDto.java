@@ -10,6 +10,8 @@ public record PostResponseDto(
         String content,
         LocalDateTime createdAt,
         int viewCount,
-        String imgUrl
+        String imgUrl,
+        boolean likedByUser,
+        long likeCount
 ) {
 }
