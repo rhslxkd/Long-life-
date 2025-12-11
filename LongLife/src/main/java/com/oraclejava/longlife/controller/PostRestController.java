@@ -1,6 +1,13 @@
 package com.oraclejava.longlife.controller;
 
+import com.oraclejava.longlife.dto.PostRequestDto;
+import com.oraclejava.longlife.model.Exercise;
 import com.oraclejava.longlife.model.Post;
+import com.oraclejava.longlife.model.Users;
+import com.oraclejava.longlife.repo.ExerciseRepository;
+import com.oraclejava.longlife.repo.PostRepository;
+import com.oraclejava.longlife.repo.UsersRepository;
+import com.oraclejava.longlife.service.ExerciseService;
 import com.oraclejava.longlife.service.PostService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -18,22 +25,42 @@ import java.util.List;
 public class PostRestController {
 
     private final PostService postService;
+    private final ExerciseRepository exerciseRepository;
+    private final UsersRepository usersRepository;
+
 
     //전체 스토리 가져오기
     @GetMapping("/story")
-    public List<Post> post(){
-        return postService.getAllStory();
+    public List<Post> post(@RequestParam String userId) throws IOException {
+
+        return postService.getAllStory(userId);
     }
 
     //스토리 등록
     @PostMapping(value="/create",
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Post> addPost(
-            @RequestPart Post post,
+            @RequestPart("post") PostRequestDto dto,
+//            @RequestPart Post post,
             @RequestPart(required = false) MultipartFile poster) throws IOException {
-        Post savedPost = postService.savePost(post,poster);
-        return ResponseEntity.status(HttpStatus.CREATED)
-                .body(savedPost);
+
+        Users user = usersRepository.findById(dto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("User not found"));
+
+        Exercise exercise = exerciseRepository.findById(dto.getExerciseId())
+                .orElseThrow(() -> new IllegalArgumentException("Exercise not found"));
+
+        Post post = new Post();
+        post.setUser(user);
+        post.setTitle(dto.getTitle());
+        post.setContent(dto.getContent());
+        post.setExerciseId(exercise);
+        post.setCreatedAt(dto.getCreatedAt());
+        post.setUpdatedAt(dto.getUpdatedAt());
+
+        Post saved = postService.savePost(post, poster);
+        return ResponseEntity.ok(saved);
+
     }
 
     //검색어 조회
@@ -54,16 +81,28 @@ public class PostRestController {
             consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity<Post> update(
             @PathVariable long id,
-            @RequestPart Post post,
+            @RequestPart("post") PostRequestDto dto,
             @RequestPart(required = false) MultipartFile imgfile
     ) throws IOException {
 
-        Post savedPost = postService.updatePost(id, post);
+        Exercise exercise = exerciseRepository.findById(dto.getExerciseId())
+                .orElseThrow(() -> new IllegalArgumentException("Exercise not found"));
+
+//        Post savedPost = postService.updatePost(id, post);
+        Post post = new Post();
+        post.setTitle(dto.getTitle());
+        post.setContent(dto.getContent());
+        post.setExerciseId(exercise);
+        post.setUpdatedAt(dto.getUpdatedAt());
+
         //if(포스터가 있으면) 업로드;
         if (imgfile != null && !imgfile.isEmpty()) {
             postService.updateImgFile(id, imgfile);
         }
-        return ResponseEntity.ok(savedPost);
+
+        Post postUp = postService.updatePost(id, post);
+
+        return ResponseEntity.ok(postUp);
 
     }
 

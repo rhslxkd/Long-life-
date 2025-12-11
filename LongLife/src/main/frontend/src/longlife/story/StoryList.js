@@ -54,7 +54,11 @@ export default function StoryList() {
 
     const loadPost = useCallback(async () => {
         try {
-            const data = await fetcher(`http://localhost:8080/api/post/story`);
+
+            //접속한 유저아이디로 전체 리스트 조회
+            const userSession = user.userId;
+            console.log(userSession);
+            const data = await fetcher(`http://localhost:8080/api/post/story?userId=${userSession}`);
             if (!data) return;
             setPost(data);
         } catch (e) {
@@ -100,7 +104,7 @@ export default function StoryList() {
     useEffect(() => {
         const loadExercise = async () => {
             try {
-                const data = await fetcher("http://localhost:8080/api/post/exerciseId");
+                const data = await fetcher(`http://localhost:8080/api/exercise`);
                 setExerciseList(data);
             } catch (e) {
                 console.error("운동 목록 오류:", e);
@@ -111,25 +115,29 @@ export default function StoryList() {
 
     // 스토리 등록
     const addPost = () => {
-
         if(!title){
             alert("제목은 반드시 입력하셔야 합니다.");
             return;
         }
-
         if (!exerciseId) {
             alert("ExerciseList 종목을 선택하세요!");
             return;
         }
-
         if(!content){
             alert("내용도 반드시 입력하셔야 합니다.");
             return;
         }
 
-
         const form = new FormData();
-        const data = { userId, title, content, exerciseId, createdAt, updatedAt };
+        // const data = { userId, title, content, exerciseId, createdAt, updatedAt };
+        const data = {
+            userId,
+            title,
+            content,
+            exerciseId ,
+            createdAt,
+            updatedAt };
+
         const json = JSON.stringify(data);
         const blob = new Blob([json], { type: "application/json" });
         form.append("post", blob);
@@ -176,7 +184,11 @@ export default function StoryList() {
     };
 
     return (
-        <div className="container my-5">
+        <div className="container my-5"
+             style={{
+                 maxWidth: "60%",
+                 margin: "0 auto"
+             }}>
 
             {/* 제목 */}
             <h2 className="fw-bold text-center mb-4">운동 스토리 게시판</h2>
@@ -201,7 +213,8 @@ export default function StoryList() {
                             <select
                                 className="form-select"
                                 value={exerciseId}
-                                onChange={(e) => setExerciseId(e.target.value)}
+                                // onChange={(e) => setExerciseId(e.target.value)}
+                                onChange={(e) => setExerciseId(Number(e.target.value))}
                             >
                                 <option value="">-Exercise종목-</option>
                                 {exerciseList.map((ex) => (
@@ -249,7 +262,7 @@ export default function StoryList() {
                 <div className="card mb-4 shadow-sm" key={p.postId}>
             <div className="card-body">
 
-                <h6 className="text-secondary small">작성자: {p.userId}</h6>
+                <h6 className="text-secondary small">작성자: {p.user.userId}</h6>
 
                 <div className="row">
                     <div className="col-md-6">

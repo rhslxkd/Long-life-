@@ -69,7 +69,7 @@ public class AdminService {
 
         return posts.map((p) -> new ForAdminPostDto(
                 p.getPostId(),
-                p.getUserId(),
+                p.getUser().getUserId(),
                 p.getTitle(),
                 p.getCreatedAt(),
                 p.getUpdatedAt()
