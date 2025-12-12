@@ -54,3 +54,9 @@ venv/
 # [핵심] Vector DB 데이터 (용량 큼, 언제든 재생성 가능)
 chroma_db/
 LongLife/python-agent/chroma_db/
+
+# gg
+secrets/
+*.json
+*.key
+*.pem
