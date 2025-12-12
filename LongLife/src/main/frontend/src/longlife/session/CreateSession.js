@@ -19,7 +19,8 @@ export default function CreateSession() {
     const {
         register,
         handleSubmit,
-        formState: {errors}
+        formState: {errors},
+        watch
     } = useForm();
 
     useEffect(() => {
@@ -102,6 +103,7 @@ export default function CreateSession() {
                 maxWidth: "700px",
                 margin: "0 auto",
                 marginTop: "30px",
+                marginBottom: "30px",
                 backgroundColor: "#ffffff",
                 border: "1px solid #e0e0e0",
                 borderRadius: "12px",
@@ -237,7 +239,7 @@ export default function CreateSession() {
                         <label style={{ fontWeight: "600", color: "#333" }}>시작 시간</label>
                         <input
                             type="time"
-                            {...register("startedAt", { required: true })}
+                            {...register("startedAt", { required: "시작 시간을 입력해주세요." })}
                             style={{
                                 padding: "10px",
                                 borderRadius: "6px",
@@ -245,13 +247,22 @@ export default function CreateSession() {
                                 outline: "none"
                             }}
                         />
+                        {errors.startedAt && (
+                            <p style={{ color: "red" }}>{errors.startedAt.message}</p>
+                        )}
                     </div>
 
                     <div style={{ flex: 1, display: "flex", flexDirection: "column", gap: "6px" }}>
                         <label style={{ fontWeight: "600", color: "#333" }}>종료 시간</label>
                         <input
                             type="time"
-                            {...register("endedAt", { required: true })}
+                            {...register("endedAt", {
+                                required: "종료 시간을 입력해주세요.",
+                                validate: (value) => {
+                                    const start = watch("startedAt");
+                                    return !start || value >= start || "종료 시간이 시작 시간보다 빠릅니다.";
+                                }
+                            })}
                             style={{
                                 padding: "10px",
                                 borderRadius: "6px",
@@ -259,7 +270,11 @@ export default function CreateSession() {
                                 outline: "none"
                             }}
                         />
+                        {errors.endedAt && (
+                            <p style={{ color: "red" }}>{errors.endedAt.message}</p>
+                        )}
                     </div>
+
                 </div>
 
                 {/* 버튼 영역 */}
