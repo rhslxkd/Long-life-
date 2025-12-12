@@ -46,11 +46,12 @@ export default function CommentItem({ comment, postId, userId, reload, mode }) {
                     답글쓰기
                 </button>
                 }
-                {loginUser.userId === comment.userId &&
-                <button   className="btn btn-outline-danger btn-sm">
-                    삭제
-                </button>
-                }
+                {/*추후에 추가*/}
+                {/*{loginUser.userId === comment.userId &&*/}
+                {/*<button   className="btn btn-outline-danger btn-sm">*/}
+                {/*    삭제*/}
+                {/*</button>*/}
+                {/*}*/}
                 </div>
             </div>
 
