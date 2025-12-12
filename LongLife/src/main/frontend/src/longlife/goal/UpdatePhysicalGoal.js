@@ -9,6 +9,7 @@ export default function UpdatePhysicalGoal() {
         handleSubmit,
         setValue,
         formState: { errors },
+        watch
     } = useForm();
 
     const [physical, setPhysical] = useState([]);
@@ -128,7 +129,9 @@ export default function UpdatePhysicalGoal() {
                     <label style={{ fontWeight: "600", color: "#333" }}>시작일</label>
                     <input
                         type="date"
-                        {...register("startingDate", { required: "시작일을 입력하세요." })}
+                        {...register("startingDate", {
+                            required: "시작일을 입력하세요."
+                        })}
                         style={{
                             padding: "10px",
                             borderRadius: "6px",
@@ -141,12 +144,21 @@ export default function UpdatePhysicalGoal() {
                     )}
                 </div>
 
-                {/* 완료 예정일 */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
                     <label style={{ fontWeight: "600", color: "#333" }}>완료 예정일</label>
                     <input
                         type="date"
-                        {...register("completeDate", { required: "완료일을 입력하세요." })}
+                        {...register("completeDate", {
+                            required: "완료일을 입력하세요.",
+                            validate: (value) => {
+                                const start = watch("startingDate");
+                                return (
+                                    !start ||
+                                    value >= start ||
+                                    "완료 예정일은 시작일보다 빠를 수 없습니다."
+                                );
+                            }
+                        })}
                         style={{
                             padding: "10px",
                             borderRadius: "6px",
@@ -158,6 +170,7 @@ export default function UpdatePhysicalGoal() {
                         <small style={{ color: "red" }}>{errors.completeDate.message}</small>
                     )}
                 </div>
+
 
                 {/* 버튼 영역 */}
                 <div

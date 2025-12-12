@@ -6,6 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="3fc5dd0f-1710-4307-be2c-89ef6bf15e9e" name="변경" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/CreateExerciseGoal.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/CreateExerciseGoal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/CreatePhysicalGoal.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/CreatePhysicalGoal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/UpdateExerciseGoal.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/UpdateExerciseGoal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/UpdatePhysicalGoal.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/goal/UpdatePhysicalGoal.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/session/CreateSession.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/session/CreateSession.js" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/session/UpdateSession.js" beforeDir="false" afterPath="$PROJECT_DIR$/LongLife/src/main/frontend/src/longlife/session/UpdateSession.js" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -226,6 +232,7 @@
       <workItem from="1765341160133" duration="16976000" />
       <workItem from="1765413136376" duration="8389000" />
       <workItem from="1765443835332" duration="1260000" />
+      <workItem from="1765499854266" duration="2014000" />
     </task>
     <servers />
   </component>

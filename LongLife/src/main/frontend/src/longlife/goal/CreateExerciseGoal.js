@@ -10,6 +10,7 @@ export default function CreateExerciseGoal() {
         handleSubmit,
         setValue,
         formState: {errors},
+        watch
     } = useForm();
 
     const [exercise, setExercise] = useState([]);
@@ -282,22 +283,39 @@ export default function CreateExerciseGoal() {
                         <label style={{fontWeight: "600", color: "#333"}}>시작일</label>
                         <input
                             type="date"
-                            {...register("startingDate", {required: "시작일을 입력하세요."})}
+                            {...register("startingDate", {
+                                required: "시작일을 입력하세요."
+                            })}
                             style={{padding: "10px", borderRadius: "6px", border: "1px solid #007bff"}}
                         />
-                        {errors.startingDate && <small style={{color: "red"}}>{errors.startingDate.message}</small>}
+                        {errors.startingDate && (
+                            <small style={{color: "red"}}>{errors.startingDate.message}</small>
+                        )}
                     </div>
 
                     <div style={{flex: 1, display: "flex", flexDirection: "column", gap: "6px"}}>
                         <label style={{fontWeight: "600", color: "#333"}}>완료 예정일</label>
                         <input
                             type="date"
-                            {...register("completeDate", {required: "완료일을 입력하세요."})}
+                            {...register("completeDate", {
+                                required: "완료일을 입력하세요.",
+                                validate: (value) => {
+                                    const start = watch("startingDate");
+                                    return (
+                                        !start ||
+                                        value >= start ||
+                                        "완료 예정일은 시작일보다 빠를 수 없습니다."
+                                    );
+                                }
+                            })}
                             style={{padding: "10px", borderRadius: "6px", border: "1px solid #007bff"}}
                         />
-                        {errors.completeDate && <small style={{color: "red"}}>{errors.completeDate.message}</small>}
+                        {errors.completeDate && (
+                            <small style={{color: "red"}}>{errors.completeDate.message}</small>
+                        )}
                     </div>
                 </div>
+
 
                 {/* 버튼 영역 */}
                 <div style={{display: "flex", justifyContent: "center", gap: "15px", marginTop: "20px"}}>
