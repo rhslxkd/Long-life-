@@ -1,7 +1,10 @@
 import React, { useState } from "react";
 import {fetcher} from "../../lib/fetcher";
+import useMe from "../../hooks/useMe";
+import FormatKST from "../../lib/FormatKST";
 
-export default function CommentItem({ comment, postId, userId, reload }) {
+export default function CommentItem({ comment, postId, userId, reload, mode }) {
+    const loginUser = useMe();
     const [replyOpen, setReplyOpen] = useState(false);
     const [replyText, setReplyText] = useState("");
 
@@ -29,19 +32,26 @@ export default function CommentItem({ comment, postId, userId, reload }) {
 
             {/* 댓글 본문 */}
             <div className="border rounded p-2 bg-light">
-                <b>{comment.userId}</b>
-                <div>{comment.content}</div>
+                <b className="ms-2">{comment.userId}</b>
+                <small className="ms-2">{FormatKST(comment.createdAt).slice(0,-3)}</small>
+                <div className="d-flex justify-content-between align-items-center ms-2">
+                <div className="fs-5">{comment.content}</div>
 
                 {/* 답글 버튼 */}
+                {loginUser.userId !== comment.userId &&
                 <button
                     className="btn btn-link btn-sm"
                     onClick={() => setReplyOpen(!replyOpen)}
                 >
                     답글쓰기
                 </button>
-                <button   className="btn btn-link btn-sm">
+                }
+                {loginUser.userId === comment.userId &&
+                <button   className="btn btn-outline-danger btn-sm">
                     삭제
                 </button>
+                }
+                </div>
             </div>
 
             {/* 답글 입력창 */}
@@ -49,7 +59,7 @@ export default function CommentItem({ comment, postId, userId, reload }) {
                 <div className="input-group my-2">
                     <input
                         className="form-control"
-                        placeholder="대댓글 입력..."
+                        placeholder="댓글 입력..."
                         value={replyText}
                         onChange={(e) => setReplyText(e.target.value)}
                     />
@@ -68,6 +78,7 @@ export default function CommentItem({ comment, postId, userId, reload }) {
                         postId={postId}
                         userId={userId}
                         reload={reload}
+                        mode={mode}
                     />
                 ))}
         </div>

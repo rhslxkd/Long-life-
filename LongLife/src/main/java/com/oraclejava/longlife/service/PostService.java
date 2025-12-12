@@ -40,15 +40,49 @@ public class PostService extends BaseTransactioanalService{
     //        return postRepository.findAllByUserId(userId);
     //    }
     //운동스토리 전체조회 계정별  페이징 적용
-    public Page<Post> getAllStory(String userId, int page, int size) {
+    public Page<PostResponseDto> getAllStory(String userId, int page, int size) {
         Pageable pageable = PageRequest.of(page, size, Sort.by("postId").descending());
-        return postRepository.findAllByUserId(userId, pageable);
+        Page<Post> posts = postRepository.findAllByUserId(userId, pageable);
+
+        return posts.map(post -> {
+            Long likeCount = likeRepository.countByPost(post);
+
+            return new PostResponseDto(
+                    post.getPostId(),
+                    post.getUser().getUserId(),
+                    post.getExercise().getName(),
+                    post.getTitle(),
+                    post.getContent(),
+                    post.getCreatedAt(),
+                    post.getViewCount(),
+                    post.getImgUrl(),
+                    true,
+                    likeCount
+            );
+        });
     }
 
     //검색 페이징 미적용
-    public Page<Post> searchData(String searchData ,String userId, int page, int size){
+    public Page<PostResponseDto> searchData(String searchData ,String userId, int page, int size){
         Pageable pageable = PageRequest.of(page, size, Sort.by("postId").descending());
-        return postRepository.findSearchTitleContent(searchData , userId, pageable);
+        Page<Post> posts = postRepository.findSearchTitleContent(searchData , userId, pageable);
+
+        return posts.map(post -> {
+            Long likeCount = likeRepository.countByPost(post);
+
+            return new PostResponseDto(
+                    post.getPostId(),
+                    post.getUser().getUserId(),
+                    post.getExercise().getName(),
+                    post.getTitle(),
+                    post.getContent(),
+                    post.getCreatedAt(),
+                    post.getViewCount(),
+                    post.getImgUrl(),
+                    true,
+                    likeCount
+            );
+        });
     }
 
 
@@ -103,7 +137,6 @@ public class PostService extends BaseTransactioanalService{
         Page<Post> friendsPosts = postRepository.findByUser_UserIdIn(friendListId, pageable);
 
         return friendsPosts.map((fp) -> {
-            String exerciseName = exerciseRepository.findById(fp.getExercise().getExerciseId()).map(Exercise::getName).orElse(null);
             Optional<Likes> likesOptional = likeRepository.findByPostAndUser(fp, usersRepository.findById(userId).get());
             boolean likedByUser = likesOptional.isPresent() && likesOptional.get().isLike();
             Long likeCount = likeRepository.countByPost(fp);
@@ -111,7 +144,7 @@ public class PostService extends BaseTransactioanalService{
             return new PostResponseDto(
                     fp.getPostId(),
                     fp.getUser().getUserId(),
-                    exerciseName,
+                    fp.getExercise().getName(),
                     fp.getTitle(),
                     fp.getContent(),
                     fp.getCreatedAt(),
@@ -128,7 +161,6 @@ public class PostService extends BaseTransactioanalService{
         List<String> friendListId = friendService.getFriends(userId).stream().map(FriendDto::receiverId).toList();
 
         return postRepository.findTop3ByUser_UserIdInOrderByCreatedAtDesc(friendListId).stream().map((fp) -> {
-            String exerciseName = exerciseRepository.findById(fp.getExercise().getExerciseId()).map(Exercise::getName).orElse(null);
             Optional<Likes> likesOptional = likeRepository.findByPostAndUser(fp, usersRepository.findById(userId).get());
             boolean likedByUser = likesOptional.isPresent() && likesOptional.get().isLike();
             Long likeCount = likeRepository.countByPost(fp);
@@ -136,7 +168,7 @@ public class PostService extends BaseTransactioanalService{
             return new PostResponseDto(
                     fp.getPostId(),
                     fp.getUser().getUserId(),
-                    exerciseName,
+                    fp.getExercise().getName(),
                     fp.getTitle(),
                     fp.getContent(),
                     fp.getCreatedAt(),

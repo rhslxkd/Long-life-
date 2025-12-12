@@ -4,8 +4,12 @@ import InfiniteScroll from "react-infinite-scroll-component";
 import Pagination from "../../components/pagination";
 import noImage from "../../assets/images/noImage.png";
 import {set} from "react-hook-form";
+import CommentList from "../../components/comments/CommentList";
+import useMe from "../../hooks/useMe";
+import FormatKST from "../../lib/FormatKST";
 
 export default function FriendStory() {
+    const user = useMe();
     const [posts, setPosts] = useState([]);
     const [loading, setLoading] = useState(true);
     const [err, setErr] = useState(null);
@@ -99,7 +103,7 @@ export default function FriendStory() {
                             </div>
                             {/* 날짜 */}
                             <div className="mt-3 text-muted small">
-                                <span>작성일: {p.createdAt}</span>
+                                <span>작성일: {FormatKST(p.createdAt).slice(0,-3)}</span>
                             </div>
                             <hr/>
                             {/* 좋아요 */}
@@ -108,10 +112,12 @@ export default function FriendStory() {
                                 <i className="fa-regular fa-heart"></i>({p.likeCount})
                             </button>
                             {/* 댓글 */}
-                            <div className="input-group mt-3">
-                                <input type="text" className="form-control" placeholder="댓글 작성..."/>
-                                <button className="btn btn-outline-primary">등록</button>
-                            </div>
+                            {/* 댓글 */}
+                            <CommentList
+                                postId={p.postId}
+                                userId={user.userId}
+                                mode="friendStory"
+                            />
                         </div>
                     </div>
                 ))}

@@ -8,12 +8,12 @@ import noImage from "../../assets/images/noImage.png";
 import StoryEditForm from "./StoryEditForm";
 import Pagination from "../../components/pagination";
 import CommentList from "../../components/comments/CommentList";
+import FormatKST from "../../lib/FormatKST";
 
 export default function StoryList() {
     const user = useMe();
     const navigate = useNavigate();
     const [post, setPost] = useState([]);
-    const [page, setPage] = useState(0);
     const [totalPages, setTotalPages] = useState(0);
     const [currentPage, setCurrentPage] = useState(1);
 
@@ -207,10 +207,10 @@ export default function StoryList() {
              }}>
 
             {/* 제목 */}
-            <h2 className="fw-bold text-center mb-4">운동 스토리 게시판</h2>
+            <h2 className="fw-bold text-center my-4">나의 운동 스토리</h2>
 
             {/* 글 작성 박스 */}
-            <div className="card shadow-sm mb-4">
+            <div className="card shadow-sm my-4">
                 <div className="card-body">
 
                     {/* 제목 + 운동 선택 */}
@@ -232,7 +232,7 @@ export default function StoryList() {
                                 // onChange={(e) => setExerciseId(e.target.value)}
                                 onChange={(e) => setExerciseId(Number(e.target.value))}
                             >
-                                <option value="">-Exercise종목-</option>
+                                <option value="">-운동 종목-</option>
                                 {exerciseList.map((ex) => (
                                     <option key={ex.exerciseId} value={ex.exerciseId}>
                                         {ex.name}
@@ -245,7 +245,7 @@ export default function StoryList() {
                     {/* 내용 */}
                     <textarea
                         className="form-control mb-3"
-                        placeholder="운동스토리내용 작성..."
+                        placeholder="운동 스토리 내용 작성..."
                         value={content}
                         onChange={(e) => setContent(e.target.value)}
                         style={{height: "100px"}}
@@ -263,13 +263,13 @@ export default function StoryList() {
             {/* 검색 */}
             <input
                 type="text"
-                className="form-control mb-4"
+                className="form-control mb-4 fs-5 py-3"
                 placeholder="검색어 입력..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
                 style={{
                     border: "2px solid #4A90E2",   // 테두리 색상
-                    boxShadow: "0 0 8px rgba(74, 144, 226, 0.6)" // 파란색 그림자
+                    boxShadow: "0 0 8px rgba(74, 144, 226, 0.6)", // 파란색 그림자
                 }}
             />
 
@@ -282,7 +282,7 @@ export default function StoryList() {
                         <div className="card mb-4 shadow-sm" key={p.postId}>
                             <div className="card-body">
 
-                                <h6 className="text-secondary small">작성자: {p.user.userId}</h6>
+                                <h6 className="text-secondary small">작성자: {p.writer}</h6>
 
                                 <div className="row">
                                     <div className="col-md-6">
@@ -309,7 +309,7 @@ export default function StoryList() {
 
                                 {/* 날짜 */}
                                 <div className="mt-3 text-muted small">
-                                    <span>작성일: {p.createdAt}</span>
+                                    <span>작성일: {FormatKST(p.createdAt).slice(0,-3)}</span>
                                 </div>
 
                                 {/* 수정/삭제 버튼 */}
@@ -327,7 +327,9 @@ export default function StoryList() {
                                 <hr/>
 
                                 {/* 좋아요 */}
-                                <button className="btn btn-outline-primary btn-sm">좋아요(12)</button>
+                                <button className="btn btn-sm btn-danger">
+                                    <i className="fa-regular fa-heart"></i>({p.likeCount})
+                                </button>
 
                                 {/* 댓글 */}
                                 <CommentList postId={p.postId} userId={user.userId} />
