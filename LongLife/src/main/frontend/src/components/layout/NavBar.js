@@ -36,18 +36,18 @@ export default function NavBar() {
 
                 {/* 홈 링크 */}
                 <li className="nav-item d-none d-sm-inline-block">
-                    <a href="/" className="nav-link">홈</a>
+                    <a href="/" className="nav-link">페이지</a>
                 </li>
             </ul>
 
             {/* 오른쪽 메뉴 */}
             <ul className="navbar-nav ml-auto">
                 <li className="nav-item dropdown d-flex">
-                    <span className="dropdown-item dropdown-header">
+                    <span className="dropdown-item dropdown-header me-4">
                         {user && <span style={{ marginLeft: 12 }}>안녕하세요, {user.name}({user.userId})님</span>}
                     </span>
 
-                    <button className="text-danger dropdown-item" onClick={onLogout}>
+                    <button className="text-danger dropdown-item me-4" onClick={onLogout}>
                         <i className="fas fa-sign-out-alt mr-5">로그아웃</i>
                     </button>
                 </li>

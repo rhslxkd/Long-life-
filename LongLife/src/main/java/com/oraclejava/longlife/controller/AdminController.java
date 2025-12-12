@@ -14,7 +14,7 @@ public class AdminController {
     // 유저 목록
     @GetMapping("/userList")
     public ResponseEntity<?> getUsers(@RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "2") int size,
+                                      @RequestParam(defaultValue = "5") int size,
                                       @RequestParam(required = false) String searchData) {
         if (searchData != null) {
             return ResponseEntity.ok(adminService.getSearchUsers(searchData, page, size));
@@ -34,7 +34,7 @@ public class AdminController {
     // 스토리 목록
     @GetMapping("/postList")
     public ResponseEntity<?> getPosts(@RequestParam(defaultValue = "0") int page,
-                                      @RequestParam(defaultValue = "2") int size,
+                                      @RequestParam(defaultValue = "5") int size,
                                       @RequestParam(required = false) String searchData) {
 
         if (searchData != null) {
