@@ -1,0 +1,44 @@
+package com.oraclejava.longlife.model;
+
+import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
+import java.time.LocalDateTime;
+
+@Entity
+@Getter
+@Setter
+public class WorkoutSession {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long sessionId;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
+    private Users users;
+
+    @Column(name = "started_at")
+    private LocalDateTime startedAt;
+
+    @Column(name = "ended_at")
+    private LocalDateTime endedAt;
+
+    private String location;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "exercise_id")
+    private Exercise exercise;
+
+    private String note;
+
+    public void update(LocalDateTime startedAt, LocalDateTime endedAt,
+                       String location, String note, Exercise exercise) {
+        this.startedAt = startedAt;
+        this.endedAt = endedAt;
+        this.location = location;
+        this.note = note;
+        this.exercise = exercise;
+    }
+
+}

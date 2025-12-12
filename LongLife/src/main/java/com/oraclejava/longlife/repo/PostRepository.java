@@ -1,0 +1,64 @@
+package com.oraclejava.longlife.repo;
+
+import com.oraclejava.longlife.model.Post;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+
+import java.util.List;
+
+public interface PostRepository extends JpaRepository<Post, Long> {
+
+    //운동 스토리 전체 페이징 미적용
+//       @Query("""
+//          SELECT p FROM Post p WHERE p.user.userId = :userId order by p.postId desc
+//          """)
+//       List<Post> findAll(@Param("userId") String userId);
+    @Query("""
+                SELECT p FROM Post p 
+                WHERE p.user.userId = :userId
+                ORDER BY p.postId DESC
+            """)
+    Page<Post> findAllByUserId(@Param("userId") String userId, Pageable pageable);
+
+    //조회 페이징 미적용
+//       @Query("""
+//              SELECT p FROM Post p
+//              WHERE p.user.userId  = :userId
+//              AND ((:searchData IS NULL OR p.title LIKE %:searchData%)
+//              OR (:searchData IS NULL OR p.content LIKE %:searchData%))
+//             """)
+//       List<Post> findSearchTitleContent(
+//               @Param("searchData") String searchData ,
+//               @Param("userId") String userId
+//       );
+
+    @Query("""
+             SELECT p FROM Post p
+             WHERE p.user.userId  = :userId 
+             AND ((:searchData IS NULL OR p.title LIKE %:searchData%)
+             OR (:searchData IS NULL OR p.content LIKE %:searchData%))
+            """)
+    Page<Post> findSearchTitleContent(
+            @Param("searchData") String searchData,
+            @Param("userId") String userId,
+            Pageable pageable
+    );
+
+
+    // 관리자용 스토리 검색
+    @Query("""
+                select p from Post p
+                where p.title LIKE %:searchData%
+                or p.user.userId LIKE %:searchData%
+            """)
+    Page<Post> findByTitleOrUserId(String searchData, Pageable pageable);
+
+    // 친구 스토리 가져오기
+    Page<Post> findByUser_UserIdIn(List<String> userIds, Pageable pageable);
+
+    // 친구 스토리 최신 3가지 가져오기
+    List<Post> findTop3ByUser_UserIdInOrderByCreatedAtDesc(List<String> userIds);
+}
